@@ -33,5 +33,13 @@ export const routes: Routes = [
     path: 'register-barber',
     loadComponent: () => import('./pages/register-barber/register-barber.page').then( m => m.RegisterBarberPage)
   },
+  {
+    path: 'qualify-barber',
+    loadComponent: () => import('./pages/qualify-barber/qualify-barber.page').then( m => m.QualifyBarberPage)
+  },
+  {
+    path: 'appointment',
+    loadComponent: () => import('./pages/appointment/appointment.page').then( m => m.AppointmentPage)
+  },
 
 ];
