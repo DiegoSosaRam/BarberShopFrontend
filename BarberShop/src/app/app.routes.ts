@@ -15,9 +15,6 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/pages.page').then( m => m.PagesPage)
   },
   {
-    path: 'pages',
-    loadComponent: () => import('./pages/pages.page').then( m => m.PagesPage)
-  },  {
     path: 'services',
     loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
   },
@@ -25,5 +22,12 @@ export const routes: Routes = [
     path: 'custom-services',
     loadComponent: () => import('./pages/custom-services/custom-services.page').then( m => m.CustomServicesPage)
   },
-
+  {
+    path: 'reservar',
+    loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
+  },
 ];

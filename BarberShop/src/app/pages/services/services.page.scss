@@ -1,0 +1,370 @@
+// Services Page Styles
+.services-page {
+  --ion-background-color: #0f0f0f;
+  --ion-text-color: #ffffff;
+  
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+  
+  // Hero Section
+  .hero-section {
+    padding: 80px 20px;
+    text-align: center;
+    
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .hero-title {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      
+      @media (max-width: 768px) {
+        font-size: 2.5rem;
+      }
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-description {
+      font-size: 1.25rem;
+      color: #b3b3b3;
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+  
+  // Advantages Section
+  .advantages-section {
+    padding: 60px 20px;
+    
+    .advantage-card {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      height: 100%;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(212, 175, 55, 0.1);
+      }
+    }
+    
+    .advantage-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem auto;
+      
+      .icon-large {
+        font-size: 2rem;
+        color: #000;
+      }
+    }
+    
+    .advantage-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #ffffff;
+    }
+    
+    .advantage-description {
+      color: #b3b3b3;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+  
+  // Services Section
+  .services-section {
+    padding: 60px 20px;
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+    
+    .section-description {
+      color: #b3b3b3;
+      font-size: 1rem;
+    }
+    
+    .service-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      height: 100%;
+      
+      &:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(212, 175, 55, 0.15);
+      }
+      
+      &.popular-service {
+        border: 2px solid rgba(212, 175, 55, 0.3);
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #d4af37 0%, #ffd700 100%);
+        }
+      }
+    }
+    
+    .popular-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 10;
+      --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+      --color: #000;
+      font-weight: 600;
+    }
+    
+    .category-badge {
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    
+    .service-title {
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      
+      .title-icon {
+        color: #d4af37;
+        font-size: 1.25rem;
+      }
+    }
+    
+    .service-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      
+      .duration {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #b3b3b3;
+        font-size: 0.875rem;
+        
+        .meta-icon {
+          font-size: 1rem;
+        }
+      }
+      
+      .price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #d4af37;
+      }
+    }
+    
+    .service-description {
+      color: #b3b3b3;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+    }
+    
+    .features-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    .features-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+    
+    .features-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      
+      .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #b3b3b3;
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+        
+        .bullet {
+          width: 6px;
+          height: 6px;
+          background: #d4af37;
+          border-radius: 50%;
+          flex-shrink: 0;
+        }
+      }
+    }
+    
+    .reserve-button {
+      --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+      --color: #000;
+      --border-radius: 8px;
+      font-weight: 600;
+      text-transform: none;
+      margin-top: auto;
+      
+      &:hover {
+        --background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+      }
+    }
+  }
+  
+  // Call to Action Section
+  .cta-section {
+    padding: 80px 20px;
+    
+    .cta-content {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 3rem;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .cta-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 1rem;
+    }
+    
+    .cta-description {
+      font-size: 1.125rem;
+      color: #b3b3b3;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      
+      @media (min-width: 640px) {
+        flex-direction: row;
+        justify-content: center;
+      }
+    }
+    
+    .cta-button-primary {
+      --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+      --color: #000;
+      --border-radius: 8px;
+      font-weight: 600;
+      text-transform: none;
+      min-width: 160px;
+      
+      &:hover {
+        --background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+      }
+    }
+    
+    .cta-button-secondary {
+      --border-color: #d4af37;
+      --color: #d4af37;
+      --border-radius: 8px;
+      font-weight: 600;
+      text-transform: none;
+      min-width: 160px;
+      
+      &:hover {
+        --background: #d4af37;
+        --color: #000;
+      }
+    }
+  }
+}
+
+// Global card styles for Ionic cards
+ion-card {
+  --background: transparent;
+  --color: inherit;
+  box-shadow: none;
+  margin: 0;
+}
+
+ion-card-header {
+  --background: transparent;
+  --color: inherit;
+}
+
+ion-card-content {
+  --background: transparent;
+  --color: inherit;
+}
+
+// Badge color customization
+ion-badge {
+  &[color="primary"] {
+    --background: rgba(var(--ion-color-primary-rgb), 0.2);
+    --color: var(--ion-color-primary);
+  }
+  
+  &[color="secondary"] {
+    --background: rgba(var(--ion-color-secondary-rgb), 0.2);
+    --color: var(--ion-color-secondary);
+  }
+  
+  &[color="tertiary"] {
+    --background: rgba(var(--ion-color-tertiary-rgb), 0.2);
+    --color: var(--ion-color-tertiary);
+  }
+  
+  &[color="warning"] {
+    --background: rgba(var(--ion-color-warning-rgb), 0.2);
+    --color: var(--ion-color-warning);
+  }
+  
+  &[color="medium"] {
+    --background: rgba(var(--ion-color-medium-rgb), 0.2);
+    --color: var(--ion-color-medium);
+  }
+}
