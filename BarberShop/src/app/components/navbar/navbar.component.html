@@ -1,3 +1,41 @@
-<p>
-  navbar works!
-</p>
+<ion-header class="navbar-header">
+  <ion-toolbar class="navbar-toolbar">
+    <div class="navbar-container">
+      <div class="navbar-content">
+        
+        <!-- Logo Section -->
+        <div class="logo-section" (click)="navigateToHome()">
+          <div class="logo-container">
+            <ion-img 
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ1zgZnxIfFwUNYBcDxTaoorL1Oj0QaozmZw&s" 
+              alt="Barbería Premium" 
+              class="logo-image">
+            </ion-img>
+            <div class="logo-text">
+              BarberPro
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <ion-button 
+            fill="clear" 
+            class="login-button"
+            (click)="navigateToLogin()">
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            Iniciar Sesión
+          </ion-button>
+          
+          <ion-button 
+            class="register-button"
+            (click)="navigateToRegister()">
+            <ion-icon name="person-add-outline" slot="start"></ion-icon>
+            Registrarse
+          </ion-button>
+        </div>
+
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>

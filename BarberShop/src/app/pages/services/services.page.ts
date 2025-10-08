@@ -27,6 +27,8 @@ import {
   sparklesOutline 
 } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+
 
 interface Servicio {
   id: string;
@@ -53,7 +55,7 @@ interface Ventaja {
   imports: [
     IonContent, IonCard, IonCardContent, 
     IonCardHeader, IonCardTitle, IonButton, IonBadge, IonIcon, IonGrid, 
-    IonRow, IonCol, CommonModule, FormsModule
+    IonRow, IonCol, CommonModule, FormsModule, NavbarComponent
   ]
 })
 export class ServicesPage implements OnInit {
