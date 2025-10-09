@@ -3,47 +3,50 @@
     <div class="navbar-container">
       <div class="navbar-content">
         
-        <!-- Logo Section -->
-        <div class="logo-section" (click)="navigateToHome()">
-          <div class="logo-container">
-            <ion-img 
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ1zgZnxIfFwUNYBcDxTaoorL1Oj0QaozmZw&s" 
-              alt="Barbería Premium" 
-              class="logo-image">
-            </ion-img>
-            <div class="logo-text">
-              BarberPro
+        <!-- Left Side: Logo + Navigation -->
+        <div class="left-section">
+          <!-- Logo Section -->
+          <div class="logo-section" (click)="navigateToHome()">
+            <div class="logo-container">
+              <ion-img 
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQ1zgZnxIfFwUNYBcDxTaoorL1Oj0QaozmZw&s" 
+                alt="Barbería Premium" 
+                class="logo-image">
+              </ion-img>
+              <div class="logo-text">
+                BarberPro
+              </div>
             </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <div class="nav-buttons">
+            <ion-button 
+              fill="clear" 
+              class="nav-button services-button" 
+              (click)="navigateToServices()">
+              <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+              <span class="button-text">Servicios</span>
+            </ion-button>
           </div>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Right Side: Action Buttons -->
         <div class="action-buttons">
           <ion-button 
             fill="clear" 
             class="login-button"
             (click)="navigateToLogin()">
             <ion-icon name="person-outline" slot="start"></ion-icon>
-            Iniciar Sesión
+            <span class="button-text">Iniciar Sesión</span>
           </ion-button>
           
           <ion-button 
             class="register-button"
             (click)="navigateToRegister()">
             <ion-icon name="person-add-outline" slot="start"></ion-icon>
-            Registrarse
+            <span class="button-text">Registrarse</span>
           </ion-button>
-          
-          <ion-button 
-            fill="clear" 
-            class="services-button"
-            (click)="navigateToServices()">
-            <ion-icon name="briefcase-outline" slot="start"></ion-icon>
-            Servicios
-          </ion-button>
-
-
-
         </div>
 
       </div>
