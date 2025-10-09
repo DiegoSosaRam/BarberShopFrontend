@@ -9,7 +9,7 @@ import {
   IonIcon
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { personOutline, personAddOutline } from 'ionicons/icons';
+import { personOutline, personAddOutline, briefcaseOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-navbar',
@@ -28,7 +28,7 @@ import { personOutline, personAddOutline } from 'ionicons/icons';
 export class NavbarComponent implements OnInit {
 
   constructor(private router: Router) {
-    addIcons({ personOutline, personAddOutline });
+    addIcons({personOutline,personAddOutline,briefcaseOutline});
   }
 
   ngOnInit() {}
@@ -42,6 +42,10 @@ export class NavbarComponent implements OnInit {
   }
 
   navigateToRegister() {
-    this.router.navigate(['/register']);
+    this.router.navigate(['/register-barber']);
+  }
+  
+  navigateToServices() {
+    this.router.navigate(['/services']);
   }
 }

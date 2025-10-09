@@ -26,12 +26,25 @@ export const routes: Routes = [
     path: 'reservar',
     loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
   },
-  {
-    path: 'login',
-    loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
-  },
+  // {
+  //   path: 'login',
+  //   loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
+  // },
   {
     path: 'register',
     loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
   },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'register-barber',
+    loadComponent: () => import('./pages/register-barber/register-barber.page').then( m => m.RegisterBarberPage)
+  },
+  {
+    path: 'register-user',
+    loadComponent: () => import('./pages/register-user/register-user.page').then( m => m.RegisterUserPage)
+  },
+
 ];
