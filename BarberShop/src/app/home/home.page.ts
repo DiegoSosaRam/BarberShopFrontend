@@ -6,7 +6,7 @@ import { NavbarComponent } from '../components/navbar/navbar.component';
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, NavbarComponent],
+  imports: [ IonContent, NavbarComponent],
 })
 export class HomePage {
   constructor() {}

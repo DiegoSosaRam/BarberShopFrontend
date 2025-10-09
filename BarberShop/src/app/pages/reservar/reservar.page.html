@@ -101,9 +101,13 @@
           
           <!-- Selección de Barbero -->
           <div class="section">
-            <h3 class="section-title">Selecciona tu Barbero</h3>
+            <h3 class="section-title">
+              Selecciona tu Barbero 
+              <span class="barberos-count">({{ getFilteredBarberos().length }} disponibles)</span>
+            </h3>
+            <p class="section-subtitle">Barberos especializados en {{ getSelectedServicio()?.nombre }}</p>
             <div class="barbers-grid">
-              <div *ngFor="let barbero of barberos" 
+              <div *ngFor="let barbero of getFilteredBarberos()" 
                    class="barber-item"
                    [ngClass]="{'selected': formData.barbero === barbero.id}"
                    (click)="selectBarbero(barbero.id)">

@@ -104,10 +104,35 @@ export class ReservarPage implements OnInit {
   ];
 
   barberos: Barbero[] = [
+    // Especialistas en Fade y Degradados
     { id: "carlos", nombre: "Carlos Mendoza", especialidad: "Fade y Degradados", experiencia: "8 años", rating: 4.9 },
+    { id: "alexis", nombre: "Alexis Vargas", especialidad: "Fade y Degradados", experiencia: "5 años", rating: 4.7 },
+    { id: "samuel", nombre: "Samuel Herrera", especialidad: "Fade y Degradados", experiencia: "7 años", rating: 4.8 },
+    
+    // Especialistas en Cortes Clásicos
     { id: "miguel", nombre: "Miguel Torres", especialidad: "Cortes Clásicos", experiencia: "12 años", rating: 4.8 },
+    { id: "eduardo", nombre: "Eduardo Morales", especialidad: "Cortes Clásicos", experiencia: "20 años", rating: 4.9 },
+    { id: "pablo", nombre: "Pablo Jiménez", especialidad: "Cortes Clásicos", experiencia: "14 años", rating: 4.7 },
+    
+    // Especialistas en Cortes Modernos
+    { id: "fernando", nombre: "Fernando López", especialidad: "Cortes Modernos", experiencia: "6 años", rating: 4.7 },
+    { id: "diego", nombre: "Diego Ramos", especialidad: "Cortes Modernos", experiencia: "4 años", rating: 4.6 },
+    { id: "andres", nombre: "Andrés Castro", especialidad: "Cortes Modernos", experiencia: "8 años", rating: 4.8 },
+    
+    // Especialistas en Barba y Bigote
     { id: "ricardo", nombre: "Ricardo Silva", especialidad: "Barba y Bigote", experiencia: "10 años", rating: 4.9 },
-    { id: "fernando", nombre: "Fernando López", especialidad: "Cortes Modernos", experiencia: "6 años", rating: 4.7 }
+    { id: "mauricio", nombre: "Mauricio Delgado", especialidad: "Barba y Bigote", experiencia: "13 años", rating: 4.8 },
+    { id: "gabriel", nombre: "Gabriel Peña", especialidad: "Barba y Bigote", experiencia: "11 años", rating: 4.7 },
+    
+    // Especialistas en Cortes Infantiles
+    { id: "antonio", nombre: "Antonio Ruiz", especialidad: "Cortes Infantiles", experiencia: "15 años", rating: 4.8 },
+    { id: "javier", nombre: "Javier Ortega", especialidad: "Cortes Infantiles", experiencia: "9 años", rating: 4.6 },
+    { id: "felipe", nombre: "Felipe Aguilar", especialidad: "Cortes Infantiles", experiencia: "12 años", rating: 4.7 },
+    
+    // Especialistas en Servicios Premium
+    { id: "daniel", nombre: "Daniel Vega", especialidad: "Servicios Premium", experiencia: "9 años", rating: 4.9 },
+    { id: "leonardo", nombre: "Leonardo Sánchez", especialidad: "Servicios Premium", experiencia: "16 años", rating: 4.9 },
+    { id: "rodrigo", nombre: "Rodrigo Mendez", especialidad: "Servicios Premium", experiencia: "11 años", rating: 4.8 }
   ];
 
   horariosDisponibles: string[] = [
@@ -152,15 +177,47 @@ export class ReservarPage implements OnInit {
 
   changeService() {
     this.formData.servicio = '';
+    this.formData.barbero = ''; // Limpiar también el barbero
     this.step = 1;
   }
 
   selectServicio(servicioId: string) {
     this.formData.servicio = servicioId;
+    
+    // Verificar si el barbero actual sigue siendo válido para el nuevo servicio
+    const barberosDisponibles = this.getFilteredBarberos();
+    const barberoActual = this.formData.barbero;
+    
+    if (barberoActual && !barberosDisponibles.find(b => b.id === barberoActual)) {
+      // Si el barbero actual no está disponible para el nuevo servicio, limpiar la selección
+      this.formData.barbero = '';
+    }
   }
 
   selectBarbero(barberoId: string) {
     this.formData.barbero = barberoId;
+  }
+
+  getFilteredBarberos(): Barbero[] {
+    if (!this.formData.servicio) {
+      return this.barberos;
+    }
+
+    // Mapeo de servicios a especialidades de barberos
+    const servicioToEspecialidades: { [key: string]: string[] } = {
+      'corte-clasico': ['Cortes Clásicos', 'Cortes Modernos'], // Miguel y Fernando
+      'fade-moderno': ['Fade y Degradados', 'Cortes Modernos'], // Carlos y Fernando
+      'corte-barba': ['Barba y Bigote', 'Cortes Clásicos', 'Servicios Premium'], // Ricardo, Miguel y Daniel
+      'arreglo-barba': ['Barba y Bigote', 'Servicios Premium'], // Ricardo y Daniel
+      'corte-infantil': ['Cortes Infantiles', 'Cortes Clásicos'], // Antonio y Miguel
+      'paquete-premium': ['Servicios Premium', 'Barba y Bigote', 'Cortes Clásicos'] // Daniel, Ricardo y Miguel
+    };
+
+    const especialidadesPermitidas = servicioToEspecialidades[this.formData.servicio] || [];
+    
+    return this.barberos.filter(barbero => 
+      especialidadesPermitidas.includes(barbero.especialidad)
+    );
   }
 
   getCurrentDate(): string {
