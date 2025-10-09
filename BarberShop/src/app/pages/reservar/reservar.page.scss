@@ -201,6 +201,65 @@
     }
   }
   
+  // Selected Service Card (Step 2)
+  .selected-service-card {
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    
+    .service-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      
+      .service-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+      }
+      
+      .change-service-button {
+        --color: #d4af37;
+        --background: transparent;
+        font-size: 0.875rem;
+        text-decoration: underline;
+        
+        &:hover {
+          --background: rgba(212, 175, 55, 0.1);
+        }
+      }
+    }
+    
+    .service-details {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      
+      .service-price {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #d4af37;
+      }
+      
+      .service-duration {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        color: #b3b3b3;
+        font-size: 0.875rem;
+        
+        ion-icon {
+          font-size: 1rem;
+          color: #d4af37;
+        }
+      }
+    }
+  }
+  
   // Barbers Grid (Step 2)
   .section {
     margin-bottom: 2rem;

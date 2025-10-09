@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { 
   IonContent, 
   IonCard, 
@@ -115,7 +115,7 @@ export class ReservarPage implements OnInit {
     "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00"
   ];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private route: ActivatedRoute) {
     addIcons({ 
       calendarOutline, 
       timeOutline, 
@@ -128,7 +128,15 @@ export class ReservarPage implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    // Capturar parámetro de servicio desde la URL
+    this.route.queryParams.subscribe(params => {
+      if (params['servicio']) {
+        this.formData.servicio = params['servicio'];
+        this.step = 2; // Saltar directamente al paso 2
+      }
+    });
+  }
 
   handleNextStep() {
     if (this.step < 3) this.step++;
@@ -136,6 +144,15 @@ export class ReservarPage implements OnInit {
 
   handlePrevStep() {
     if (this.step > 1) this.step--;
+  }
+
+  goToStep1() {
+    this.step = 1;
+  }
+
+  changeService() {
+    this.formData.servicio = '';
+    this.step = 1;
   }
 
   selectServicio(servicioId: string) {

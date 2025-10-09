@@ -76,6 +76,29 @@
         <!-- Step 2: Seleccionar Barbero y Horario -->
         <div *ngIf="step === 2" class="step-content">
           
+          <!-- Servicio Seleccionado -->
+          <div class="section" *ngIf="getSelectedServicio()">
+            <div class="selected-service-card">
+              <div class="service-header">
+                <h3 class="service-name">{{ getSelectedServicio()?.nombre }}</h3>
+                <ion-button 
+                  fill="clear" 
+                  size="small"
+                  class="change-service-button"
+                  (click)="changeService()">
+                  Cambiar Servicio
+                </ion-button>
+              </div>
+              <div class="service-details">
+                <span class="service-price">${{ formatPrice(getSelectedServicio()?.precio || 0) }}</span>
+                <span class="service-duration">
+                  <ion-icon name="time-outline"></ion-icon>
+                  {{ getSelectedServicio()?.duracion }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
           <!-- Selección de Barbero -->
           <div class="section">
             <h3 class="section-title">Selecciona tu Barbero</h3>

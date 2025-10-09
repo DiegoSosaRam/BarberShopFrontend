@@ -172,8 +172,12 @@ export class ServicesPage implements OnInit {
     return colors[categoria] || "medium";
   }
 
-  navigateToReservar() {
-    this.router.navigate(['/reservar']);
+  navigateToReservar(servicioId?: string) {
+    if (servicioId) {
+      this.router.navigate(['/reservar'], { queryParams: { servicio: servicioId } });
+    } else {
+      this.router.navigate(['/reservar']);
+    }
   }
 
   navigateToLogin() {
