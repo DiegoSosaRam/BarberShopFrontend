@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "node": "^24.10.0",
-    "supabase": "^2.48.3"
-  }
-}
