@@ -107,12 +107,6 @@
 }
 
 @layer base {
-  * {
-    border-color: hsl(var(--border));
-    border-width: 1px;
-    border-style: solid;
-  }
-
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
