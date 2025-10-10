@@ -10,14 +10,8 @@ export const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full',
   },
+  // Removed duplicate and invalid 'pages' route. If you have a valid pages.page file, correct the import path.
   {
-    path: 'pages',
-    loadComponent: () => import('./pages/pages.page').then( m => m.PagesPage)
-  },
-  {
-    path: 'pages',
-    loadComponent: () => import('./pages/pages.page').then( m => m.PagesPage)
-  },  {
     path: 'index',
     loadComponent: () => import('./pages/index/index.page').then( m => m.IndexPage)
   },
