@@ -1,4 +1,4 @@
-/* Removed @tailwind directives - use Tailwind in .css or .postcss files only */
+/* Tailwind directives are handled in the global stylesheet/postcss pipeline; keep this file focused on component styles */
 
 /* Barbería Premium Design System - Negro, Dorado y Azul Marino */
 
@@ -66,6 +66,11 @@
 
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  /* Example: to set the hero background image for the index page, add this to your global :root or here:
+     :root { --hero-bg: url('/assets/hero.jpg'); }
+     The component uses `background-image: var(--hero-bg, none)` so it will pick it up automatically.
+  */
 
   .dark {
     --background: 222.2 84% 4.9%;
@@ -181,8 +186,8 @@
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 300;
     margin: 0 0 0.25rem 0;
-    color: hsl(var(--primary-foreground)); /* bright cream */
-    opacity: 0.95;
+    color: hsl(var(--primary-foreground)); /* cream */
+    opacity: 0.97;
   }
 
   .hero__title {
@@ -193,15 +198,19 @@
     color: hsl(var(--primary-foreground));
     line-height: 0.95;
     text-wrap: balance;
+    /* Give the main title more contrast for large displays */
+    text-shadow: 0 10px 40px rgba(0,0,0,0.65);
   }
 
   .hero__title--accent {
-    color: hsl(var(--accent));
+    color: hsl(var(--accent)); /* gold */
     display: inline-block;
-    font-size: 1.05em;
+    font-size: 1.18em; /* slightly larger so 'Premium' stands out */
+    font-weight: 900;
     transform: translateZ(0);
-    filter: drop-shadow(0 8px 28px rgba(0,0,0,0.6));
+    filter: drop-shadow(0 10px 40px rgba(0,0,0,0.7));
     -webkit-font-smoothing: antialiased;
+    padding-left: 0.15rem;
   }
 
   .hero__subtitle {
@@ -237,16 +246,16 @@
   }
 
   .stat-number {
-    font-size: 2.25rem;
-    font-weight: 800;
-    color: hsl(var(--accent));
-    text-shadow: 0 6px 18px rgba(0,0,0,0.65);
+    font-size: 2.4rem;
+    font-weight: 900;
+    color: hsl(var(--accent)); /* gold */
+    text-shadow: 0 8px 20px rgba(0,0,0,0.7);
   }
 
   .stat-label {
     margin-top: 0.35rem;
     font-size: 0.9rem;
-    color: hsl(var(--card-foreground));
+    color: hsl(var(--primary-foreground));
   }
 
   .hero__ctas {
@@ -273,17 +282,16 @@
     padding: 0.85rem 1.6rem;
     border-radius: 0.6rem;
     font-size: 1rem;
+    border: 1px solid rgba(0,0,0,0.15);
   }
 
   .btn-outline {
-    background: transparent;
-    color: hsl(var(--accent));
-    border: 2px solid hsl(var(--accent) / 0.9);
+    background: rgba(0,0,0,0.28);
+    color: hsl(var(--accent-foreground));
+    border: 2px solid hsl(var(--accent) / 0.95);
     padding: 0.75rem 1.4rem;
     border-radius: 0.6rem;
-    background-color: rgba(0,0,0,0.35);
-    color: hsl(var(--accent-foreground));
-    box-shadow: 0 6px 18px rgba(0,0,0,0.45) inset;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.5);
   }
 
   .btn:hover {
