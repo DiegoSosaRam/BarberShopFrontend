@@ -1,13 +1,78 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register_barber</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
+<ion-content class="register-bg" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">register_barber</ion-title>
+      <ion-title size="large">Crear Cuenta - Barbero</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div class="register-wrapper">
+    <div class="register-card">
+      <header class="card-header">
+        <h1 class="card-title">Registro de Barbero</h1>
+        <p class="card-subtitle">Crea tu perfil profesional para ofrecer servicios</p>
+      </header>
+
+      <section class="card-body">
+        <form class="register-form" (submit)="onSubmit?.($event)">
+          <div class="form-group">
+            <label for="shopName" class="label">Nombre del Local / Barbería</label>
+            <input id="shopName" type="text" placeholder="Nombre de tu barbería" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="ownerName" class="label">Nombre Completo</label>
+            <input id="ownerName" type="text" placeholder="Tu nombre completo" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="label">Correo Electrónico</label>
+            <input id="email" type="email" placeholder="tu@email.com" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="label">Teléfono</label>
+            <input id="phone" type="tel" placeholder="+56 9 1234 5678" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="address" class="label">Dirección</label>
+            <input id="address" type="text" placeholder="Calle, número, comuna" class="input" />
+          </div>
+
+          <div class="form-group">
+            <label for="license" class="label">Número de Licencia / Registro (opcional)</label>
+            <input id="license" type="text" placeholder="Ej. LIC-12345" class="input" />
+          </div>
+
+          <div class="form-group">
+            <label for="services" class="label">Servicios (describe brevemente)</label>
+            <textarea id="services" rows="3" placeholder="Cortes, afeitado, teñido, etc." class="input" style="resize:vertical; padding-top:10px;"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="hours" class="label">Horario de Atención</label>
+            <input id="hours" type="text" placeholder="Ej. Lun-Vie 10:00-20:00, Sáb 9:00-16:00" class="input" />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="label">Contraseña</label>
+            <input id="password" type="password" placeholder="Tu contraseña" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword" class="label">Confirmar Contraseña</label>
+            <input id="confirmPassword" type="password" placeholder="Confirma tu contraseña" class="input" required />
+          </div>
+
+          <button type="submit" class="btn-primary">
+            Crear Cuenta
+          </button>
+        </form>
+
+        <div class="register-note">
+          <p>¿Ya tienes cuenta? <a routerLink="/login" class="register-link">Inicia sesión aquí</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
 </ion-content>
