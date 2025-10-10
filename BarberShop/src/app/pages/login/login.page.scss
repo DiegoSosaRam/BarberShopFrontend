@@ -3,16 +3,28 @@
   background: radial-gradient(ellipse at center, rgba(255,200,40,0.03) 0%, rgba(0,0,0,0.9) 40%), linear-gradient(180deg, #0b0b0b 0%, #0f1111 100%);
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 16px;
+  flex-direction: column; /* <-- asegurar apilado vertical para centrar header + contenido */
+  align-items: center;    /* <-- centra horizontalmente */
+  justify-content: center;/* <-- centra verticalmente */
+  padding: 24px 16px;     /* ajustar top/bottom para que el header no empuje */
   color: #f6e7b8;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+ion-header {
+  width: 100%;
+  max-width: 420px;
+  /* Opcional: ocultar espacio extra cuando header colapse */
+  margin-bottom: 8px;
 }
 
 .login-wrapper {
   width: 100%;
   max-width: 420px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centra la tarjeta dentro del wrapper */
+  margin: 0 auto;
 }
 
 .login-card {
@@ -22,6 +34,7 @@
   border: 1px solid rgba(255,255,255,0.04);
   box-shadow: 0 10px 30px rgba(3,3,3,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
   backdrop-filter: blur(6px);
+  margin: 0 auto; /* Mantener centrada la tarjeta si por alguna razón el wrapper cambia */
 }
 
 .card-header {

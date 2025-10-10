@@ -9,6 +9,15 @@
        :root { --hero-bg: url('/assets/hero.jpg'); }
     */
     --hero-bg: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREdyg2zpc4Sr1Y3Yi6GMY8iqwhIFsLiQnLVg&s');
+
+    /* Paleta / fallbacks basada en login.page.scss */
+    --primary-foreground: 50 44 20;
+    --accent: 44 28 0;
+    --muted-foreground: 246 231 184;
+    --accent-foreground: 27 18 0;
+
+    --gold-hex: #ffe07a;
+    --cream-rgba: rgba(246,231,184,0.92);
   }
 
   body {
@@ -52,7 +61,7 @@
     align-items: center;
     justify-content: center;
     padding: 4rem 1rem;
-    color: hsl(var(--foreground));
+    color: #fff; /* FORZAR texto blanco como en la imagen */
     overflow: hidden;
   }
 
@@ -86,44 +95,42 @@
   }
 
   .hero__pretitle {
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    font-weight: 300;
-    margin: 0 0 0.25rem 0;
-    color: hsl(var(--primary-foreground)); /* cream */
-    opacity: 0.97;
+    font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    font-weight: 400;
+    margin: 0 0 0.5rem 0;
+    color: rgba(255,255,255,0.9); /* blanco sutil */
+    opacity: 0.95;
+    letter-spacing: 0.2px;
   }
 
   .hero__title {
-    font-size: clamp(3.25rem, 9vw, 6.5rem);
+    font-size: clamp(2.8rem, 9vw, 5rem);
     font-weight: 800;
-    margin: 0.25rem 0 0.5rem 0;
+    margin: 0.25rem 0 0.6rem 0;
     letter-spacing: -0.02em;
-    color: hsl(var(--primary-foreground));
+    color: #fff; /* título principal en blanco */
     line-height: 0.95;
     text-wrap: balance;
-    /* Give the main title more contrast for large displays */
-    text-shadow: 0 10px 40px rgba(0,0,0,0.65);
+    text-shadow: 0 14px 40px rgba(0,0,0,0.7); /* sombra más marcada para contraste */
   }
 
   .hero__title--accent {
-    color: hsl(var(--accent)); /* gold */
+    color: #fff; /* mantener 'Premium' fuerte y en blanco, o usar --gold-hex si prefieres dorado */
     display: inline-block;
-    font-size: 1.18em; /* slightly larger so 'Premium' stands out */
     font-weight: 900;
-    transform: translateZ(0);
-    filter: drop-shadow(0 10px 40px rgba(0,0,0,0.7));
+    filter: drop-shadow(0 12px 32px rgba(0,0,0,0.65));
     -webkit-font-smoothing: antialiased;
     padding-left: 0.15rem;
   }
 
   .hero__subtitle {
-    color: hsl(var(--muted-foreground));
+    color: rgba(255,255,255,0.92); /* subtítulo en blanco ligeramente atenuado */
     max-width: 72ch;
-    margin: 0.5rem auto 1.75rem auto;
-    font-size: clamp(1rem, 2.2vw, 1.25rem);
+    margin: 0.75rem auto 1.75rem auto;
+    font-size: clamp(1rem, 2.2vw, 1.35rem);
     line-height: 1.6;
     opacity: 0.95;
-    font-weight: 300; /* Añadido para un look más refinado */
+    font-weight: 300;
   }
 
   .stats {
@@ -132,34 +139,36 @@
     justify-content: center;
     align-items: stretch;
     flex-wrap: wrap;
-    margin-top: 1.25rem;
+    margin-top: 2rem;
   }
 
   .stat-card {
-    min-width: 180px;
-    padding: 1.25rem 1.5rem;
-    border-radius: 0.75rem;
-    background-color: rgba(9,10,11,0.48); /* darker translucent */
-    color: hsl(var(--card-foreground));
-    backdrop-filter: blur(8px) saturate(1.05);
-    -webkit-backdrop-filter: blur(8px) saturate(1.05);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+    min-width: 200px;
+    padding: 1.6rem 1.8rem;
+    border-radius: 1rem;
+    background-color: rgba(6,6,6,0.65);
+    color: #fff;
+    backdrop-filter: blur(10px) saturate(1.05);
+    -webkit-backdrop-filter: blur(10px) saturate(1.05);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
   .stat-number {
-    font-size: 2.4rem;
+    font-size: clamp(2.4rem, 6vw, 4rem); /* números grandes como en la imagen */
     font-weight: 900;
-    color: hsl(var(--accent)); /* gold */
-    text-shadow: 0 8px 20px rgba(0,0,0,0.7);
+    color: #fff; /* número en blanco */
+    text-shadow: 0 16px 40px rgba(0,0,0,0.75);
+    line-height: 1;
   }
 
   .stat-label {
-    margin-top: 0.35rem;
-    font-size: 0.9rem;
-    color: hsl(var(--primary-foreground));
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.92); /* label en blanco atenuado */
+    font-weight: 700;
   }
 
   .hero__ctas {
