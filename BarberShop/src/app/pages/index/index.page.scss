@@ -9,15 +9,10 @@
        :root { --hero-bg: url('/assets/hero.jpg'); }
     */
     --hero-bg: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREdyg2zpc4Sr1Y3Yi6GMY8iqwhIFsLiQnLVg&s');
-
-    /* Paleta / fallbacks basada en login.page.scss */
-    --primary-foreground: 50 44 20;
-    --accent: 44 28 0;
-    --muted-foreground: 246 231 184;
-    --accent-foreground: 27 18 0;
-
-    --gold-hex: #ffe07a;
-    --cream-rgba: rgba(246,231,184,0.92);
+    
+    /* Variables de color para referencia (opcional en esta solución rápida) */
+    --gold-hex: #ffd24a;
+    --dark-text-hex: #1b1200;
   }
 
   body {
@@ -30,25 +25,6 @@
 }
 
 @layer components {
-  /* ... El resto de tu CSS (que ya está perfecto) va aquí ... */
-  /* (No es necesario copiarlo de nuevo, solo he mostrado dónde hacer los cambios) */
-
-  .gradient-premium {
-    background: var(--gradient-premium);
-  }
-  
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-  
-  .shadow-premium {
-    box-shadow: var(--shadow-premium);
-  }
-  
-  .shadow-elegant {
-    box-shadow: var(--shadow-elegant);
-  }
-  
   .transition-smooth {
     transition: var(--transition-smooth);
   }
@@ -65,7 +41,6 @@
     overflow: hidden;
   }
 
-  /* Background placeholder. Replace the CSS variable --hero-bg on :root or the page to set the image. */
   .hero__bg {
     position: absolute;
     inset: 0;
@@ -77,7 +52,6 @@
     transform: scale(1.02);
   }
 
-  /* Slight dark overlay to make text pop (still allow switching image later) */
   .hero__overlay {
     position: absolute;
     inset: 0;
@@ -98,7 +72,7 @@
     font-size: clamp(1.1rem, 2.2vw, 1.6rem);
     font-weight: 400;
     margin: 0 0 0.5rem 0;
-    color: rgba(255,255,255,0.9); /* blanco sutil */
+    color: rgba(255,255,255,0.9);
     opacity: 0.95;
     letter-spacing: 0.2px;
   }
@@ -108,14 +82,14 @@
     font-weight: 800;
     margin: 0.25rem 0 0.6rem 0;
     letter-spacing: -0.02em;
-    color: #fff; /* título principal en blanco */
+    color: #fff;
     line-height: 0.95;
     text-wrap: balance;
-    text-shadow: 0 14px 40px rgba(0,0,0,0.7); /* sombra más marcada para contraste */
+    text-shadow: 0 14px 40px rgba(0,0,0,0.7);
   }
 
   .hero__title--accent {
-    color: #fff; /* mantener 'Premium' fuerte y en blanco, o usar --gold-hex si prefieres dorado */
+    color: var(--gold-hex); /* CAMBIO AQUÍ: Usamos el color dorado para 'Premium' */
     display: inline-block;
     font-weight: 900;
     filter: drop-shadow(0 12px 32px rgba(0,0,0,0.65));
@@ -124,7 +98,7 @@
   }
 
   .hero__subtitle {
-    color: rgba(255,255,255,0.92); /* subtítulo en blanco ligeramente atenuado */
+    color: rgba(255,255,255,0.92);
     max-width: 72ch;
     margin: 0.75rem auto 1.75rem auto;
     font-size: clamp(1rem, 2.2vw, 1.35rem);
@@ -157,9 +131,9 @@
   }
 
   .stat-number {
-    font-size: clamp(2.4rem, 6vw, 4rem); /* números grandes como en la imagen */
+    font-size: clamp(2.4rem, 6vw, 4rem);
     font-weight: 900;
-    color: #fff; /* número en blanco */
+    color: #fff;
     text-shadow: 0 16px 40px rgba(0,0,0,0.75);
     line-height: 1;
   }
@@ -167,7 +141,7 @@
   .stat-label {
     margin-top: 0.6rem;
     font-size: 0.95rem;
-    color: rgba(255,255,255,0.92); /* label en blanco atenuado */
+    color: rgba(255,255,255,0.92);
     font-weight: 700;
   }
 
@@ -189,8 +163,10 @@
   }
 
   .btn-primary {
-    background: var(--gradient-premium);
-    color: hsl(var(--accent-foreground));
+    /* CAMBIO AQUÍ: Copiamos el gradiente y color de login.page.scss */
+    background: linear-gradient(90deg, #ffd24a 0%, #f7b419 50%, #f2a600 100%);
+    color: var(--dark-text-hex);
+    
     box-shadow: 0 8px 24px rgba(0,0,0,0.45);
     padding: 0.85rem 1.6rem;
     border-radius: 0.6rem;
@@ -199,9 +175,11 @@
   }
 
   .btn-outline {
+    /* CAMBIO AQUÍ: Usamos colores fijos del tema para el borde y texto */
     background: rgba(0,0,0,0.28);
-    color: hsl(var(--accent-foreground));
-    border: 2px solid hsl(var(--accent) / 0.95);
+    color: #fff; /* Texto blanco para mayor contraste sobre el fondo oscuro */
+    border: 2px solid var(--gold-hex);
+    
     padding: 0.75rem 1.4rem;
     border-radius: 0.6rem;
     box-shadow: 0 8px 22px rgba(0,0,0,0.5);
@@ -221,5 +199,4 @@
       font-size: 2.4rem;
     }
   }
-
 }

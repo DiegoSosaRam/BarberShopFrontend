@@ -4,10 +4,56 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="register-bg" [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">register_user</ion-title>
+      <ion-title size="large">Crear Cuenta</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <div class="register-wrapper">
+    <div class="register-card">
+      <header class="card-header">
+        <h1 class="card-title">Crear Cuenta</h1>
+        <p class="card-subtitle">Completa el formulario para registrarte</p>
+      </header>
+
+      <section class="card-body">
+        <form class="register-form" (submit)="onSubmit?.($event)">
+          <div class="form-group">
+            <label for="name" class="label">Nombre Completo</label>
+            <input id="name" type="text" placeholder="Tu nombre completo" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="email" class="label">Correo Electrónico</label>
+            <input id="email" type="email" placeholder="tu@email.com" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="phone" class="label">Teléfono</label>
+            <input id="phone" type="tel" placeholder="+56 9 1234 5678" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="label">Contraseña</label>
+            <input id="password" type="password" placeholder="Tu contraseña" class="input" required />
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword" class="label">Confirmar Contraseña</label>
+            <input id="confirmPassword" type="password" placeholder="Confirma tu contraseña" class="input" required />
+          </div>
+
+          <button type="submit" class="btn-primary">
+            Crear Cuenta
+          </button>
+        </form>
+
+        <div class="register-note">
+          <p>¿Ya tienes cuenta? <a routerLink="/login" class="register-link">Inicia sesión aquí</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
 </ion-content>
