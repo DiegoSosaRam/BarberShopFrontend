@@ -1,59 +1,38 @@
-<!--Colocacion de index hecho por Chuy-->
+<!-- Hero index - diseño estilo premium con fondo personalizable -->
 
 <ion-content [fullscreen]="true">
- 
-    <!-- Contenedor de la sección con padding y ancho máximo para control en pantallas grandes -->
-    <section class="text-center p-6 sm:p-8 max-w-4xl mx-auto">
-      
-      <!-- Título secundario -->
-      <h2 class="text-3xl md:text-4xl font-light text-muted-foreground">La Mejor</h2>
-      
-      <!-- Título Principal usando el color de acento definido en SCSS (simulado con text-amber-400) -->
-      <h1 class="text-5xl md:text-7xl font-extrabold text-amber-400 my-2 tracking-tight">
-        Barbería Premium
-      </h1>
+  <div class="hero">
+    <!-- Background placeholder: set --hero-bg in :root or let it use placeholder image -->
+    <div class="hero__bg" aria-hidden></div>
+    <div class="hero__overlay" aria-hidden></div>
 
-      <!-- Subtítulo -->
-      <p class="text-base md:text-lg text-muted-foreground mt-4 max-w-2xl mx-auto">
-        Experiencia única con los mejores profesionales, técnicas modernas y atención personalizada.
-      </p>
+    <div class="hero__content">
+      <h2 class="hero__pretitle">La Mejor</h2>
+      <h1 class="hero__title">Barbería <span class="hero__title--accent">Premium</span></h1>
 
-      <!-- Contenedor de estadísticas con un fondo sutil y sombra elegante -->
-      <div class="mt-10 p-6 rounded-xl bg-card/50 backdrop-blur-sm shadow-elegant">
-        <div class="flex flex-wrap justify-center items-center gap-x-8 gap-y-6 md:gap-x-16">
-          
-          <!-- Estadística -->
-          <div class="flex flex-col items-center">
-            <span class="text-4xl font-bold text-amber-400">15+</span>
-            <span class="text-card-foreground mt-1 text-sm">Años de Experiencia</span>
-          </div>
-          
-          <!-- Estadística -->
-          <div class="flex flex-col items-center">
-            <span class="text-4xl font-bold text-amber-400">5000+</span>
-            <span class="text-card-foreground mt-1 text-sm">Clientes Satisfechos</span>
-          </div>
-          
-          <!-- Estadística -->
-          <div class="flex flex-col items-center">
-            <span class="text-4xl font-bold text-amber-400">10</span>
-            <span class="text-card-foreground mt-1 text-sm">Barberos Expertos</span>
-          </div>
+      <p class="hero__subtitle">Experiencia única con los mejores profesionales, técnicas modernas y atención personalizada</p>
+
+      <div class="stats" role="list">
+        <div class="stat-card" role="listitem">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Años de Experiencia</div>
+        </div>
+
+        <div class="stat-card" role="listitem">
+          <div class="stat-number">5000+</div>
+          <div class="stat-label">Clientes Satisfechos</div>
+        </div>
+
+        <div class="stat-card" role="listitem">
+          <div class="stat-number">10</div>
+          <div class="stat-label">Barberos Expertos</div>
         </div>
       </div>
 
-      <!-- Contenedor de botones CTA -->
-      <div class="flex flex-col sm:flex-row justify-center items-center gap-4 mt-12">
-        
-        <!-- Botón Primario con clases personalizadas de SCSS -->
-        <button class="w-full sm:w-auto gradient-premium text-accent-foreground font-bold py-3 px-8 rounded-lg transition-smooth transform hover:scale-105 shadow-premium">
-          Reservar Cita
-        </button>
-        
-        <!-- Botón Secundario -->
-        <button class="w-full sm:w-auto border border-amber-500 text-amber-500 font-bold py-3 px-8 rounded-lg transition-smooth hover:bg-amber-500 hover:text-accent-foreground">
-          Ver Servicios
-        </button>
+      <div class="hero__ctas">
+        <button class="btn btn-primary">Reservar Cita</button>
+        <button class="btn btn-outline">Ver Servicios</button>
       </div>
-    </section>
+    </div>
+  </div>
 </ion-content>

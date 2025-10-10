@@ -142,4 +142,152 @@
     transition: var(--transition-smooth);
   }
 
+  /* Hero / Index page styles */
+  .hero {
+    position: relative;
+    min-height: calc(100vh - 0px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    color: hsl(var(--foreground));
+    overflow: hidden;
+  }
+
+  /* Background placeholder. Replace the CSS variable --hero-bg on :root or the page to set the image. */
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    background-image: var(--hero-bg, none);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    filter: brightness(0.55);
+    transform: scale(1.02);
+  }
+
+  /* Slight dark overlay to make text pop (still allow switching image later) */
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.55) 100%);
+    mix-blend-mode: normal;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1100px;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .hero__pretitle {
+    font-size: 2rem;
+    font-weight: 300;
+    margin: 0 0 0.25rem 0;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .hero__title {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    margin: 0.25rem 0 0.5rem 0;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__title--accent {
+    color: hsl(var(--accent));
+    display: inline-block;
+    background: transparent;
+  }
+
+  .hero__subtitle {
+    color: hsl(var(--muted-foreground));
+    max-width: 60ch;
+    margin: 0.5rem auto 1.75rem auto;
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .stats {
+    display: flex;
+    gap: 1.25rem;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+
+  .stat-card {
+    min-width: 160px;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    background-color: hsl(var(--card) / 0.35);
+    color: hsl(var(--card-foreground));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: var(--shadow-premium);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: hsl(var(--accent));
+  }
+
+  .stat-label {
+    margin-top: 0.35rem;
+    font-size: 0.9rem;
+    color: hsl(var(--card-foreground));
+  }
+
+  .hero__ctas {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    border-radius: 0.75rem;
+    padding: 0.7rem 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--gradient-premium);
+    color: hsl(var(--accent-foreground));
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: hsl(var(--accent));
+    border: 2px solid hsl(var(--accent) / 0.9);
+  }
+
+  .btn:hover {
+    transform: translateY(-3px) scale(1.02);
+  }
+
+  @media (max-width: 640px) {
+    .stat-card {
+      min-width: 140px;
+      padding: 0.8rem 1rem;
+    }
+
+    .hero__title {
+      font-size: 2.4rem;
+    }
+  }
+
 }
