@@ -1,7 +1,7 @@
-.login-content {
+.register-content {
   --background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   
-  .login-container {
+  .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,9 +9,9 @@
     padding: 20px;
   }
   
-  .login-card {
+  .register-card {
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(212, 175, 55, 0.2);
@@ -22,45 +22,30 @@
       text-align: center;
       padding: 30px 20px 20px;
       
-      .login-title {
+      .register-title {
         color: #d4af37;
         font-size: 28px;
         font-weight: 700;
         margin-bottom: 8px;
       }
       
-      .login-subtitle {
+      .register-subtitle {
         color: rgba(255, 255, 255, 0.7);
         font-size: 14px;
-        margin: 0 0 20px 0;
+        margin: 0 0 16px 0;
       }
       
-      .test-credentials {
+      .info-note {
         background: rgba(212, 175, 55, 0.1);
         border: 1px solid rgba(212, 175, 55, 0.3);
         border-radius: 8px;
         padding: 12px;
-        margin-top: 16px;
         
-        .credentials-title {
-          color: #d4af37;
-          font-size: 12px;
-          font-weight: 600;
-          margin: 0 0 8px 0;
-        }
-        
-        .credential-item {
+        p {
           color: rgba(255, 255, 255, 0.8);
-          font-size: 11px;
-          margin-bottom: 4px;
-          
-          strong {
-            color: #d4af37;
-          }
-          
-          &:last-child {
-            margin-bottom: 0;
-          }
+          font-size: 12px;
+          margin: 0;
+          text-align: center;
         }
       }
     }
@@ -89,7 +74,7 @@
         }
       }
       
-      .login-button {
+      .register-button {
         --background: linear-gradient(45deg, #d4af37, #ffd700);
         --color: #1a1a1a;
         font-weight: 600;
@@ -102,7 +87,7 @@
         }
       }
       
-      .register-link {
+      .login-link {
         text-align: center;
         margin-top: 24px;
         
@@ -117,25 +102,15 @@
           font-weight: 600;
         }
       }
-      
-      .admin-link {
-        text-align: center;
-        margin-top: 16px;
-        
-        ion-button {
-          --color: rgba(212, 175, 55, 0.7);
-          font-size: 12px;
-        }
-      }
     }
   }
 }
 
 @media (max-width: 768px) {
-  .login-content .login-container {
+  .register-content .register-container {
     padding: 10px;
     
-    .login-card {
+    .register-card {
       margin: 20px 0;
       
       ion-card-content {

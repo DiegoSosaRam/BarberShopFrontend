@@ -202,6 +202,64 @@
       }
     }
   }
+  
+  // Estilos para usuario logueado
+  .user-welcome {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    
+    .welcome-text {
+      color: #d4af37;
+      font-weight: 600;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+  }
+  
+  .logout-button {
+    --color: #d4af37;
+    --background: transparent;
+    --border-color: #d4af37;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 8px;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      --background: rgba(212, 175, 55, 0.1);
+      --color: #ffd700;
+      --border-color: #ffd700;
+    }
+    
+    ion-icon {
+      margin-right: 0.5rem;
+      font-size: 1.125rem;
+    }
+    
+    .button-text {
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      --padding-start: 0.5rem;
+      --padding-end: 0.5rem;
+      
+      ion-icon {
+        margin-right: 0;
+      }
+    }
+  }
 }
 
 // Responsive adjustments
