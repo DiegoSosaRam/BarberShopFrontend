@@ -18,15 +18,18 @@
   <div class="advantages-section">
     <ion-grid>
       <ion-row>
-        <ion-col size="12" sizeMd="6" sizeLg="3" *ngFor="let ventaja of ventajas">
-          <div class="advantage-card">
-            <div class="advantage-icon">
-              <ion-icon [name]="ventaja.icono" class="icon-large"></ion-icon>
-            </div>
-            <h3 class="advantage-title">{{ ventaja.titulo }}</h3>
-            <p class="advantage-description">{{ ventaja.descripcion }}</p>
-          </div>
-        </ion-col>
+        @for (ventaja of ventajas; track ventaja) {
+  <ion-col size="12" sizeMd="6" sizeLg="3">
+    <div class="advantage-card">
+      <div class="advantage-icon">
+        <ion-icon [name]="ventaja.icono" class="icon-large"></ion-icon>
+      </div>
+      <h3 class="advantage-title">{{ ventaja.titulo }}</h3>
+      <p class="advantage-description">{{ ventaja.descripcion }}</p>
+    </div>
+  </ion-col>
+}
+        
       </ion-row>
     </ion-grid>
   </div>
@@ -42,16 +45,18 @@
 
     <ion-grid>
       <ion-row>
-        <ion-col size="12" sizeMd="6" sizeLg="4" *ngFor="let servicio of servicios">
+        @for (servicio of servicios; track servicio) {
+        <ion-col size="12" sizeMd="6" sizeLg="4" >
           <ion-card class="service-card" [ngClass]="{'popular-service': servicio.popular}">
             
             <!-- Popular Badge -->
-            <ion-badge 
-              *ngIf="servicio.popular" 
-              class="popular-badge" 
-              color="success">
-              Popular
-            </ion-badge>
+            @if (servicio.popular) {
+              <ion-badge 
+                class="popular-badge" 
+                color="success">
+                Popular
+              </ion-badge>
+            }
 
             <ion-card-header>
               <!-- Category Badge -->
@@ -87,10 +92,12 @@
               <div class="features-section">
                 <h4 class="features-title">Incluye:</h4>
                 <ul class="features-list">
-                  <li *ngFor="let caracteristica of servicio.caracteristicas" class="feature-item">
-                    <div class="bullet"></div>
-                    {{ caracteristica }}
-                  </li>
+                  @for (caracteristica of servicio.caracteristicas; track caracteristica) {
+                    <li class="feature-item">
+                      <div class="bullet"></div>
+                      {{ caracteristica }}
+                    </li>
+                  }
                 </ul>
               </div>
 
@@ -104,6 +111,7 @@
             </ion-card-content>
           </ion-card>
         </ion-col>
+      }
       </ion-row>
     </ion-grid>
   </div>

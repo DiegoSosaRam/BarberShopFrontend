@@ -42,7 +42,7 @@
         <!-- Right Side: Action Buttons -->
         <div class="action-buttons">
           <!-- Botones cuando NO está logueado -->
-          <ng-container *ngIf="!isLoggedIn">
+          @if (!isLoggedIn) {
             <ion-button 
               fill="clear" 
               class="login-button"
@@ -57,10 +57,10 @@
               <ion-icon name="person-add-outline" slot="start"></ion-icon>
               <span class="button-text">Registrarse</span>
             </ion-button>
-          </ng-container>
+          }
 
           <!-- Botones cuando SÍ está logueado -->
-          <ng-container *ngIf="isLoggedIn">
+          @if (isLoggedIn) {
             <div class="user-welcome">
               <span class="welcome-text">Hola, {{userDisplayName}}</span>
             </div>
@@ -72,7 +72,7 @@
               <ion-icon name="log-out-outline" slot="start"></ion-icon>
               <span class="button-text">Cerrar Sesión</span>
             </ion-button>
-          </ng-container>
+          }
         </div>
 
       </div>

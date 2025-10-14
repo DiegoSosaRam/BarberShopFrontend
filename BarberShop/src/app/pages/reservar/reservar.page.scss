@@ -469,3 +469,112 @@ ion-toast {
   --background: #28a745;
   --color: #ffffff;
 }
+
+// Estilos para la sección de autenticación
+.auth-section {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(26, 26, 26, 0.6);
+  border-radius: 16px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  margin-bottom: 2rem;
+  
+  .section-title {
+    color: #d4af37;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .auth-description {
+    color: #b3b3b3;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
+  }
+  
+  .auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 300px;
+    margin: 0 auto;
+    
+    .auth-button {
+      --border-radius: 12px;
+      --padding-start: 1.5rem;
+      --padding-end: 1.5rem;
+      height: 48px;
+      font-weight: 600;
+      
+      &.login-btn {
+        --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+        --color: #000000;
+        
+        &:hover {
+          --background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+        }
+      }
+      
+      &.register-btn {
+        --border-color: #d4af37;
+        --color: #d4af37;
+        
+        &:hover {
+          --background: rgba(212, 175, 55, 0.1);
+        }
+      }
+    }
+    
+    .guest-option {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      
+      .guest-text {
+        color: #b3b3b3;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      
+      .guest-button {
+        --color: #d4af37;
+        font-size: 0.9rem;
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Estilos para usuario logueado
+.user-logged-section {
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    .logged-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(40, 167, 69, 0.2);
+      color: #28a745;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border: 1px solid rgba(40, 167, 69, 0.3);
+      
+      ion-icon {
+        font-size: 1rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+}

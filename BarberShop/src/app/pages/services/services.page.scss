@@ -114,6 +114,9 @@
     }
     
     .service-card {
+      padding-top: 3rem;
+      position: relative;
+
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 16px;
@@ -142,38 +145,53 @@
       }
     }
     
-    .popular-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      z-index: 10;
-      --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-      --color: #000;
-      font-weight: 600;
-    }
+    // .popular-badge {
+    // position: absolute;
+    // top: 1rem;
+    // right: 1rem;
+    // z-index: 10;
+    // --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    // --color: #000;
+    // font-weight: 500;
+    // border-radius: 8px;
+    // padding: 6px 10px;
+
+
+    // }
+
+.popular-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10;
+  --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+  --color: #000;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
     
     // .category-badge {
     //   margin-bottom: 1rem;
     //   font-size: 0.75rem;
     //   font-weight: 500;
+    //   left: 1rem;
+    //   // position: relative;
+    //   margin-top: 2.5rem;
+     
     // }
-    
-.category-badge {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    z-index: 10;
-    --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-    --color: #000;
-    font-weight: 500;
-    border-radius: 8px;
-    padding: 6px 10px;
+    .category-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 6px 10px;
+  z-index: 10;
+}
 
-          margin-bottom: 1rem;
-      font-size: 0.75rem;
-
-    
-  }
 
 
     .service-title {

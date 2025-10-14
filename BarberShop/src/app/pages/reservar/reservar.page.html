@@ -16,15 +16,22 @@
     <!-- Progress Bar -->
     <div class="progress-section">
       <div class="progress-container">
-        <div class="progress-step" 
-             *ngFor="let stepNum of [1, 2, 3]; let i = index"
-             [ngClass]="{'active': step >= stepNum, 'completed': step > stepNum}">
-          <div class="step-circle">
-            <ion-icon *ngIf="step > stepNum" name="checkmark-circle" class="check-icon"></ion-icon>
-            <span *ngIf="step <= stepNum">{{ stepNum }}</span>
+        @for (stepNum of [1, 2, 3]; track stepNum; let i = $index) {
+          <div class="progress-step" 
+               [ngClass]="{'active': step >= stepNum, 'completed': step > stepNum}">
+            <div class="step-circle">
+              @if (step > stepNum) {
+                <ion-icon name="checkmark-circle" class="check-icon"></ion-icon>
+              }
+              @if (step <= stepNum) {
+                <span>{{ stepNum }}</span>
+              }
+            </div>
+            @if (i < 2) {
+              <div class="step-connector" [ngClass]="{'active': step > stepNum}"></div>
+            }
           </div>
-          <div *ngIf="i < 2" class="step-connector" [ngClass]="{'active': step > stepNum}"></div>
-        </div>
+        }
       </div>
     </div>
 
@@ -38,12 +45,13 @@
       <ion-card-content>
         
         <!-- Step 1: Seleccionar Servicio -->
-        <div *ngIf="step === 1" class="step-content">
-          <div class="services-grid">
-            <div *ngFor="let servicio of servicios" 
-                 class="service-item"
-                 [ngClass]="{'selected': formData.servicio === servicio.id}"
-                 (click)="selectServicio(servicio.id)">
+        @if (step === 1) {
+          <div class="step-content">
+            <div class="services-grid">
+              @for (servicio of servicios; track servicio.id) {
+                <div class="service-item"
+                     [ngClass]="{'selected': formData.servicio === servicio.id}"
+                     (click)="selectServicio(servicio.id)">
               
               <div class="service-content">
                 <div class="service-info">
@@ -60,25 +68,27 @@
                   ${{ formatPrice(servicio.precio) }}
                 </div>
               </div>
+                </div>
+              }
             </div>
+            
+            <ion-button 
+              expand="block" 
+              class="continue-button"
+              [disabled]="!canContinueStep1()"
+              (click)="handleNextStep()">
+              <ion-icon name="arrow-forward" slot="end"></ion-icon>
+              Continuar
+            </ion-button>
           </div>
-          
-          <ion-button 
-            expand="block" 
-            class="continue-button"
-            [disabled]="!canContinueStep1()"
-            (click)="handleNextStep()">
-            <ion-icon name="arrow-forward" slot="end"></ion-icon>
-            Continuar
-          </ion-button>
-        </div>
-
-        <!-- Step 2: Seleccionar Barbero y Horario -->
-        <div *ngIf="step === 2" class="step-content">
-          
-          <!-- Servicio Seleccionado -->
-          <div class="section" *ngIf="getSelectedServicio()">
-            <div class="selected-service-card">
+        }        <!-- Step 2: Seleccionar Barbero y Horario -->
+        @if (step === 2) {
+          <div class="step-content">
+            
+            <!-- Servicio Seleccionado -->
+            @if (getSelectedServicio()) {
+              <div class="section">
+                <div class="selected-service-card">
               <div class="service-header">
                 <h3 class="service-name">{{ getSelectedServicio()?.nombre }}</h3>
                 <ion-button 
@@ -107,21 +117,22 @@
             </h3>
             <p class="section-subtitle">Barberos especializados en {{ getSelectedServicio()?.nombre }}</p>
             <div class="barbers-grid">
-              <div *ngFor="let barbero of getFilteredBarberos()" 
-                   class="barber-item"
-                   [ngClass]="{'selected': formData.barbero === barbero.id}"
-                   (click)="selectBarbero(barbero.id)">
+              @for (barbero of getFilteredBarberos(); track barbero.id) {
+                <div class="barber-item"
+                     [ngClass]="{'selected': formData.barbero === barbero.id}"
+                     (click)="selectBarbero(barbero.id)">
                 
                 <div class="barber-info">
                   <h4 class="barber-name">{{ barbero.nombre }}</h4>
                   <p class="barber-specialty">Especialidad: {{ barbero.especialidad }}</p>
                   <p class="barber-experience">{{ barbero.experiencia }} de experiencia</p>
                 </div>
-                <div class="barber-rating">
-                  <ion-icon name="star-outline" class="star-icon"></ion-icon>
-                  <span>{{ barbero.rating }}</span>
+                  <div class="barber-rating">
+                    <ion-icon name="star" class="star-icon"></ion-icon>
+                    <span>{{ barbero.rating }}</span>
+                  </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
 
@@ -144,14 +155,18 @@
                   <ion-item class="form-item">
                     <ion-label position="stacked">Hora</ion-label>
                     <ion-select [(ngModel)]="formData.hora" placeholder="Seleccionar hora">
-                      <ion-select-option *ngFor="let hora of horariosDisponibles" [value]="hora">
-                        {{ hora }}
-                      </ion-select-option>
+                      @for (hora of horariosDisponibles; track hora) {
+                        <ion-select-option [value]="hora">
+                          {{ hora }}
+                        </ion-select-option>
+                      }
                     </ion-select>
                   </ion-item>
                 </ion-col>
               </ion-row>
             </ion-grid>
+              </div>
+            }
           </div>
 
           <div class="button-group">
@@ -170,10 +185,11 @@
               Continuar
             </ion-button>
           </div>
-        </div>
+        }
 
         <!-- Step 3: Datos Personales y Confirmación -->
-        <div *ngIf="step === 3" class="step-content">
+        @if (step === 3) {
+          <div class="step-content">
           
           <!-- Resumen de la Reserva -->
           <div class="summary-section">
@@ -222,57 +238,118 @@
 
           <!-- Datos Personales -->
           <div class="section">
-            <h3 class="section-title">Datos Personales</h3>
-            <ion-grid>
-              <ion-row>
-                <ion-col size="12" sizeMd="6">
-                  <ion-item class="form-item">
-                    <ion-label position="stacked">Nombre Completo *</ion-label>
-                    <ion-input 
-                      [(ngModel)]="formData.nombre"
-                      placeholder="Tu nombre completo"
-                      required>
-                    </ion-input>
-                  </ion-item>
-                </ion-col>
-                <ion-col size="12" sizeMd="6">
-                  <ion-item class="form-item">
-                    <ion-label position="stacked">Teléfono *</ion-label>
-                    <ion-input 
-                      type="tel"
-                      [(ngModel)]="formData.telefono"
-                      placeholder="+56 9 1234 5678"
-                      required>
-                    </ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="12">
-                  <ion-item class="form-item">
-                    <ion-label position="stacked">Email *</ion-label>
-                    <ion-input 
-                      type="email"
-                      [(ngModel)]="formData.email"
-                      placeholder="tu@email.com"
-                      required>
-                    </ion-input>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="12">
-                  <ion-item class="form-item">
-                    <ion-label position="stacked">Notas adicionales (opcional)</ion-label>
-                    <ion-textarea 
-                      [(ngModel)]="formData.notas"
-                      placeholder="Peticiones especiales, preferencias, etc."
-                      [rows]="3">
-                    </ion-textarea>
-                  </ion-item>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
+            
+            <!-- Si el usuario NO está logueado -->
+            @if (!isUserLoggedIn) {
+              <div class="auth-section">
+              <h3 class="section-title">Para continuar, necesitas iniciar sesión</h3>
+              <p class="auth-description">
+                Inicia sesión o crea una cuenta para completar tu reserva. 
+                Tus datos se guardarán automáticamente para futuras reservas.
+              </p>
+              
+              <div class="auth-buttons">
+                <ion-button 
+                  expand="block" 
+                  (click)="goToLogin()" 
+                  class="auth-button login-btn">
+                  <ion-icon name="person-outline" slot="start"></ion-icon>
+                  Iniciar Sesión
+                </ion-button>
+                
+                <ion-button 
+                  expand="block" 
+                  fill="outline" 
+                  (click)="goToRegister()" 
+                  class="auth-button register-btn">
+                  <ion-icon name="person-add-outline" slot="start"></ion-icon>
+                  Crear Cuenta
+                </ion-button>
+                
+                <div class="guest-option">
+                  <p class="guest-text">¿O prefieres continuar sin crear una cuenta?</p>
+                  <ion-button 
+                    fill="clear" 
+                    (click)="continueAsGuest()" 
+                    class="guest-button">
+                    Continuar como invitado
+                  </ion-button>
+                </div>
+              </div>
+              </div>
+            }
+            
+            <!-- Si el usuario SÍ está logueado O continúa como invitado -->
+            @if (isUserLoggedIn || showGuestForm) {
+              <div class="user-logged-section">
+                @if (isUserLoggedIn) {
+                  <h3 class="section-title">
+                    Datos Personales 
+                    <span class="logged-badge">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      Logueado como {{ currentUser?.nombre }}
+                    </span>
+                  </h3>
+                }
+                @if (!isUserLoggedIn && showGuestForm) {
+                  <h3 class="section-title">
+                    Datos Personales
+                  </h3>
+                }
+              
+              <!-- Formulario de datos -->
+              <ion-grid>
+                <ion-row>
+                  <ion-col size="12" sizeMd="6">
+                    <ion-item class="form-item">
+                      <ion-label position="stacked">Nombre Completo *</ion-label>
+                      <ion-input 
+                        [(ngModel)]="formData.nombre"
+                        placeholder="Tu nombre completo"
+                        required>
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+                  <ion-col size="12" sizeMd="6">
+                    <ion-item class="form-item">
+                      <ion-label position="stacked">Teléfono *</ion-label>
+                      <ion-input 
+                        type="tel"
+                        [(ngModel)]="formData.telefono"
+                        placeholder="+56 9 1234 5678"
+                        required>
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-item class="form-item">
+                      <ion-label position="stacked">Email *</ion-label>
+                      <ion-input 
+                        type="email"
+                        [(ngModel)]="formData.email"
+                        placeholder="tu@email.com"
+                        required>
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <ion-item class="form-item">
+                      <ion-label position="stacked">Notas adicionales (opcional)</ion-label>
+                      <ion-textarea 
+                        [(ngModel)]="formData.notas"
+                        placeholder="Peticiones especiales, preferencias, etc."
+                        [rows]="3">
+                      </ion-textarea>
+                    </ion-item>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+              </div>
+            }
           </div>
 
           <div class="button-group">
@@ -287,12 +364,19 @@
               class="submit-button"
               [disabled]="loading || !canSubmit()"
               (click)="handleSubmit()">
-              <ion-spinner *ngIf="loading" name="crescent" slot="start"></ion-spinner>
-              <span *ngIf="!loading">Confirmar Reserva</span>
-              <span *ngIf="loading">Confirmando...</span>
+              @if (loading) {
+                <ion-spinner name="crescent" slot="start"></ion-spinner>
+              }
+              @if (!loading) {
+                <span>Confirmar Reserva</span>
+              }
+              @if (loading) {
+                <span>Confirmando...</span>
+              }
             </ion-button>
           </div>
-        </div>
+          </div>
+        }
 
       </ion-card-content>
     </ion-card>

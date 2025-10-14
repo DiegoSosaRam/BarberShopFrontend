@@ -63,26 +63,29 @@
       </ion-card-header>
       <ion-card-content>
         <ion-list>
-          <ion-item *ngFor="let usuario of usuarios" class="user-item">
-            <ion-icon name="person-outline" slot="start"></ion-icon>
-            <ion-label>
-              <h2>{{usuario.nombre}}</h2>
-              <p>{{usuario.email}}</p>
-              <p>{{usuario.telefono}}</p>
-              <p class="date-info">Registrado: {{formatDate(usuario.fechaRegistro)}}</p>
-            </ion-label>
-            <ion-badge [color]="getUserBadgeColor(usuario.tipo)" slot="end">
-              {{usuario.tipo}}
-            </ion-badge>
-            <ion-button 
-              fill="clear" 
-              color="danger" 
-              slot="end"
-              (click)="confirmDelete(usuario.id)"
-              *ngIf="usuario.email !== 'cliente@barbershop.com' && usuario.email !== 'barbero@barbershop.com'">
-              <ion-icon name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-item>
+          @for (usuario of usuarios; track usuario.id) {
+            <ion-item class="user-item">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-label>
+                <h2>{{usuario.nombre}}</h2>
+                <p>{{usuario.email}}</p>
+                <p>{{usuario.telefono}}</p>
+                <p class="date-info">Registrado: {{formatDate(usuario.fechaRegistro)}}</p>
+              </ion-label>
+              <ion-badge [color]="getUserBadgeColor(usuario.tipo)" slot="end">
+                {{usuario.tipo}}
+              </ion-badge>
+              @if (usuario.email !== 'cliente@barbershop.com' && usuario.email !== 'barbero@barbershop.com') {
+                <ion-button 
+                  fill="clear" 
+                  color="danger" 
+                  slot="end"
+                  (click)="confirmDelete(usuario.id)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              }
+            </ion-item>
+          }
         </ion-list>
       </ion-card-content>
     </ion-card>

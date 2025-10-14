@@ -33,9 +33,10 @@ import {
   starOutline,
   checkmarkCircle,
   arrowBack,
-  arrowForward
-} from 'ionicons/icons';
+  arrowForward, personAddOutline, checkmarkCircleOutline, 
+  star} from 'ionicons/icons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { UserService, Usuario } from '../../services/user.service';
 
 interface Servicio {
   id: string;
@@ -82,6 +83,14 @@ export class ReservarPage implements OnInit {
   loading: boolean = false;
   showToast: boolean = false;
   toastMessage: string = '';
+  // Estado de autenticación
+  currentUser: Usuario | null = null;
+  showGuestForm = false;
+
+  // Getter para verificar si el usuario está logueado
+  get isUserLoggedIn(): boolean {
+    return this.currentUser !== null;
+  }
 
   formData: FormData = {
     nombre: "",
@@ -140,27 +149,87 @@ export class ReservarPage implements OnInit {
     "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00"
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    addIcons({ 
-      calendarOutline, 
-      timeOutline, 
-      cutOutline, 
-      personOutline, 
-      starOutline,
-      checkmarkCircle,
-      arrowBack,
-      arrowForward
-    });
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) {
+    addIcons({checkmarkCircle,timeOutline,arrowForward,star,arrowBack,personOutline,personAddOutline,checkmarkCircleOutline,starOutline,calendarOutline,cutOutline});
   }
 
   ngOnInit() {
+    // Verificar si hay usuario logueado
+    this.currentUser = this.userService.getCurrentUser();
+    
+    // Si hay usuario logueado, pre-llenar los campos
+    if (this.currentUser) {
+      this.formData.nombre = this.currentUser.nombre;
+      this.formData.email = this.currentUser.email;
+      this.formData.telefono = this.currentUser.telefono || '';
+    }
+    
     // Capturar parámetro de servicio desde la URL
     this.route.queryParams.subscribe(params => {
       if (params['servicio']) {
         this.formData.servicio = params['servicio'];
         this.step = 2; // Saltar directamente al paso 2
       }
+      
+      // Si viene desde login/registro, restaurar estado de reserva
+      if (params['return_from_login'] || params['return_from_register']) {
+        this.restoreReservationState();
+      }
     });
+  }
+
+  restoreReservationState() {
+    const reservaPendiente = localStorage.getItem('reserva_pendiente');
+    if (reservaPendiente) {
+      try {
+        const savedData = JSON.parse(reservaPendiente);
+        this.formData = { ...this.formData, ...savedData.formData };
+        this.step = savedData.step || 3; // Ir al paso 3 por defecto
+        
+        // Actualizar datos del usuario si ahora está logueado
+        if (this.currentUser) {
+          this.formData.nombre = this.currentUser.nombre;
+          this.formData.email = this.currentUser.email;
+          this.formData.telefono = this.currentUser.telefono || '';
+        }
+        
+        localStorage.removeItem('reserva_pendiente');
+      } catch (error) {
+        console.error('Error al restaurar estado de reserva:', error);
+      }
+    }
+  }
+
+  // Métodos de autenticación para el paso 3
+  goToLogin() {
+    // Guardar el estado actual de la reserva
+    this.saveReservationState();
+    // Navegar a login
+    this.router.navigate(['/login']);
+  }
+
+  goToRegister() {
+    // Guardar el estado actual de la reserva
+    this.saveReservationState();
+    // Navegar a registro
+    this.router.navigate(['/register']);
+  }
+
+  continueAsGuest() {
+    // Mostrar el formulario sin requerir login
+    this.showGuestForm = true;
+  }
+
+  saveReservationState() {
+    const reservaData = {
+      formData: this.formData,
+      step: this.step
+    };
+    localStorage.setItem('reserva_pendiente', JSON.stringify(reservaData));
   }
 
   handleNextStep() {

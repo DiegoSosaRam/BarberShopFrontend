@@ -71,11 +71,22 @@ export class LoginPage {
       this.userService.setCurrentUser(usuario);
       
       setTimeout(() => {
-        // Redirigir según el tipo de usuario
-        if (usuario.tipo === 'barbero') {
-          this.router.navigate(['/custom-services']);
+        // Verificar si hay una reserva pendiente
+        const reservaPendiente = localStorage.getItem('reserva_pendiente');
+        
+        if (reservaPendiente) {
+          // Limpiar reserva pendiente y volver a reservar
+          localStorage.removeItem('reserva_pendiente');
+          this.router.navigate(['/reservar'], { 
+            queryParams: { return_from_login: 'true' } 
+          });
         } else {
-          this.router.navigate(['/services']);
+          // Redirigir según el tipo de usuario
+          if (usuario.tipo === 'barbero') {
+            this.router.navigate(['/custom-services']);
+          } else {
+            this.router.navigate(['/services']);
+          }
         }
       }, 1500);
     } else {

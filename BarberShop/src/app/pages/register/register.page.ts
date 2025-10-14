@@ -107,8 +107,19 @@ export class RegisterPage {
       this.userService.setCurrentUser(nuevoUsuario);
       
       setTimeout(() => {
-        // Los clientes van a services
-        this.router.navigate(['/services']);
+        // Verificar si hay una reserva pendiente
+        const reservaPendiente = localStorage.getItem('reserva_pendiente');
+        
+        if (reservaPendiente) {
+          // Limpiar reserva pendiente y volver a reservar
+          localStorage.removeItem('reserva_pendiente');
+          this.router.navigate(['/reservar'], { 
+            queryParams: { return_from_register: 'true' } 
+          });
+        } else {
+          // Los clientes van a services
+          this.router.navigate(['/services']);
+        }
       }, 1500);
       
     } catch (error) {
