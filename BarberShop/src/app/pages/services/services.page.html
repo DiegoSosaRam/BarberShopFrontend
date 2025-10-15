@@ -123,6 +123,7 @@
       <p class="cta-description">
         Agenda tu cita hoy y descubre por qué somos la barbería premium más elegida
       </p>
+      
       <div class="cta-buttons">
         <ion-button 
           size="large"
@@ -130,13 +131,16 @@
           (click)="navigateToReservar()">
           Reservar Cita
         </ion-button>
-        <ion-button 
-          size="large"
-          fill="outline"
-          class="cta-button-secondary"
-          (click)="navigateToLogin()">
-          Iniciar Sesión
-        </ion-button>
+        
+        @if (!isLoggedIn) {
+          <ion-button 
+            size="large"
+            fill="outline"
+            class="cta-button-secondary"
+            (click)="navigateToLogin()">
+            Iniciar Sesión
+          </ion-button>
+        }
       </div>
     </div>
   </div>

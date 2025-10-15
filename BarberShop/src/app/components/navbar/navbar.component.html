@@ -21,21 +21,46 @@
 
           <!-- Navigation Buttons -->
           <div class="nav-buttons">
-            <ion-button 
-              fill="clear" 
-              class="nav-button services-button" 
-              (click)="navigateToServices()">
-              <ion-icon name="briefcase-outline" slot="start"></ion-icon>
-              <span class="button-text">Servicios</span>
-            </ion-button>
+            <!-- Botones para clientes o usuarios no logueados -->
+            @if (!isBarbero) {
+              <ion-button 
+                fill="clear" 
+                class="nav-button services-button" 
+                (click)="navigateToServices()">
+                <ion-icon name="briefcase-outline" slot="start"></ion-icon>
+                <span class="button-text">Servicios</span>
+              </ion-button>
+              
+              <!-- Botón Mis Citas para clientes logueados que tienen citas -->
+              @if (clienteTieneCitas) {
+                <ion-button 
+                  fill="clear" 
+                  class="nav-button services-button" 
+                  (click)="navigateToMisCitas()">
+                  <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                  <span class="button-text">Mis Citas</span>
+                </ion-button>
+              }
+            }
             
-            <!-- Botón temporal para testing -->
-            <!-- <ion-button 
-              fill="clear" 
-              class="nav-button" 
-              (click)="navigateToAdmin()">
-              <span class="button-text">Admin Test</span>
-            </ion-button> -->
+            <!-- Botones específicos para barberos -->
+            @if (isBarbero) {
+              <ion-button 
+                fill="clear" 
+                class="nav-button" 
+                (click)="navigateToMisServicios()">
+                <ion-icon name="cut-outline" slot="start"></ion-icon>
+                <span class="button-text">Mis Servicios</span>
+              </ion-button>
+              
+              <ion-button 
+                fill="clear" 
+                class="nav-button" 
+                (click)="navigateToCustomServices()">
+                <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                <span class="button-text">Gestionar Citas</span>
+              </ion-button>
+            }
           </div>
         </div>
 

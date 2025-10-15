@@ -28,6 +28,7 @@ import {
 } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { UserService } from '../../services/user.service';
 
 
 interface Servicio {
@@ -146,7 +147,10 @@ export class ServicesPage implements OnInit {
     }
   ];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    public userService: UserService
+  ) {
     addIcons({ 
       timeOutline, 
       starOutline, 
@@ -186,5 +190,9 @@ export class ServicesPage implements OnInit {
 
   formatPrice(price: number): string {
     return price.toLocaleString();
+  }
+
+  get isLoggedIn(): boolean {
+    return this.userService.getCurrentUser() !== null;
   }
 }

@@ -10,7 +10,15 @@ import {
   IonToast
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { personOutline, personAddOutline, briefcaseOutline, logOutOutline } from 'ionicons/icons';
+import { 
+  personOutline, 
+  personAddOutline, 
+  briefcaseOutline, 
+  logOutOutline,
+  cutOutline,
+  calendarOutline,
+  createOutline
+} from 'ionicons/icons';
 import { UserService, Usuario } from '../../services/user.service';
 
 @Component({
@@ -38,7 +46,15 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     private userService: UserService
   ) {
-    addIcons({personOutline, personAddOutline, briefcaseOutline, logOutOutline});
+    addIcons({
+      personOutline, 
+      personAddOutline, 
+      briefcaseOutline, 
+      logOutOutline,
+      cutOutline,
+      calendarOutline,
+      createOutline
+    });
   }
 
   ngOnInit() {
@@ -52,12 +68,26 @@ export class NavbarComponent implements OnInit {
     return this.currentUser !== null;
   }
 
+  get isBarbero(): boolean {
+    return this.currentUser?.tipo === 'barbero';
+  }
+
+  get clienteTieneCitas(): boolean {
+    return this.userService.clienteActualTieneCitas;
+  }
+
   get userDisplayName(): string {
     return this.currentUser ? this.currentUser.nombre.split(' ')[0] : '';
   }
 
   navigateToHome() {
-    this.router.navigate(['/']);
+    // Si es barbero logueado, va a su dashboard principal (resumen)
+    if (this.isBarbero) {
+      this.router.navigate(['/custom-services'], { queryParams: { tab: 'dashboard' } });
+    } else {
+      // Si es cliente o no está logueado, va al home normal
+      this.router.navigate(['/']);
+    }
   }
 
   navigateToLogin() {
@@ -70,6 +100,19 @@ export class NavbarComponent implements OnInit {
   
   navigateToServices() {
     this.router.navigate(['/services']);
+  }
+
+  navigateToMisCitas() {
+    this.router.navigate(['/mis-citas']);
+  }
+
+  // Navegación específica para barberos
+  navigateToCustomServices() {
+    this.router.navigate(['/custom-services'], { queryParams: { tab: 'citas' } });
+  }
+
+  navigateToMisServicios() {
+    this.router.navigate(['/custom-services'], { queryParams: { tab: 'servicios' } });
   }
   
   // Método temporal para testing admin

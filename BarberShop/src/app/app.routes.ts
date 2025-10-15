@@ -33,9 +33,14 @@ export const routes: Routes = [
   {
     path: 'reservar',
     loadComponent: () => import('./pages/reservar/reservar.page').then( m => m.ReservarPage)
-  },  {
+  },
+  {
     path: 'admin',
     loadComponent: () => import('./pages/admin/admin.page').then( m => m.AdminPage)
+  },
+  {
+    path: 'mis-citas',
+    loadComponent: () => import('./pages/mis-citas/mis-citas.page').then( m => m.MisCitasPage)
   }
 
 ];

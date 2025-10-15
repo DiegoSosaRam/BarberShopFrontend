@@ -160,4 +160,18 @@ export class UserService {
       }).length
     };
   }
+
+  // Método para verificar si un cliente tiene citas (simulación)
+  clienteTieneCitas(clienteId: string): boolean {
+    // Simular que algunos clientes tienen citas
+    // En una implementación real, esto consultaría tu API
+    const clientesConCitas = ['cliente-001', 'cliente-002', 'cliente-003'];
+    return clientesConCitas.includes(clienteId);
+  }
+
+  // Getter para verificar si el usuario actual es cliente y tiene citas
+  get clienteActualTieneCitas(): boolean {
+    const currentUser = this.getCurrentUser();
+    return currentUser?.tipo === 'cliente' && this.clienteTieneCitas(currentUser.id);
+  }
 }
