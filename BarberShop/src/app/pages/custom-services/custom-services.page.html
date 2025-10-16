@@ -1,0 +1,504 @@
+<app-navbar></app-navbar>
+
+<ion-content class="custom-services-page">
+  <div class="page-container">
+    
+    <!-- Header Section -->
+    <div class="header-section">
+      <h1 class="page-title">Panel de <span class="gradient-text">Barbero</span></h1>
+      @if (activeTab === 'dashboard') {
+        <p class="page-description">¡Bienvenido {{ firstName }}! Aquí tienes el resumen de tu negocio</p>
+      } @else if (activeTab === 'servicios') {
+        <p class="page-description">Gestiona tus servicios personalizados</p>
+      } @else if (activeTab === 'citas') {
+        <p class="page-description">Administra las citas solicitadas por tus clientes</p>
+      }
+      
+      <!-- Navegación por pestañas solo si no es dashboard -->
+      @if (activeTab !== 'dashboard') {
+        <div class="tab-navigation">
+          <!-- <ion-button 
+            fill="clear" 
+            [class.active]="activeTab === 'servicios'"
+            (click)="setActiveTab('servicios')">
+            <ion-icon name="cut-outline" slot="start"></ion-icon>
+            Mis Servicios
+          </ion-button>
+          <ion-button 
+            fill="clear" 
+            [class.active]="activeTab === 'citas'"
+            (click)="setActiveTab('citas')">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            Gestionar Citas
+          </ion-button> -->
+        </div>
+      }
+    </div>
+
+    <!-- Dashboard Principal (Vista de Bienvenida) -->
+    @if (activeTab === 'dashboard') {
+      <div class="dashboard-section">
+        
+        <!-- Resumen General -->
+        <ion-grid class="stats-grid">
+          <ion-row>
+            <ion-col size="12" sizeMd="4">
+              <ion-card class="stat-card welcome-card" (click)="goToServicios()">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ misServicios.length }}</div>
+                    <div class="stat-label">Servicios Creados</div>
+                    <div class="stat-sublabel">{{ serviciosActivos }} activos</div>
+                  </div>
+                  <ion-icon name="cut-outline" class="stat-icon"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size="12" sizeMd="4">
+              <ion-card class="stat-card welcome-card" (click)="goToCitas()">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ citasPendientesCount }}</div>
+                    <div class="stat-label">Citas Pendientes</div>
+                    <div class="stat-sublabel">Requieren atención</div>
+                  </div>
+                  <ion-icon name="time-outline" class="stat-icon warning"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size="12" sizeMd="4">
+              <ion-card class="stat-card welcome-card" (click)="goToCitas()">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ citasAceptadasCount }}</div>
+                    <div class="stat-label">Citas Aceptadas</div>
+                    <div class="stat-sublabel">Próximas confirmadas</div>
+                  </div>
+                  <ion-icon name="checkmark-circle-outline" class="stat-icon success"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Acciones Rápidas -->
+        <ion-card class="quick-actions-card">
+          <ion-card-header>
+            <ion-card-title>Acciones Rápidas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-grid>
+              <ion-row>
+                <ion-col size="12" sizeMd="6">
+                  <ion-button 
+                    expand="block" 
+                    fill="outline"
+                    class="action-button"
+                    (click)="goToServicios()">
+                    <ion-icon name="cut-outline" slot="start"></ion-icon>
+                    Gestionar Mis Servicios
+                  </ion-button>
+                </ion-col>
+                <ion-col size="12" sizeMd="6">
+                  <ion-button 
+                    expand="block" 
+                    fill="outline"
+                    class="action-button"
+                    (click)="goToCitas()">
+                    <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                    Ver Citas Pendientes
+                  </ion-button>
+                </ion-col>
+                <ion-col size="12" sizeMd="6">
+                  <ion-button 
+                    expand="block" 
+                    class="action-button primary"
+                    (click)="openServiceModal()">
+                    <ion-icon name="add-outline" slot="start"></ion-icon>
+                    Crear Nuevo Servicio
+                  </ion-button>
+                </ion-col>
+                <ion-col size="12" sizeMd="6">
+                  <ion-button 
+                    expand="block" 
+                    fill="outline"
+                    class="action-button"
+                    (click)="goToCitas()">
+                    <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                    Revisar Citas del Día
+                  </ion-button>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- Últimas Citas (Preview) -->
+        @if (citasPendientes.length > 0) {
+          <ion-card class="recent-appointments-card">
+            <ion-card-header>
+              <ion-card-title class="card-title">
+                Últimas Citas Solicitadas
+                <ion-button fill="clear" size="small" (click)="goToCitas()">
+                  Ver Todas
+                </ion-button>
+              </ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              @for (cita of citasPendientes.slice(0, 3); track cita.id) {
+                <div class="appointment-preview">
+                  <div class="appointment-info">
+                    <h4>{{ cita.clienteNombre }}</h4>
+                    <p>{{ cita.servicio }} - {{ formatDate(cita.fecha) }} {{ cita.hora }}</p>
+                  </div>
+                  <ion-badge [color]="getEstadoBadgeColor(cita.estado)">
+                    {{ cita.estado }}
+                  </ion-badge>
+                </div>
+              }
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    }
+
+    <!-- Sección de Servicios -->
+    @if (activeTab === 'servicios') {
+      <div class="services-section">
+        
+        <!-- Stats Cards -->
+        <ion-grid class="stats-grid">
+          <ion-row>
+            <ion-col size="12" sizeMd="6">
+              <ion-card class="stat-card">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ misServicios.length }}</div>
+                    <div class="stat-label">Servicios Creados</div>
+                  </div>
+                  <ion-icon name="cut-outline" class="stat-icon"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size="12" sizeMd="6">
+              <ion-card class="stat-card">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ serviciosActivos }}</div>
+                    <div class="stat-label">Servicios Activos</div>
+                  </div>
+                  <ion-icon name="checkmark-circle-outline" class="stat-icon active"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Lista de Servicios -->
+        <ion-card class="services-card">
+          <ion-card-header>
+            <ion-card-title class="card-title">
+              Mis Servicios
+              <ion-button 
+                fill="clear" 
+                (click)="openServiceModal()"
+                class="add-button">
+                <ion-icon name="add-outline"></ion-icon>
+              </ion-button>
+            </ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            @if (misServicios.length === 0) {
+              <div class="empty-state">
+                <ion-icon name="cut-outline" class="empty-icon"></ion-icon>
+                <h3>No tienes servicios creados</h3>
+                <p>Crea tu primer servicio para comenzar a recibir citas</p>
+                <ion-button (click)="openServiceModal()">
+                  <ion-icon name="add-outline" slot="start"></ion-icon>
+                  Crear Primer Servicio
+                </ion-button>
+              </div>
+            } @else {
+              <div class="services-list">
+                @for (servicio of misServicios; track servicio.id) {
+                  <div class="service-item" [class.inactive]="!servicio.activo">
+                    <div class="service-content">
+                      <div class="service-info">
+                        <h3 class="service-name">{{ servicio.nombre }}</h3>
+                        <p class="service-description">{{ servicio.descripcion }}</p>
+                        <div class="service-meta">
+                          <span class="price">${{ formatPrice(servicio.precio) }}</span>
+                          <span class="duration">
+                            <ion-icon name="time-outline"></ion-icon>
+                            {{ servicio.duracion }}
+                          </span>
+                          <ion-badge [color]="servicio.activo ? 'success' : 'medium'">
+                            {{ servicio.activo ? 'Activo' : 'Inactivo' }}
+                          </ion-badge>
+                        </div>
+                      </div>
+                      <div class="service-actions">
+                        <ion-button 
+                          fill="clear" 
+                          size="small"
+                          (click)="toggleServiceStatus(servicio)">
+                          <ion-icon [name]="servicio.activo ? 'close-circle-outline' : 'checkmark-circle-outline'"></ion-icon>
+                        </ion-button>
+                        <ion-button 
+                          fill="clear" 
+                          size="small"
+                          (click)="openServiceModal(servicio)">
+                          <ion-icon name="create-outline"></ion-icon>
+                        </ion-button>
+                        <ion-button 
+                          fill="clear" 
+                          size="small"
+                          color="danger"
+                          (click)="deleteService(servicio.id)">
+                          <ion-icon name="trash-outline"></ion-icon>
+                        </ion-button>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </ion-card-content>
+        </ion-card>
+      </div>
+    }
+
+    <!-- Sección de Citas -->
+    @if (activeTab === 'citas') {
+      <div class="appointments-section">
+        
+        <!-- Stats de Citas -->
+        <ion-grid class="stats-grid">
+          <ion-row>
+            <ion-col size="12" sizeMd="4">
+              <ion-card class="stat-card">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ citasPendientesCount }}</div>
+                    <div class="stat-label">Pendientes</div>
+                  </div>
+                  <ion-icon name="time-outline" class="stat-icon warning"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size="12" sizeMd="4">
+              <ion-card class="stat-card">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ citasAceptadasCount }}</div>
+                    <div class="stat-label">Aceptadas</div>
+                  </div>
+                  <ion-icon name="checkmark-circle-outline" class="stat-icon success"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size="12" sizeMd="4">
+              <ion-card class="stat-card">
+                <ion-card-content>
+                  <div class="stat-content">
+                    <div class="stat-number">{{ citasCompletadasCount }}</div>
+                    <div class="stat-label">Completadas</div>
+                  </div>
+                  <ion-icon name="checkmark-circle-outline" class="stat-icon completed"></ion-icon>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <!-- Lista de Citas -->
+        <ion-card class="appointments-card">
+          <ion-card-header>
+            <ion-card-title class="card-title">Citas Solicitadas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            @if (citasPendientes.length === 0) {
+              <div class="empty-state">
+                <ion-icon name="calendar-outline" class="empty-icon"></ion-icon>
+                <h3>No tienes citas pendientes</h3>
+                <p>Las citas solicitadas aparecerán aquí</p>
+              </div>
+            } @else {
+              <div class="appointments-list">
+                @for (cita of citasPendientes; track cita.id) {
+                  <div class="appointment-item">
+                    <div class="appointment-content">
+                      <div class="appointment-header">
+                        <div class="client-info">
+                          <h3 class="client-name">
+                            <ion-icon name="person-outline"></ion-icon>
+                            {{ cita.clienteNombre }}
+                          </h3>
+                          <div class="contact-info">
+                            <span class="email">{{ cita.clienteEmail }}</span>
+                            <span class="phone">{{ cita.clienteTelefono }}</span>
+                          </div>
+                        </div>
+                        <ion-badge [color]="getEstadoBadgeColor(cita.estado)">
+                          {{ cita.estado | titlecase }}
+                        </ion-badge>
+                      </div>
+                      
+                      <div class="appointment-details">
+                        <div class="service-detail">
+                          <strong>Servicio:</strong> {{ cita.servicio }}
+                        </div>
+                        <div class="datetime-detail">
+                          <span class="date">
+                            <ion-icon name="calendar-outline"></ion-icon>
+                            {{ formatDate(cita.fecha) }}
+                          </span>
+                          <span class="time">
+                            <ion-icon name="time-outline"></ion-icon>
+                            {{ cita.hora }}
+                          </span>
+                        </div>
+                        @if (cita.notas) {
+                          <div class="notes">
+                            <strong>Notas:</strong> {{ cita.notas }}
+                          </div>
+                        }
+                      </div>
+                      
+                      @if (cita.estado === 'pendiente') {
+                        <div class="appointment-actions">
+                          <ion-button 
+                            fill="clear" 
+                            color="success"
+                            (click)="aceptarCita(cita)">
+                            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                            Aceptar
+                          </ion-button>
+                          <ion-button 
+                            fill="clear" 
+                            color="danger"
+                            (click)="rechazarCita(cita)">
+                            <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                            Rechazar
+                          </ion-button>
+                        </div>
+                      }
+                      
+                      @if (cita.estado === 'aceptada') {
+                        <div class="appointment-actions">
+                          <ion-button 
+                            fill="outline" 
+                            color="success"
+                            (click)="completarCita(cita)">
+                            <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                            Marcar como Completada
+                          </ion-button>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </ion-card-content>
+        </ion-card>
+      </div>
+    }
+  </div>
+
+  <!-- FAB para agregar servicio -->
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openServiceModal()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Modal para crear/editar servicio -->
+  <ion-modal [isOpen]="isModalOpen" (didDismiss)="closeServiceModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ editingService ? 'Editar' : 'Crear' }} Servicio</ion-title>
+          <ion-button fill="clear" slot="end" (click)="closeServiceModal()">
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-toolbar>
+      </ion-header>
+      
+      <ion-content class="modal-content">
+        <div class="form-container">
+          <ion-grid>
+            <ion-row>
+              <ion-col size="12">
+                <ion-item class="form-item">
+                  <ion-label position="stacked">Nombre del Servicio *</ion-label>
+                  <ion-input 
+                    [(ngModel)]="nuevoServicio.nombre"
+                    placeholder="Ej: Corte Premium, Barba Clásica">
+                  </ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12">
+                <ion-item class="form-item">
+                  <ion-label position="stacked">Descripción *</ion-label>
+                  <ion-textarea 
+                    [(ngModel)]="nuevoServicio.descripcion"
+                    placeholder="Describe tu servicio..."
+                    [rows]="3">
+                  </ion-textarea>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" sizeMd="6">
+                <ion-item class="form-item">
+                  <ion-label position="stacked">Precio (CLP) *</ion-label>
+                  <ion-input 
+                    type="number"
+                    [(ngModel)]="nuevoServicio.precio"
+                    placeholder="25000">
+                  </ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12" sizeMd="6">
+                <ion-item class="form-item">
+                  <ion-label position="stacked">Duración *</ion-label>
+                  <ion-input 
+                    [(ngModel)]="nuevoServicio.duracion"
+                    placeholder="45 min">
+                  </ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col size="12">
+                <ion-item class="form-item">
+                  <ion-label position="stacked">Categoría *</ion-label>
+                  <ion-select [(ngModel)]="nuevoServicio.categoria">
+                    @for (categoria of categorias; track categoria) {
+                      <ion-select-option [value]="categoria">{{ categoria }}</ion-select-option>
+                    }
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          
+          <div class="modal-actions">
+            <ion-button fill="outline" (click)="closeServiceModal()">
+              Cancelar
+            </ion-button>
+            <ion-button (click)="saveService()">
+              {{ editingService ? 'Actualizar' : 'Crear' }} Servicio
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Toast -->
+  <ion-toast
+    [isOpen]="showToast"
+    [message]="toastMessage"
+    duration="2000"
+    (didDismiss)="showToast = false">
+  </ion-toast>
+
+</ion-content>

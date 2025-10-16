@@ -15,7 +15,40 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/pages.page').then( m => m.PagesPage)
   },
   {
-    path: 'pages',
-    loadComponent: () => import('./pages/pages.page').then( m => m.PagesPage)
+    path: 'services',
+    loadComponent: () => import('./pages/services/services.page').then( m => m.ServicesPage)
   },
+  {
+    path: 'custom-services',
+    loadComponent: () => import('./pages/custom-services/custom-services.page').then( m => m.CustomServicesPage)
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./pages/register/register.page').then( m => m.RegisterPage)
+  },
+  {
+    path: 'reservar',
+    loadComponent: () => import('./pages/reservar/reservar.page').then( m => m.ReservarPage)
+  },
+  {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin/admin.page').then( m => m.AdminPage)
+  },
+  {
+    path: 'mis-citas',
+    loadComponent: () => import('./pages/mis-citas/mis-citas.page').then( m => m.MisCitasPage)
+  },
+  {
+    path: 'register-barber',
+    loadComponent: () => import('./pages/register-barber/register-barber.page').then( m => m.RegisterBarberPage)
+  },
+  {
+    path: 'qualify-barber',
+    loadComponent: () => import('./pages/qualify-barber/qualify-barber.page').then( m => m.QualifyBarberPage)
+  },
+
 ];

@@ -1,0 +1,328 @@
+// Navbar Styles
+.navbar-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  
+  .navbar-toolbar {
+    --background: rgba(0, 0, 0, 0.8);
+    --border-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    --min-height: 64px;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+}
+
+.navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  
+  @media (min-width: 640px) {
+    padding: 0 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    padding: 0 2rem;
+  }
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+}
+
+// Left Section: Logo + Navigation
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  
+  @media (max-width: 768px) {
+    gap: 1rem;
+  }
+}
+
+// Logo Section
+.logo-section {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .logo-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  
+  .logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.025em;
+  }
+}
+
+// Navigation Buttons
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  .nav-button {
+    --color: #ffffff;
+    --background: transparent;
+    --background-hover: rgba(212, 175, 55, 0.1);
+    --border-radius: 8px;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      --background: rgba(212, 175, 55, 0.1);
+      --color: #d4af37;
+    }
+    
+    &.services-button {
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      
+      &:hover {
+        border-color: #d4af37;
+      }
+    }
+    
+    &.mis-citas-button {
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      --color: #3b82f6;
+      
+      &:hover {
+        --background: rgba(59, 130, 246, 0.1);
+        border-color: #3b82f6;
+        --color: #60a5fa;
+      }
+    }
+    
+    ion-icon {
+      margin-right: 0.5rem;
+      font-size: 1.125rem;
+    }
+    
+    .button-text {
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+  }
+}
+
+// Action Buttons
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  
+  .login-button {
+    --color: #ffffff;
+    --background: transparent;
+    --background-hover: rgba(255, 255, 255, 0.1);
+    --border-radius: 8px;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      --background: rgba(255, 255, 255, 0.1);
+    }
+    
+    ion-icon {
+      margin-right: 0.5rem;
+      font-size: 1.125rem;
+    }
+    
+    .button-text {
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      --padding-start: 0.5rem;
+      --padding-end: 0.5rem;
+      
+      ion-icon {
+        margin-right: 0;
+      }
+    }
+  }
+  
+  .register-button {
+    --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+    --color: #000000;
+    --border-radius: 8px;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    font-weight: 600;
+    text-transform: none;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      --background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+      transform: translateY(-1px);
+    }
+    
+    ion-icon {
+      margin-right: 0.5rem;
+      font-size: 1.125rem;
+    }
+    
+    .button-text {
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      --padding-start: 0.5rem;
+      --padding-end: 0.5rem;
+      
+      ion-icon {
+        margin-right: 0;
+      }
+    }
+  }
+  
+  // Estilos para usuario logueado
+  .user-welcome {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    
+    .welcome-text {
+      color: #d4af37;
+      font-weight: 600;
+      font-size: 0.875rem;
+      white-space: nowrap;
+      
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+  }
+  
+  .logout-button {
+    --color: #d4af37;
+    --background: transparent;
+    --border-color: #d4af37;
+    --border-width: 1px;
+    --border-style: solid;
+    --border-radius: 8px;
+    --padding-start: 1rem;
+    --padding-end: 1rem;
+    font-weight: 500;
+    text-transform: none;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      --background: rgba(212, 175, 55, 0.1);
+      --color: #ffd700;
+      --border-color: #ffd700;
+    }
+    
+    ion-icon {
+      margin-right: 0.5rem;
+      font-size: 1.125rem;
+    }
+    
+    .button-text {
+      @media (max-width: 640px) {
+        display: none;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      --padding-start: 0.5rem;
+      --padding-end: 0.5rem;
+      
+      ion-icon {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 640px) {
+  .navbar-container {
+    padding: 0 0.75rem;
+  }
+  
+  .logo-section {
+    .logo-text {
+      font-size: 1.125rem;
+    }
+    
+    .logo-image {
+      width: 36px;
+      height: 36px;
+    }
+  }
+  
+  .action-buttons {
+    gap: 0.5rem;
+    
+    .login-button,
+    .register-button {
+      min-width: 44px;
+      --padding-start: 0.5rem;
+      --padding-end: 0.5rem;
+      
+      // Ocultar texto en móviles pequeños
+      .button-inner {
+        font-size: 0;
+        
+        ion-icon {
+          margin-right: 0;
+          font-size: 1.25rem;
+        }
+      }
+    }
+  }
+}
+
+// Override default Ionic button styles
+ion-button {
+  --ripple-color: transparent;
+  margin: 0;
+}
+
+// Global navbar overrides
+ion-header {
+  box-shadow: none;
+}
+
+ion-toolbar {
+  --ion-safe-area-top: 0;
+}

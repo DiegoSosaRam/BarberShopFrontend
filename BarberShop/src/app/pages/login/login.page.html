@@ -1,0 +1,82 @@
+<app-navbar></app-navbar>
+
+<ion-content [fullscreen]="true" class="login-content">
+  <div class="login-container">
+    <ion-card class="login-card">
+      <ion-card-header>
+        <ion-card-title class="login-title">Iniciar Sesión</ion-card-title>
+        <p class="login-subtitle">Accede a tu cuenta BarberShop</p>
+        
+        <!-- Credenciales de prueba -->
+        <div class="test-credentials">
+          <p class="credentials-title">Credenciales de prueba:</p>
+          <div class="credential-item">
+            <strong>Cliente:</strong> cliente@barbershop.com / 123456
+          </div>
+          <div class="credential-item">
+            <strong>Barbero:</strong> barbero@barbershop.com / 123456
+          </div>
+        </div>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <form (ngSubmit)="onLogin()">
+          <ion-item>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-input 
+              type="email" 
+              placeholder="Correo electrónico"
+              [(ngModel)]="loginData.email"
+              name="email"
+              required>
+            </ion-input>
+          </ion-item>
+          
+          <ion-item>
+            <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+            <ion-input 
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Contraseña"
+              [(ngModel)]="loginData.password"
+              name="password"
+              required>
+            </ion-input>
+            <ion-button 
+              fill="clear" 
+              slot="end" 
+              (click)="togglePasswordVisibility()">
+              <ion-icon [name]="showPassword ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </ion-button>
+          </ion-item>
+          
+          <ion-button 
+            expand="block" 
+            type="submit" 
+            class="login-button">
+            Iniciar Sesión
+          </ion-button>
+        </form>
+        
+        <div class="register-link">
+          <p>¿No tienes cuenta?</p>
+          <ion-button fill="clear" (click)="goToRegister()">
+            Regístrate aquí
+          </ion-button>
+        </div>
+        
+        <div class="admin-link">
+          <ion-button fill="clear" size="small" (click)="goToAdmin()">
+            Panel de Administración
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  
+  <ion-toast
+    [isOpen]="showToast"
+    [message]="toastMessage"
+    duration="2000"
+    (didDismiss)="showToast = false">
+  </ion-toast>
+</ion-content>

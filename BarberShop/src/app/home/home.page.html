@@ -1,20 +1,54 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<app-navbar></app-navbar>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+<ion-content [fullscreen]="true" class="home-page">
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    
+    <div class="hero-content">
+      <p class="hero-pretitle">La Mejor</p>
+      <h1 class="hero-title">
+        Barbería <span class="gradient-text">Premium</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Experiencia única con los mejores profesionales, técnicas modernas y atención personalizada
+      </p>
+      
+      <div class="hero-buttons">
+        <a class="btn-primary" href="/reservar">
+          Reservar Cita
+        </a>
+        <a class="btn-outline" href="/services">
+          Ver Servicios
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Años de Experiencia</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">5000+</div>
+          <div class="stat-label">Clientes Satisfechos</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">10</div>
+          <div class="stat-label">Barberos Expertos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </ion-content>

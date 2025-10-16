@@ -1,0 +1,265 @@
+<app-navbar></app-navbar>
+
+<ion-content class="mis-citas-content">
+  <div class="container">
+    <div class="header-section">
+      <ion-button 
+        fill="clear" 
+        class="back-button" 
+        (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+        Volver
+      </ion-button>
+      
+      <h1 class="page-title">Mis <span class="gradient-text">Citas</span></h1>
+      <p class="page-description">¡Hola {{ firstName }}! Aquí puedes ver todas tus citas programadas</p>
+    </div>
+
+    <!-- Estadísticas Rápidas -->
+    <div class="stats-section">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" size-md="3">
+            <ion-card class="stats-card pendientes">
+              <ion-card-content>
+                <div class="stats-content">
+                  <ion-icon name="hourglass-outline" class="stats-icon"></ion-icon>
+                  <div class="stats-info">
+                    <div class="stats-number">{{ citasPendientes.length }}</div>
+                    <div class="stats-label">Pendientes</div>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size="6" size-md="3">
+            <ion-card class="stats-card aceptadas">
+              <ion-card-content>
+                <div class="stats-content">
+                  <ion-icon name="checkmark-circle-outline" class="stats-icon"></ion-icon>
+                  <div class="stats-info">
+                    <div class="stats-number">{{ citasAceptadas.length }}</div>
+                    <div class="stats-label">Confirmadas</div>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size="6" size-md="3">
+            <ion-card class="stats-card completadas">
+              <ion-card-content>
+                <div class="stats-content">
+                  <ion-icon name="checkmark-circle-outline" class="stats-icon"></ion-icon>
+                  <div class="stats-info">
+                    <div class="stats-number">{{ citasCompletadas.length }}</div>
+                    <div class="stats-label">Completadas</div>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+          
+          <ion-col size="6" size-md="3">
+            <ion-card class="stats-card canceladas">
+              <ion-card-content>
+                <div class="stats-content">
+                  <ion-icon name="close-circle-outline" class="stats-icon"></ion-icon>
+                  <div class="stats-info">
+                    <div class="stats-number">{{ citasCanceladas.length }}</div>
+                    <div class="stats-label">Canceladas</div>
+                  </div>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <!-- Lista de Citas -->
+    <div class="citas-section">
+      <div class="section-header">
+        <h2>Historial de Citas</h2>
+        <ion-button 
+          fill="solid" 
+          size="small" 
+          (click)="agendarNuevaCita()"
+          class="nueva-cita-btn">
+          <ion-icon name="calendar-outline" slot="start"></ion-icon>
+          Nueva Cita
+        </ion-button>
+      </div>
+
+      @if (misCitas.length === 0) {
+        <ion-card class="empty-state">
+          <ion-card-content>
+            <div class="empty-content">
+              <ion-icon name="calendar-outline" class="empty-icon"></ion-icon>
+              <h3>No tienes citas programadas</h3>
+              <p>¡Agenda tu primera cita y disfruta de nuestros servicios profesionales!</p>
+              <ion-button fill="solid" (click)="agendarNuevaCita()">
+                <ion-icon name="calendar-outline" slot="start"></ion-icon>
+                Agendar Cita
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      } @else {
+        <!-- Citas Próximas/Activas -->
+        @if (citasProximas.length > 0) {
+          <div class="citas-group">
+            <h3 class="group-title">Próximas Citas</h3>
+            @for (cita of citasProximas; track trackByCitaId($index, cita)) {
+              <ion-card class="cita-card" [class]="'estado-' + cita.estado">
+                <ion-card-content>
+                  <div class="cita-header">
+                    <div class="cita-info">
+                      <h4>{{ cita.servicio }}</h4>
+                      <p class="barbero">
+                        <ion-icon name="person-outline"></ion-icon>
+                        {{ cita.barbero }}
+                      </p>
+                    </div>
+                    <ion-badge [color]="getEstadoColor(cita.estado)" class="estado-badge">
+                      <ion-icon [name]="getEstadoIcon(cita.estado)"></ion-icon>
+                      {{ cita.estado | titlecase }}
+                    </ion-badge>
+                  </div>
+
+                  <div class="cita-details">
+                    <div class="detail-item">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      <span>{{ formatFecha(cita.fecha) }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <ion-icon name="time-outline"></ion-icon>
+                      <span>{{ cita.hora }} ({{ cita.duracion }})</span>
+                    </div>
+                    <div class="detail-item precio">
+                      <span class="precio-label">Precio:</span>
+                      <span class="precio-value">${{ cita.precio }}</span>
+                    </div>
+                  </div>
+
+                  @if (cita.notas) {
+                    <div class="cita-notas">
+                      <p><strong>Notas:</strong> {{ cita.notas }}</p>
+                    </div>
+                  }
+
+                  <div class="cita-actions">
+                    @if (cita.estado === 'pendiente' || cita.estado === 'aceptada') {
+                      <ion-button 
+                        fill="outline" 
+                        color="danger" 
+                        size="small"
+                        (click)="cancelarCita(cita)">
+                        <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                        Cancelar
+                      </ion-button>
+                    }
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            }
+          </div>
+        }
+
+        <!-- Citas Completadas -->
+        @if (citasCompletadas.length > 0) {
+          <div class="citas-group">
+            <h3 class="group-title">Historial Completado</h3>
+            @for (cita of citasCompletadas; track trackByCitaId($index, cita)) {
+              <ion-card class="cita-card estado-completada">
+                <ion-card-content>
+                  <div class="cita-header">
+                    <div class="cita-info">
+                      <h4>{{ cita.servicio }}</h4>
+                      <p class="barbero">
+                        <ion-icon name="person-outline"></ion-icon>
+                        {{ cita.barbero }}
+                      </p>
+                    </div>
+                    <ion-badge color="success" class="estado-badge">
+                      <ion-icon name="checkmark-circle-outline"></ion-icon>
+                      Completada
+                    </ion-badge>
+                  </div>
+
+                  <div class="cita-details">
+                    <div class="detail-item">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      <span>{{ formatFecha(cita.fecha) }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <ion-icon name="time-outline"></ion-icon>
+                      <span>{{ cita.hora }} ({{ cita.duracion }})</span>
+                    </div>
+                    <div class="detail-item precio">
+                      <span class="precio-label">Precio:</span>
+                      <span class="precio-value">${{ cita.precio }}</span>
+                    </div>
+                  </div>
+
+                  @if (cita.notas) {
+                    <div class="cita-notas">
+                      <p><strong>Notas:</strong> {{ cita.notas }}</p>
+                    </div>
+                  }
+                </ion-card-content>
+              </ion-card>
+            }
+          </div>
+        }
+
+        <!-- Citas Canceladas -->
+        @if (citasCanceladas.length > 0) {
+          <div class="citas-group">
+            <h3 class="group-title">Citas Canceladas</h3>
+            @for (cita of citasCanceladas; track trackByCitaId($index, cita)) {
+              <ion-card class="cita-card estado-cancelada">
+                <ion-card-content>
+                  <div class="cita-header">
+                    <div class="cita-info">
+                      <h4>{{ cita.servicio }}</h4>
+                      <p class="barbero">
+                        <ion-icon name="person-outline"></ion-icon>
+                        {{ cita.barbero }}
+                      </p>
+                    </div>
+                    <ion-badge color="danger" class="estado-badge">
+                      <ion-icon name="close-circle-outline"></ion-icon>
+                      Cancelada
+                    </ion-badge>
+                  </div>
+
+                  <div class="cita-details">
+                    <div class="detail-item">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      <span>{{ formatFecha(cita.fecha) }}</span>
+                    </div>
+                    <div class="detail-item">
+                      <ion-icon name="time-outline"></ion-icon>
+                      <span>{{ cita.hora }} ({{ cita.duracion }})</span>
+                    </div>
+                  </div>
+                </ion-card-content>
+              </ion-card>
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+</ion-content>
+
+<!-- Toast para mensajes -->
+<ion-toast
+  [isOpen]="showToast"
+  [message]="toastMessage"
+  [duration]="3000"
+  position="bottom"
+  color="success">
+</ion-toast>

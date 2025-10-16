@@ -1,0 +1,36 @@
+<app-navbar></app-navbar>
+
+<ion-content class="login-bg" [fullscreen]="true">
+
+
+  <div class="login-wrapper">
+    <div class="rating-card">
+      <header class="card-header">
+        <h1 class="card-title">Califica a tu barbero {{ name }}</h1>
+        <p class="card-subtitle">Selecciona la puntuación</p>
+      </header>
+
+      <section class="card-body">
+        <div class="stars" role="radiogroup" aria-label="Selecciona puntuación">
+          @for (s of [1,2,3,4,5]; track $index) {
+            <button
+              type="button"
+              class="star"
+              [class.filled]="$index < rating"
+              (click)="setRating($index + 1)"
+              aria-checked="{{ $index < rating }}"
+              role="radio"
+              [attr.aria-label]="'Puntuación ' + ($index + 1)">
+              <span class="icon">{{ $index < rating ? '★' : '☆' }}</span>
+            </button>
+          }
+        </div>
+
+
+        <div class="actions">
+          <button class="btn-primary" (click)="submitRating($event)" [disabled]="rating === 0">Enviar Calificación</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</ion-content>

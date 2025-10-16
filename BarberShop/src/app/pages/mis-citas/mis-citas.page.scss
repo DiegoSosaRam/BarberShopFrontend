@@ -1,0 +1,428 @@
+// Mis Citas Page Styles
+.mis-citas-content {
+  --ion-background-color: #0f0f0f;
+  --ion-text-color: #ffffff;
+  
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    
+    .back-button {
+      position: absolute;
+      top: 0;
+      left: 0;
+      --color: #d4af37;
+      --background: rgba(212, 175, 55, 0.1);
+      --border-radius: 12px;
+      --border-color: rgba(212, 175, 55, 0.3);
+      border: 1px solid var(--border-color);
+      
+      &:hover {
+        --background: rgba(212, 175, 55, 0.2);
+        --border-color: #d4af37;
+      }
+    }
+
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin: 20px 0 1rem 0;
+      
+      @media (max-width: 768px) {
+        font-size: 2rem;
+      }
+
+      .gradient-text {
+        background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .page-description {
+      font-size: 1.125rem;
+      color: #b3b3b3;
+      margin: 0;
+    }
+  }
+
+  .stats-section {
+    margin-bottom: 2rem;
+    
+    .stats-card {
+      margin: 8px 0;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(212, 175, 55, 0.3);
+        box-shadow: 0 8px 25px rgba(212, 175, 55, 0.1);
+      }
+
+      ion-card-content {
+        padding: 20px;
+      }
+
+      .stats-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .stats-icon {
+        font-size: 2rem;
+        margin-right: 12px;
+      }
+
+      .stats-info {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .stats-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1;
+        color: #ffffff;
+      }
+
+      .stats-label {
+        font-size: 0.9rem;
+        font-weight: 500;
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #b3b3b3;
+      }
+
+      // Colores específicos para cada tipo
+      &.pendientes {
+        .stats-icon {
+          color: #d4af37;
+        }
+      }
+
+      &.aceptadas {
+        .stats-icon {
+          color: #4ade80;
+        }
+      }
+
+      &.completadas {
+        .stats-icon {
+          color: #22c55e;
+        }
+      }
+
+      &.canceladas {
+        .stats-icon {
+          color: #ef4444;
+        }
+      }
+    }
+  }
+
+  .citas-section {
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+
+      h2 {
+        color: #ffffff;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin: 0;
+      }
+
+      .nueva-cita-btn {
+        --background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+        --color: #0f0f0f;
+        --border-radius: 12px;
+        font-weight: 600;
+        --box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+      }
+    }
+
+    .empty-state {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      text-align: center;
+      
+      .empty-content {
+        padding: 40px 20px;
+        
+        .empty-icon {
+          font-size: 4rem;
+          color: #666666;
+          margin-bottom: 20px;
+        }
+
+        h3 {
+          color: #ffffff;
+          font-size: 1.5rem;
+          margin-bottom: 10px;
+        }
+
+        p {
+          color: #b3b3b3;
+          margin-bottom: 30px;
+        }
+
+        ion-button {
+          --background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+          --color: #0f0f0f;
+          --border-radius: 12px;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .citas-group {
+      margin-bottom: 2rem;
+
+      .group-title {
+        color: #ffffff;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+      }
+    }
+
+    .cita-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+
+      &:hover {
+        transform: translateY(-3px);
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(212, 175, 55, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      }
+
+      // Border colors por estado
+      &.estado-pendiente {
+        border-left: 3px solid #d4af37;
+      }
+
+      &.estado-aceptada {
+        border-left: 3px solid #4ade80;
+      }
+
+      &.estado-completada {
+        border-left: 3px solid #22c55e;
+      }
+
+      &.estado-cancelada {
+        border-left: 3px solid #ef4444;
+        opacity: 0.7;
+      }
+
+      ion-card-content {
+        padding: 20px;
+      }
+
+      .cita-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 15px;
+
+        .cita-info {
+          flex: 1;
+
+          h4 {
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+          }
+
+          .barbero {
+            color: #b3b3b3;
+            font-size: 0.9rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+
+            ion-icon {
+              margin-right: 5px;
+              font-size: 1rem;
+              color: #d4af37;
+            }
+          }
+        }
+
+        .estado-badge {
+          display: flex;
+          align-items: center;
+          padding: 6px 12px;
+          border-radius: 12px;
+          font-size: 0.8rem;
+          font-weight: 600;
+          background: rgba(212, 175, 55, 0.1);
+          color: #d4af37;
+          border: 1px solid rgba(212, 175, 55, 0.3);
+
+          ion-icon {
+            margin-right: 4px;
+            font-size: 1rem;
+          }
+        }
+      }
+
+      .cita-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+
+        .detail-item {
+          display: flex;
+          align-items: center;
+          color: #b3b3b3;
+          font-size: 0.9rem;
+
+          ion-icon {
+            margin-right: 8px;
+            font-size: 1rem;
+            color: #d4af37;
+          }
+
+          &.precio {
+            justify-content: space-between;
+            font-weight: 600;
+            grid-column: 1 / -1;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+
+            .precio-label {
+              color: #ffffff;
+            }
+
+            .precio-value {
+              color: #d4af37;
+              font-size: 1.1rem;
+            }
+          }
+        }
+      }
+
+      .cita-notas {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        p {
+          margin: 0;
+          color: #b3b3b3;
+          font-size: 0.9rem;
+
+          strong {
+            color: #ffffff;
+          }
+        }
+      }
+
+      .cita-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+
+        ion-button {
+          --border-radius: 12px;
+          font-size: 0.8rem;
+          --border-color: rgba(239, 68, 68, 0.5);
+          
+          &:hover {
+            --background: rgba(239, 68, 68, 0.1);
+          }
+        }
+      }
+    }
+  }
+
+  // Toast customization
+  ion-toast {
+    --background: #22c55e;
+    --color: #ffffff;
+    --border-radius: 12px;
+    font-weight: 500;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .container {
+      padding: 15px;
+    }
+
+    .header-section {
+      .back-button {
+        position: relative;
+        margin-bottom: 1rem;
+      }
+      
+      .page-title {
+        font-size: 2rem;
+      }
+    }
+
+    .stats-section {
+      .stats-card {
+        .stats-content {
+          flex-direction: column;
+          
+          .stats-icon {
+            margin-right: 0;
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+
+    .citas-section {
+      .section-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+
+        .nueva-cita-btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

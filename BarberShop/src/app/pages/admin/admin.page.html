@@ -1,0 +1,124 @@
+<app-navbar></app-navbar>
+
+<ion-content [fullscreen]="true" class="admin-content">
+  <div class="admin-container">
+    <!-- Header -->
+    <ion-card class="header-card">
+      <ion-card-header>
+        <ion-card-title class="admin-title">
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          Panel de Administración
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <!-- Estadísticas -->
+    <ion-card class="stats-card">
+      <ion-card-header>
+        <ion-card-title>Estadísticas de Usuarios</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <div class="stat-item">
+                <div class="stat-number">{{stats.total}}</div>
+                <div class="stat-label">Total Usuarios</div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="stat-item">
+                <div class="stat-number">{{stats.clientes}}</div>
+                <div class="stat-label">Clientes</div>
+              </div>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <div class="stat-item">
+                <div class="stat-number">{{stats.barberos}}</div>
+                <div class="stat-label">Barberos</div>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="stat-item">
+                <div class="stat-number">{{stats.registrosHoy}}</div>
+                <div class="stat-label">Registros Hoy</div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Lista de Usuarios -->
+    <ion-card class="users-card">
+      <ion-card-header>
+        <ion-card-title>
+          Usuarios Registrados
+          <ion-button fill="clear" (click)="loadData()">
+            <ion-icon name="refresh-outline"></ion-icon>
+          </ion-button>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list>
+          @for (usuario of usuarios; track usuario.id) {
+            <ion-item class="user-item">
+              <ion-icon name="person-outline" slot="start"></ion-icon>
+              <ion-label>
+                <h2>{{usuario.nombre}}</h2>
+                <p>{{usuario.email}}</p>
+                <p>{{usuario.telefono}}</p>
+                <p class="date-info">Registrado: {{formatDate(usuario.fechaRegistro)}}</p>
+              </ion-label>
+              <ion-badge [color]="getUserBadgeColor(usuario.tipo)" slot="end">
+                {{usuario.tipo}}
+              </ion-badge>
+              @if (usuario.email !== 'cliente@barbershop.com' && usuario.email !== 'barbero@barbershop.com') {
+                <ion-button 
+                  fill="clear" 
+                  color="danger" 
+                  slot="end"
+                  (click)="confirmDelete(usuario.id)">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              }
+            </ion-item>
+          }
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Acciones de Administración -->
+    <ion-card class="actions-card">
+      <ion-card-header>
+        <ion-card-title>Acciones de Administración</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-button 
+          expand="block" 
+          color="danger" 
+          (click)="clearAllUsers()"
+          class="action-button">
+          Limpiar Todos los Datos
+        </ion-button>
+        <ion-button 
+          expand="block" 
+          fill="outline" 
+          (click)="goBack()"
+          class="action-button">
+          Volver al Inicio
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Alert de confirmación -->
+  <ion-alert
+    [isOpen]="showDeleteAlert"
+    header="Confirmar Eliminación"
+    message="¿Estás seguro de que quieres eliminar este usuario?"
+    [buttons]="alertButtons">
+  </ion-alert>
+</ion-content>

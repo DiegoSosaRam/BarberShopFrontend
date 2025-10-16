@@ -1,0 +1,148 @@
+<app-navbar></app-navbar>
+
+<ion-content [fullscreen]="true" class="services-page">
+  
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Nuestros <span class="gradient-text">Servicios</span>
+      </h1>
+      <p class="hero-description">
+        Descubre nuestra gama completa de servicios profesionales, diseñados para realzar tu estilo personal
+      </p>
+    </div>
+  </div>
+
+  <!-- Ventajas Section -->
+  <div class="advantages-section">
+    <ion-grid>
+      <ion-row>
+        @for (ventaja of ventajas; track ventaja) {
+  <ion-col size="12" sizeMd="6" sizeLg="3">
+    <div class="advantage-card">
+      <div class="advantage-icon">
+        <ion-icon [name]="ventaja.icono" class="icon-large"></ion-icon>
+      </div>
+      <h3 class="advantage-title">{{ ventaja.titulo }}</h3>
+      <p class="advantage-description">{{ ventaja.descripcion }}</p>
+    </div>
+  </ion-col>
+}
+        
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Services Section -->
+  <div class="services-section">
+    <div class="section-header">
+      <h2 class="section-title">Catálogo de Servicios</h2>
+      <p class="section-description">
+        Cada servicio está diseñado para ofrecerte la mejor experiencia
+      </p>
+    </div>
+
+    <ion-grid>
+      <ion-row>
+        @for (servicio of servicios; track servicio) {
+        <ion-col size="12" sizeMd="6" sizeLg="4" >
+          <ion-card class="service-card" [ngClass]="{'popular-service': servicio.popular}">
+            
+            <!-- Popular Badge -->
+            @if (servicio.popular) {
+              <ion-badge 
+                class="popular-badge" 
+                color="success">
+                Popular
+              </ion-badge>
+            }
+
+            <ion-card-header>
+              <!-- Category Badge -->
+              <ion-badge 
+                [color]="getCategoryColor(servicio.categoria)"
+                class="category-badge">
+                {{ servicio.categoria }}
+              </ion-badge>
+
+              <!-- Service Title -->
+              <ion-card-title class="service-title">
+                <ion-icon name="cut-outline" class="title-icon"></ion-icon>
+                {{ servicio.nombre }}
+              </ion-card-title>
+
+              <!-- Duration and Price -->
+              <div class="service-meta">
+                <div class="duration">
+                  <ion-icon name="time-outline" class="meta-icon"></ion-icon>
+                  {{ servicio.duracion }}
+                </div>
+                <div class="price">
+                  ${{ formatPrice(servicio.precio) }}
+                </div>
+              </div>
+            </ion-card-header>
+
+            <ion-card-content>
+              <!-- Description -->
+              <p class="service-description">{{ servicio.descripcion }}</p>
+
+              <!-- Features -->
+              <div class="features-section">
+                <h4 class="features-title">Incluye:</h4>
+                <ul class="features-list">
+                  @for (caracteristica of servicio.caracteristicas; track caracteristica) {
+                    <li class="feature-item">
+                      <div class="bullet"></div>
+                      {{ caracteristica }}
+                    </li>
+                  }
+                </ul>
+              </div>
+
+              <!-- Reserve Button -->
+              <ion-button 
+                expand="block" 
+                class="reserve-button"
+                (click)="navigateToReservar(servicio.id)">
+                Reservar Ahora
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      }
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <!-- Call to Action Section -->
+  <div class="cta-section">
+    <div class="cta-content">
+      <h2 class="cta-title">¿Listo para transformar tu estilo?</h2>
+      <p class="cta-description">
+        Agenda tu cita hoy y descubre por qué somos la barbería premium más elegida
+      </p>
+      
+      <div class="cta-buttons">
+        <ion-button 
+          size="large"
+          class="cta-button-primary"
+          (click)="navigateToReservar()">
+          Reservar Cita
+        </ion-button>
+        
+        @if (!isLoggedIn) {
+          <ion-button 
+            size="large"
+            fill="outline"
+            class="cta-button-secondary"
+            (click)="navigateToLogin()">
+            Iniciar Sesión
+          </ion-button>
+        }
+      </div>
+    </div>
+  </div>
+
+</ion-content>
