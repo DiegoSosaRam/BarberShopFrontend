@@ -41,6 +41,14 @@ export const routes: Routes = [
   {
     path: 'mis-citas',
     loadComponent: () => import('./pages/mis-citas/mis-citas.page').then( m => m.MisCitasPage)
-  }
+  },
+  {
+    path: 'register-barber',
+    loadComponent: () => import('./pages/register-barber/register-barber.page').then( m => m.RegisterBarberPage)
+  },
+  {
+    path: 'qualify-barber',
+    loadComponent: () => import('./pages/qualify-barber/qualify-barber.page').then( m => m.QualifyBarberPage)
+  },
 
 ];

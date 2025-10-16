@@ -17,7 +17,8 @@ import {
   logOutOutline,
   cutOutline,
   calendarOutline,
-  createOutline
+  createOutline,
+  starOutline
 } from 'ionicons/icons';
 import { UserService, Usuario } from '../../services/user.service';
 
@@ -53,7 +54,8 @@ export class NavbarComponent implements OnInit {
       logOutOutline,
       cutOutline,
       calendarOutline,
-      createOutline
+      createOutline,
+      starOutline
     });
   }
 
@@ -104,6 +106,10 @@ export class NavbarComponent implements OnInit {
 
   navigateToMisCitas() {
     this.router.navigate(['/mis-citas']);
+  }
+
+  navigateToQualifyBarber() {
+    this.router.navigate(['/qualify-barber']);
   }
 
   // Navegación específica para barberos

@@ -1,0 +1,68 @@
+<app-navbar></app-navbar>
+<ion-content [fullscreen]="true" class="register-barber-page">
+  <div class="register-wrapper">
+    
+    <div class="register-card">
+      <header class="card-header">
+        <h1 class="card-title">Registro de Barbero</h1>
+        <p class="card-subtitle">Crea tu perfil profesional para ofrecer servicios</p>
+      </header>
+
+      <section class="card-body">
+        <form class="register-form" (submit)="onSubmit($event)">
+          <!-- Nombre -->
+          <div class="form-group full">
+            <label for="ownerName" class="label">Nombre Completo</label>
+            <input id="ownerName" name="ownerName" [(ngModel)]="name" type="text" placeholder="Tu nombre completo" class="input" required />
+          </div>
+
+          <!-- Correo (nuevo) -->
+          <div class="form-group full">
+            <label for="email" class="label">Correo Electrónico</label>
+            <input id="email" name="email" [(ngModel)]="email" type="email" placeholder="tu@email.com" class="input" required />
+          </div>
+
+          <!-- Foto: upload + preview -->
+          <div class="form-group full">
+            <label class="label">Foto</label>
+            <input type="file" accept="image/*" (change)="handlePhotoChange($event)" class="input" />
+            <div *ngIf="photoPreview" class="photo-preview-wrap">
+              <img [src]="photoPreview" alt="Preview" class="photo-preview" />
+            </div>
+          </div>
+
+          <!-- Servicios: checkbox list generado con *ngFor -->
+          <div class="form-group full">
+            <label class="label">Servicios</label>
+            <div class="services-list">
+              @for (s of servicesOptions; track s; let i = $index) {
+                <label class="service-item">
+                  <input type="checkbox" [checked]="selectedServices.includes(s)" (change)="toggleService(s, $event.target.checked)" />
+                  <span class="service-label">{{ s }}</span>
+                </label>
+              }
+            </div>
+          </div>
+
+          <!-- Barbería: select generado desde barberies -->
+          <div class="form-group full">
+            <label for="barberia" class="label">Barbería</label>
+            <select id="barberia" name="barberia" [(ngModel)]="selectedBarberia" class="input">
+              <option value="" disabled selected>Selecciona barbería</option>
+              @for (b of barberies; track b; let i = $index) {
+                <option [value]="b">{{ b }}</option>
+              }
+            </select>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn-primary full">Crear Cuenta</button>
+        </form>
+
+        <div class="register-note">
+          <p>¿Ya tienes cuenta? <a routerLink="/login" class="register-link">Inicia sesión aquí</a></p>
+        </div>
+      </section>
+    </div>
+  </div>
+</ion-content>

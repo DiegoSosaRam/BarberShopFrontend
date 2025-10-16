@@ -1,9 +1,54 @@
 
 <app-navbar></app-navbar>
 
+<ion-content [fullscreen]="true" class="home-page">
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    
+    <div class="hero-content">
+      <p class="hero-pretitle">La Mejor</p>
+      <h1 class="hero-title">
+        Barbería <span class="gradient-text">Premium</span>
+      </h1>
+      
+      <p class="hero-subtitle">
+        Experiencia única con los mejores profesionales, técnicas modernas y atención personalizada
+      </p>
+      
+      <div class="hero-buttons">
+        <a class="btn-primary" href="/reservar">
+          Reservar Cita
+        </a>
+        <a class="btn-outline" href="/services">
+          Ver Servicios
+        </a>
+      </div>
+    </div>
+  </section>
 
-<ion-content [fullscreen]="true">
-  <div id="container">
-    <strong>AQUI VA INDEX O HOME DE FER</strong>
-  </div>
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="stats-container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Años de Experiencia</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">5000+</div>
+          <div class="stat-label">Clientes Satisfechos</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-number">10</div>
+          <div class="stat-label">Barberos Expertos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </ion-content>
