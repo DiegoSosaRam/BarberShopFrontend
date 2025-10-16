@@ -38,11 +38,14 @@ export class RegisterBarberPage implements OnInit {
       this.photoPreview = null;
       return;
     }
+
     this.photoFile = input.files[0];
     const reader = new FileReader();
+
     reader.onload = () => {
       this.photoPreview = reader.result as string;
     };
+
     reader.readAsDataURL(this.photoFile);
   }
 
@@ -58,12 +61,11 @@ export class RegisterBarberPage implements OnInit {
     event.preventDefault();
     const payload = {
       name: this.name,
-      email: this.email, // <-- enviar correo
+      email: this.email, 
       barberia: this.selectedBarberia,
       services: this.selectedServices,
       // photoFile: this.photoFile (procesar FormData en integración real)
     };
     console.log('Register barber payload:', payload, 'photoFile:', this.photoFile);
-    // ...existing code...
   }
 }

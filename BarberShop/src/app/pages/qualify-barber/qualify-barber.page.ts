@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
 
 @Component({
@@ -8,13 +7,24 @@ import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/stan
   templateUrl: './qualify-barber.page.html',
   styleUrls: ['./qualify-barber.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule]
 })
 export class QualifyBarberPage implements OnInit {
-
+  // variable que contiene cuántas estrellas se escogieron
+  rating: number = 0;
+  name: string = 'Barbero pelón';
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  setRating(value: number) {
+    this.rating = value;
   }
 
+  submitRating(event: Event) {
+    event.preventDefault();
+    // aquí enviarías la calificación al backend; por ahora mostramos en consola
+    console.log('Calificación enviada:', this.rating);
+    // opcional: feedback al usuario (alert, toast...) — implementar según tu stack
+  }
 }
