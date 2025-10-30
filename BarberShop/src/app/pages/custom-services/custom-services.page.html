@@ -145,11 +145,11 @@
               </ion-card-title>
             </ion-card-header>
             <ion-card-content>
-              @for (cita of citasPendientes.slice(0, 3); track cita.id) {
+              @for (cita of citasPendientes.slice(0, 3); track cita.id || cita.id_cita) {
                 <div class="appointment-preview">
                   <div class="appointment-info">
-                    <h4>{{ cita.clienteNombre }}</h4>
-                    <p>{{ cita.servicio }} - {{ formatDate(cita.fecha) }} {{ cita.hora }}</p>
+                    <h4>{{ cita.clienteNombre || cita.nombre_cliente }}</h4>
+                    <p>{{ cita.servicio || cita.nombre_servicio }} - {{ formatDate(cita.fecha || (cita.inicio ? cita.inicio.split('T')[0] : '')) }} {{ cita.hora || (cita.inicio ? cita.inicio.split('T')[1]?.substring(0,5) : '') }}</p>
                   </div>
                   <ion-badge [color]="getEstadoBadgeColor(cita.estado)">
                     {{ cita.estado }}
@@ -224,16 +224,16 @@
                   <div class="service-item" [class.inactive]="!servicio.activo">
                     <div class="service-content">
                       <div class="service-info">
-                        <h3 class="service-name">{{ servicio.nombre }}</h3>
-                        <p class="service-description">{{ servicio.descripcion }}</p>
+                        <h3 class="service-name">{{ servicio.nombre || servicio.nombre_servicio }}</h3>
+                        <p class="service-description">{{ servicio.descripcion || servicio.description }}</p>
                         <div class="service-meta">
-                          <span class="price">${{ formatPrice(servicio.precio) }}</span>
+                          <span class="price">${{ formatPrice(servicio.precio || servicio.precio_BarbServ || 0) }}</span>
                           <span class="duration">
                             <ion-icon name="time-outline"></ion-icon>
-                            {{ servicio.duracion }}
+                            {{ servicio.duracion || servicio.duracion_min + ' min' }}
                           </span>
-                          <ion-badge [color]="servicio.activo ? 'success' : 'medium'">
-                            {{ servicio.activo ? 'Activo' : 'Inactivo' }}
+                          <ion-badge [color]="(servicio.activo || servicio.servicio_active) ? 'success' : 'medium'">
+                            {{ (servicio.activo || servicio.servicio_active) ? 'Activo' : 'Inactivo' }}
                           </ion-badge>
                         </div>
                       </div>
@@ -254,7 +254,7 @@
                           fill="clear" 
                           size="small"
                           color="danger"
-                          (click)="deleteService(servicio.id)">
+                          (click)="deleteService(servicio.id || servicio.id_servicio.toString() || '')">
                           <ion-icon name="trash-outline"></ion-icon>
                         </ion-button>
                       </div>
@@ -351,11 +351,11 @@
                         <div class="datetime-detail">
                           <span class="date">
                             <ion-icon name="calendar-outline"></ion-icon>
-                            {{ formatDate(cita.fecha) }}
+                            {{ formatDate(cita.fecha || (cita.inicio ? cita.inicio.split('T')[0] : '')) }}
                           </span>
                           <span class="time">
                             <ion-icon name="time-outline"></ion-icon>
-                            {{ cita.hora }}
+                            {{ cita.hora || (cita.inicio ? cita.inicio.split('T')[1]?.substring(0,5) : '') }}
                           </span>
                         </div>
                         @if (cita.notas) {

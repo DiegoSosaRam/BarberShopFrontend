@@ -45,30 +45,40 @@ import {
   calendarOutline,
   cutOutline, closeOutline } from 'ionicons/icons';
 
-// Interfaces
-export interface ServicioCustom {
-  id: string;
-  nombre: string;
-  descripcion: string;
-  precio: number;
-  duracion: string;
+import { Servicio, Cita } from '../../models/interfaces';
+
+// Interfaces basadas en las tablas de BD
+export interface ServicioCustom extends Servicio {
+  id_barbero: number;
+  precio_BarbServ: number;
+  duracion_min: string;
   categoria: string;
-  barberoId: string;
-  activo: boolean;
-  fechaCreacion: Date;
+  // Campos de compatibilidad (deprecated)
+  id?: string;
+  nombre?: string;
+  descripcion?: string;
+  precio?: number;
+  duracion?: string;
+  barberoId?: string;
+  activo?: boolean;
+  fechaCreacion?: Date;
 }
 
-export interface CitaPendiente {
-  id: string;
-  clienteNombre: string;
-  clienteEmail: string;
-  clienteTelefono: string;
-  servicio: string;
-  fecha: string;
-  hora: string;
-  estado: 'pendiente' | 'aceptada' | 'rechazada' | 'completada';
-  notas?: string;
-  fechaSolicitud: Date;
+export interface CitaPendiente extends Cita {
+  // Campos de joins para display
+  nombre_cliente: string;
+  email_cliente: string;
+  telefono_cliente: string;
+  nombre_servicio: string;
+  // Campos de compatibilidad (deprecated)
+  id?: string;
+  clienteNombre?: string;
+  clienteEmail?: string;
+  clienteTelefono?: string;
+  servicio?: string;
+  fecha?: string;
+  hora?: string;
+  fechaSolicitud?: Date;
 }
 
 @Component({
@@ -103,11 +113,16 @@ export class CustomServicesPage implements OnInit {
   
   // Formulario de servicio
   nuevoServicio: Partial<ServicioCustom> = {
+    nombre_servicio: '',
+    description: '',
+    precio_BarbServ: 0,
+    duracion_min: '',
+    categoria: 'Corte',
+    // Campos de compatibilidad
     nombre: '',
     descripcion: '',
     precio: 0,
-    duracion: '',
-    categoria: 'Corte'
+    duracion: ''
   };
   
   // Categorías disponibles
@@ -184,23 +199,41 @@ export class CustomServicesPage implements OnInit {
     // Simular servicios del barbero (aquí conectarías con tu API)
     this.misServicios = [
       {
+        id_servicio: 1,
+        nombre_servicio: 'Corte Clásico Premium',
+        description: 'Corte tradicional con acabado profesional',
+        servicio_active: true,
+        created_at: new Date().toISOString(),
+        id_barbero: 1,
+        precio_BarbServ: 25000,
+        duracion_min: '45',
+        categoria: 'Corte',
+        // Campos de compatibilidad
         id: '1',
         nombre: 'Corte Clásico Premium',
         descripcion: 'Corte tradicional con acabado profesional',
         precio: 25000,
         duracion: '45 min',
-        categoria: 'Corte',
         barberoId: this.currentUser?.id || '',
         activo: true,
         fechaCreacion: new Date()
       },
       {
+        id_servicio: 2,
+        nombre_servicio: 'Barba y Bigote',
+        description: 'Arreglo completo de barba con aceites premium',
+        servicio_active: true,
+        created_at: new Date().toISOString(),
+        id_barbero: 1,
+        precio_BarbServ: 18000,
+        duracion_min: '30',
+        categoria: 'Barba',
+        // Campos de compatibilidad
         id: '2',
         nombre: 'Barba y Bigote',
         descripcion: 'Arreglo completo de barba con aceites premium',
         precio: 18000,
         duracion: '30 min',
-        categoria: 'Barba',
         barberoId: this.currentUser?.id || '',
         activo: true,
         fechaCreacion: new Date()
@@ -212,6 +245,22 @@ export class CustomServicesPage implements OnInit {
     // Simular citas pendientes (aquí conectarías con tu API)
     this.citasPendientes = [
       {
+        id_cita: 1,
+        id_cliente: 1,
+        id_barbero: 1,
+        id_servicio: 1,
+        id_barberia: 1,
+        inicio: '2025-10-15T10:00:00',
+        fin: '2025-10-15T10:45:00',
+        estado: 'pendiente',
+        notas: 'Prefiere corte no tan corto',
+        creada_por: 1,
+        created_at: new Date().toISOString(),
+        nombre_cliente: 'Juan Pérez',
+        email_cliente: 'juan@email.com',
+        telefono_cliente: '+56 9 1234 5678',
+        nombre_servicio: 'Corte Clásico Premium',
+        // Campos de compatibilidad
         id: '1',
         clienteNombre: 'Juan Pérez',
         clienteEmail: 'juan@email.com',
@@ -219,11 +268,25 @@ export class CustomServicesPage implements OnInit {
         servicio: 'Corte Clásico Premium',
         fecha: '2025-10-15',
         hora: '10:00',
-        estado: 'pendiente',
-        notas: 'Prefiere corte no tan corto',
         fechaSolicitud: new Date()
       },
       {
+        id_cita: 2,
+        id_cliente: 2,
+        id_barbero: 1,
+        id_servicio: 2,
+        id_barberia: 1,
+        inicio: '2025-10-15T14:30:00',
+        fin: '2025-10-15T15:00:00',
+        estado: 'pendiente',
+        notas: '',
+        creada_por: 2,
+        created_at: new Date().toISOString(),
+        nombre_cliente: 'Carlos Silva',
+        email_cliente: 'carlos@email.com',
+        telefono_cliente: '+56 9 8765 4321',
+        nombre_servicio: 'Barba y Bigote',
+        // Campos de compatibilidad
         id: '2',
         clienteNombre: 'Carlos Silva',
         clienteEmail: 'carlos@email.com',
@@ -231,7 +294,6 @@ export class CustomServicesPage implements OnInit {
         servicio: 'Barba y Bigote',
         fecha: '2025-10-15',
         hora: '14:30',
-        estado: 'pendiente',
         fechaSolicitud: new Date()
       }
     ];
@@ -245,11 +307,16 @@ export class CustomServicesPage implements OnInit {
     } else {
       this.editingService = null;
       this.nuevoServicio = {
+        nombre_servicio: '',
+        description: '',
+        precio_BarbServ: 0,
+        duracion_min: '',
+        categoria: 'Corte',
+        // Campos de compatibilidad
         nombre: '',
         descripcion: '',
         precio: 0,
-        duracion: '',
-        categoria: 'Corte'
+        duracion: ''
       };
     }
     this.isModalOpen = true;

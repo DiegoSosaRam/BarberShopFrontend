@@ -8,7 +8,7 @@ import { NavbarComponent } from 'src/app/components/navbar/navbar.component';
   templateUrl: './qualify-barber.page.html',
   styleUrls: ['./qualify-barber.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, NavbarComponent]
+  imports: [IonContent, CommonModule, NavbarComponent]
 })
 export class QualifyBarberPage implements OnInit {
   // variable que contiene cuántas estrellas se escogieron

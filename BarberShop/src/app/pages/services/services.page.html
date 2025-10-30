@@ -69,24 +69,24 @@
               <!-- Service Title -->
               <ion-card-title class="service-title">
                 <ion-icon name="cut-outline" class="title-icon"></ion-icon>
-                {{ servicio.nombre }}
+                {{ servicio.nombre_servicio }}
               </ion-card-title>
 
               <!-- Duration and Price -->
               <div class="service-meta">
                 <div class="duration">
                   <ion-icon name="time-outline" class="meta-icon"></ion-icon>
-                  {{ servicio.duracion }}
+                  {{ servicio.duracion_min }} min
                 </div>
                 <div class="price">
-                  ${{ formatPrice(servicio.precio) }}
+                  ${{ formatPrice(servicio.precio_BarbServ) }}
                 </div>
               </div>
             </ion-card-header>
 
             <ion-card-content>
               <!-- Description -->
-              <p class="service-description">{{ servicio.descripcion }}</p>
+              <p class="service-description">{{ servicio.description }}</p>
 
               <!-- Features -->
               <div class="features-section">
@@ -105,7 +105,7 @@
               <ion-button 
                 expand="block" 
                 class="reserve-button"
-                (click)="navigateToReservar(servicio.id)">
+                (click)="navigateToReservar(servicio.id_servicio.toString())">
                 Reservar Ahora
               </ion-button>
             </ion-card-content>

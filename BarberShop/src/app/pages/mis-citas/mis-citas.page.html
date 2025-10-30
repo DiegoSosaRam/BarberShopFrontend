@@ -116,10 +116,10 @@
                 <ion-card-content>
                   <div class="cita-header">
                     <div class="cita-info">
-                      <h4>{{ cita.servicio }}</h4>
+                      <h4>{{ cita.servicio || cita.nombre_servicio }}</h4>
                       <p class="barbero">
                         <ion-icon name="person-outline"></ion-icon>
-                        {{ cita.barbero }}
+                        {{ cita.barbero || cita.nombre_barbero }}
                       </p>
                     </div>
                     <ion-badge [color]="getEstadoColor(cita.estado)" class="estado-badge">
@@ -131,15 +131,15 @@
                   <div class="cita-details">
                     <div class="detail-item">
                       <ion-icon name="calendar-outline"></ion-icon>
-                      <span>{{ formatFecha(cita.fecha) }}</span>
+                      <span>{{ formatFecha(cita.fecha || (cita.inicio ? cita.inicio.split('T')[0] : '')) }}</span>
                     </div>
                     <div class="detail-item">
                       <ion-icon name="time-outline"></ion-icon>
-                      <span>{{ cita.hora }} ({{ cita.duracion }})</span>
+                      <span>{{ cita.hora || (cita.inicio ? cita.inicio.split('T')[1]?.substring(0,5) : '') }} ({{ cita.duracion || cita.duracion_min + ' min' }})</span>
                     </div>
                     <div class="detail-item precio">
                       <span class="precio-label">Precio:</span>
-                      <span class="precio-value">${{ cita.precio }}</span>
+                      <span class="precio-value">${{ cita.precio || cita.precio_BarbServ }}</span>
                     </div>
                   </div>
 
@@ -176,10 +176,10 @@
                 <ion-card-content>
                   <div class="cita-header">
                     <div class="cita-info">
-                      <h4>{{ cita.servicio }}</h4>
+                      <h4>{{ cita.servicio || cita.nombre_servicio }}</h4>
                       <p class="barbero">
                         <ion-icon name="person-outline"></ion-icon>
-                        {{ cita.barbero }}
+                        {{ cita.barbero || cita.nombre_barbero }}
                       </p>
                     </div>
                     <ion-badge color="success" class="estado-badge">
@@ -191,15 +191,15 @@
                   <div class="cita-details">
                     <div class="detail-item">
                       <ion-icon name="calendar-outline"></ion-icon>
-                      <span>{{ formatFecha(cita.fecha) }}</span>
+                      <span>{{ formatFecha(cita.fecha || (cita.inicio ? cita.inicio.split('T')[0] : '')) }}</span>
                     </div>
                     <div class="detail-item">
                       <ion-icon name="time-outline"></ion-icon>
-                      <span>{{ cita.hora }} ({{ cita.duracion }})</span>
+                      <span>{{ cita.hora || (cita.inicio ? cita.inicio.split('T')[1]?.substring(0,5) : '') }} ({{ cita.duracion || cita.duracion_min + ' min' }})</span>
                     </div>
                     <div class="detail-item precio">
                       <span class="precio-label">Precio:</span>
-                      <span class="precio-value">${{ cita.precio }}</span>
+                      <span class="precio-value">${{ cita.precio || cita.precio_BarbServ }}</span>
                     </div>
                   </div>
 
@@ -223,10 +223,10 @@
                 <ion-card-content>
                   <div class="cita-header">
                     <div class="cita-info">
-                      <h4>{{ cita.servicio }}</h4>
+                      <h4>{{ cita.servicio || cita.nombre_servicio }}</h4>
                       <p class="barbero">
                         <ion-icon name="person-outline"></ion-icon>
-                        {{ cita.barbero }}
+                        {{ cita.barbero || cita.nombre_barbero }}
                       </p>
                     </div>
                     <ion-badge color="danger" class="estado-badge">
@@ -238,11 +238,11 @@
                   <div class="cita-details">
                     <div class="detail-item">
                       <ion-icon name="calendar-outline"></ion-icon>
-                      <span>{{ formatFecha(cita.fecha) }}</span>
+                      <span>{{ formatFecha(cita.fecha || (cita.inicio ? cita.inicio.split('T')[0] : '')) }}</span>
                     </div>
                     <div class="detail-item">
                       <ion-icon name="time-outline"></ion-icon>
-                      <span>{{ cita.hora }} ({{ cita.duracion }})</span>
+                      <span>{{ cita.hora || (cita.inicio ? cita.inicio.split('T')[1]?.substring(0,5) : '') }} ({{ cita.duracion || cita.duracion_min + ' min' }})</span>
                     </div>
                   </div>
                 </ion-card-content>

@@ -286,6 +286,74 @@
     }
   }
   
+  // Search Section Styles
+  .search-section {
+    margin-bottom: 1.5rem;
+    
+    .search-item {
+      --background: rgba(255, 255, 255, 0.05);
+      --border-color: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      
+      ion-label {
+        color: #d4af37;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+      
+      ion-input {
+        --color: #ffffff;
+        --placeholder-color: #b3b3b3;
+        font-size: 1rem;
+        
+        ion-icon {
+          color: #d4af37;
+          margin-right: 8px;
+        }
+      }
+      
+      &:hover {
+        --background: rgba(255, 255, 255, 0.08);
+        --border-color: rgba(212, 175, 55, 0.3);
+      }
+    }
+    
+    .search-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0 4px;
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+      }
+      
+      .search-results {
+        font-size: 0.875rem;
+        color: #b3b3b3;
+        margin: 0;
+        font-style: italic;
+      }
+      
+      .clear-search-btn {
+        --color: #d4af37;
+        font-size: 0.875rem;
+        
+        ion-icon {
+          margin-right: 4px;
+        }
+        
+        &:hover {
+          --color: #ffd700;
+        }
+      }
+    }
+  }
+  
   .barbers-grid {
     display: grid;
     gap: 1rem;

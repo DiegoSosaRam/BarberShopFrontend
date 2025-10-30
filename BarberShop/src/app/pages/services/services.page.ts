@@ -29,14 +29,10 @@ import {
 import { addIcons } from 'ionicons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { UserService } from '../../services/user.service';
+import { ServicioConPrecio } from '../../models/interfaces';
 
-
-interface Servicio {
-  id: string;
-  nombre: string;
-  precio: number;
-  duracion: string;
-  descripcion: string;
+// Interface temporal para compatibilidad visual
+interface ServicioDisplay extends ServicioConPrecio {
   caracteristicas: string[];
   popular: boolean;
   categoria: string;
@@ -61,63 +57,75 @@ interface Ventaja {
 })
 export class ServicesPage implements OnInit {
 
-  servicios: Servicio[] = [
+  servicios: ServicioDisplay[] = [
     {
-      id: "corte-clasico",
-      nombre: "Corte Clásico",
-      precio: 15000,
-      duracion: "30 min",
-      descripcion: "Corte tradicional con tijeras y máquina, perfecto para un look elegante y profesional.",
+      id_servicio: 1,
+      nombre_servicio: "Corte Clásico",
+      description: "Corte tradicional con tijeras y máquina, perfecto para un look elegante y profesional.",
+      servicio_active: true,
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 15000,
+      duracion_min: "30",
       caracteristicas: ["Lavado incluido", "Peinado final", "Acabado preciso"],
       popular: false,
       categoria: "Clásico"
     },
     {
-      id: "fade-moderno",
-      nombre: "Fade Moderno",
-      precio: 18000,
-      duracion: "45 min",
-      descripcion: "Degradado moderno con técnicas actuales, ideal para un estilo contemporáneo y fresco.",
+      id_servicio: 2,
+      nombre_servicio: "Fade Moderno",
+      description: "Degradado moderno con técnicas actuales, ideal para un estilo contemporáneo y fresco.",
+      servicio_active: true,
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 18000,
+      duracion_min: "45",
       caracteristicas: ["Degradado perfecto", "Diseño personalizado", "Técnicas modernas"],
       popular: true,
       categoria: "Moderno"
     },
     {
-      id: "corte-barba",
-      nombre: "Corte + Barba",
-      precio: 25000,
-      duracion: "60 min",
-      descripcion: "Servicio completo que combina corte de cabello y arreglo profesional de barba.",
+      id_servicio: 3,
+      nombre_servicio: "Corte + Barba",
+      description: "Servicio completo que combina corte de cabello y arreglo profesional de barba.",
+      servicio_active: true,
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 25000,
+      duracion_min: "60",
       caracteristicas: ["Corte completo", "Perfilado de barba", "Aceites naturales", "Toalla caliente"],
       popular: true,
       categoria: "Completo"
     },
     {
-      id: "arreglo-barba",
-      nombre: "Arreglo de Barba",
-      precio: 12000,
-      duracion: "20 min",
-      descripcion: "Perfilado y mantenimiento especializado de barba con productos premium.",
+      id_servicio: 4,
+      nombre_servicio: "Arreglo de Barba",
+      description: "Perfilado y mantenimiento especializado de barba con productos premium.",
+      servicio_active: true,
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 12000,
+      duracion_min: "20",
       caracteristicas: ["Perfilado preciso", "Aceites aromáticos", "Cera de barba"],
       popular: false,
       categoria: "Barba"
     },
     {
-      id: "corte-infantil",
-      nombre: "Corte Infantil",
-      precio: 10000,
-      duracion: "25 min",
-      descripcion: "Corte especializado para niños en ambiente cómodo y divertido.",
+      id_servicio: 5,
+      nombre_servicio: "Corte Infantil",
+      description: "Corte especializado para niños en ambiente cómodo y divertido.",
+      servicio_active: true,
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 10000,
+      duracion_min: "25",
       caracteristicas: ["Ambiente amigable", "Paciencia especial", "Descuentos familiares"],
       popular: false,
       categoria: "Infantil"
     },
     {
-      id: "paquete-premium",
-      nombre: "Paquete Premium",
-      precio: 35000,
-      duracion: "90 min",
-      descripcion: "Experiencia completa de barbería con todos nuestros servicios premium.",
+      id_servicio: 6,
+      nombre_servicio: "Paquete Premium",
+      description: "Experiencia completa de barbería con todos nuestros servicios premium.",
+      servicio_active: true,
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 35000,
+      duracion_min: "90",
       caracteristicas: ["Corte personalizado", "Arreglo de barba", "Shampoo premium", "Masaje relajante", "Productos exclusivos"],
       popular: true,
       categoria: "Premium"

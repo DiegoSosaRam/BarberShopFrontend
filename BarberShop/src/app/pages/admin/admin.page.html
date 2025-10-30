@@ -67,20 +67,20 @@
             <ion-item class="user-item">
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-label>
-                <h2>{{usuario.nombre}}</h2>
+                <h2>{{usuario.full_name || usuario.nombre}}</h2>
                 <p>{{usuario.email}}</p>
-                <p>{{usuario.telefono}}</p>
-                <p class="date-info">Registrado: {{formatDate(usuario.fechaRegistro)}}</p>
+                <p>{{usuario.phone || usuario.telefono}}</p>
+                <p class="date-info">Registrado: {{formatDate(usuario.fechaRegistro || usuario.created_at || '')}}</p>
               </ion-label>
-              <ion-badge [color]="getUserBadgeColor(usuario.tipo)" slot="end">
-                {{usuario.tipo}}
+              <ion-badge [color]="getUserBadgeColor(usuario.tipo || usuario.role || '')" slot="end">
+                {{usuario.tipo || usuario.role}}
               </ion-badge>
               @if (usuario.email !== 'cliente@barbershop.com' && usuario.email !== 'barbero@barbershop.com') {
                 <ion-button 
                   fill="clear" 
                   color="danger" 
                   slot="end"
-                  (click)="confirmDelete(usuario.id)">
+                  (click)="confirmDelete(usuario.id || usuario.id_profile?.toString() || '')">
                   <ion-icon name="trash-outline"></ion-icon>
                 </ion-button>
               }

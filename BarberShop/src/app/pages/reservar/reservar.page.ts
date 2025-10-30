@@ -34,35 +34,23 @@ import {
   checkmarkCircle,
   arrowBack,
   arrowForward, personAddOutline, checkmarkCircleOutline, 
-  star} from 'ionicons/icons';
+  star, searchOutline, closeCircleOutline } from 'ionicons/icons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { UserService, Usuario } from '../../services/user.service';
+import { Servicio, Barbero, ServicioConPrecio, BarberoConBarberia } from '../../models/interfaces';
 
-interface Servicio {
-  id: string;
-  nombre: string;
-  precio: number;
-  duracion: string;
-  descripcion: string;
-}
-
-interface Barbero {
-  id: string;
-  nombre: string;
-  especialidad: string;
-  experiencia: string;
-  rating: number;
-}
-
-interface FormData {
+interface FormDataCita {
   nombre: string;
   telefono: string;
   email: string;
-  servicio: string;
-  barbero: string;
+  id_servicio: number;
+  id_barbero: number;
   fecha: string;
   hora: string;
   notas: string;
+  // Campos de compatibilidad
+  servicio?: string;
+  barbero?: string;
 }
 
 @Component({
@@ -83,6 +71,7 @@ export class ReservarPage implements OnInit {
   loading: boolean = false;
   showToast: boolean = false;
   toastMessage: string = '';
+  searchTerm: string = ''; // Nueva propiedad para el buscador
   // Estado de autenticación
   currentUser: Usuario | null = null;
   showGuestForm = false;
@@ -92,56 +81,153 @@ export class ReservarPage implements OnInit {
     return this.currentUser !== null;
   }
 
-  formData: FormData = {
+  formData: FormDataCita = {
     nombre: "",
     telefono: "",
     email: "",
-    servicio: "",
-    barbero: "",
+    id_servicio: 0,
+    id_barbero: 0,
     fecha: "",
     hora: "",
-    notas: ""
+    notas: "",
+    // Campos de compatibilidad
+    servicio: "",
+    barbero: ""
   };
 
-  servicios: Servicio[] = [
-    { id: "corte-clasico", nombre: "Corte Clásico", precio: 15000, duracion: "30 min", descripcion: "Corte tradicional con tijeras y máquina" },
-    { id: "fade-moderno", nombre: "Fade Moderno", precio: 18000, duracion: "45 min", descripcion: "Degradado moderno con técnicas actuales" },
-    { id: "corte-barba", nombre: "Corte + Barba", precio: 25000, duracion: "60 min", descripcion: "Servicio completo de corte y arreglo de barba" },
-    { id: "arreglo-barba", nombre: "Arreglo de Barba", precio: 12000, duracion: "20 min", descripcion: "Perfilado y mantenimiento de barba" },
-    { id: "corte-infantil", nombre: "Corte Infantil", precio: 10000, duracion: "25 min", descripcion: "Corte especializado para niños" },
-    { id: "paquete-premium", nombre: "Paquete Premium", precio: 35000, duracion: "90 min", descripcion: "Corte + barba + shampoo + masaje" }
+  servicios: ServicioConPrecio[] = [
+    { 
+      id_servicio: 1, 
+      nombre_servicio: "Corte Clásico", 
+      description: "Corte tradicional con tijeras y máquina", 
+      servicio_active: true, 
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 15000, 
+      duracion_min: "30"
+    },
+    { 
+      id_servicio: 2, 
+      nombre_servicio: "Fade Moderno", 
+      description: "Degradado moderno con técnicas actuales", 
+      servicio_active: true, 
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 18000, 
+      duracion_min: "45"
+    },
+    { 
+      id_servicio: 3, 
+      nombre_servicio: "Corte + Barba", 
+      description: "Servicio completo de corte y arreglo de barba", 
+      servicio_active: true, 
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 25000, 
+      duracion_min: "60"
+    },
+    { 
+      id_servicio: 4, 
+      nombre_servicio: "Arreglo de Barba", 
+      description: "Perfilado y mantenimiento de barba", 
+      servicio_active: true, 
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 12000, 
+      duracion_min: "20"
+    },
+    { 
+      id_servicio: 5, 
+      nombre_servicio: "Corte Infantil", 
+      description: "Corte especializado para niños", 
+      servicio_active: true, 
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 10000, 
+      duracion_min: "25"
+    },
+    { 
+      id_servicio: 6, 
+      nombre_servicio: "Paquete Premium", 
+      description: "Corte + barba + shampoo + masaje", 
+      servicio_active: true, 
+      created_at: new Date().toISOString(),
+      precio_BarbServ: 35000, 
+      duracion_min: "90"
+    }
   ];
 
-  barberos: Barbero[] = [
+  barberos: BarberoConBarberia[] = [
     // Especialistas en Fade y Degradados
-    { id: "carlos", nombre: "Carlos Mendoza", especialidad: "Fade y Degradados", experiencia: "8 años", rating: 4.9 },
-    { id: "alexis", nombre: "Alexis Vargas", especialidad: "Fade y Degradados", experiencia: "5 años", rating: 4.7 },
-    { id: "samuel", nombre: "Samuel Herrera", especialidad: "Fade y Degradados", experiencia: "7 años", rating: 4.8 },
+    { 
+      id_barbero: 1, 
+      id_barberia: 1, 
+      nombre_barbero: "Carlos Mendoza", 
+      especialidades: "Fade y Degradados", 
+      anios_experiencia: 8, 
+      calificacion: 4.9, 
+      foto_url: "https://example.com/carlos.jpg", 
+      created_at: new Date().toISOString(),
+      nombre_barberia: "Premium Cuts", 
+      direccion: "Av. Principal 123"
+    },
+    { 
+      id_barbero: 2, 
+      id_barberia: 1, 
+      nombre_barbero: "Alexis Vargas", 
+      especialidades: "Fade y Degradados", 
+      anios_experiencia: 5, 
+      calificacion: 4.7, 
+      foto_url: "https://example.com/alexis.jpg", 
+      created_at: new Date().toISOString(),
+      nombre_barberia: "Premium Cuts", 
+      direccion: "Av. Principal 123"
+    },
+    { 
+      id_barbero: 3, 
+      id_barberia: 2, 
+      nombre_barbero: "Samuel Herrera", 
+      especialidades: "Fade y Degradados", 
+      anios_experiencia: 7, 
+      calificacion: 4.8, 
+      foto_url: "https://example.com/samuel.jpg", 
+      created_at: new Date().toISOString(),
+      nombre_barberia: "Barbería Central", 
+      direccion: "Calle Central 456"
+    },
     
     // Especialistas en Cortes Clásicos
-    { id: "miguel", nombre: "Miguel Torres", especialidad: "Cortes Clásicos", experiencia: "12 años", rating: 4.8 },
-    { id: "eduardo", nombre: "Eduardo Morales", especialidad: "Cortes Clásicos", experiencia: "20 años", rating: 4.9 },
-    { id: "pablo", nombre: "Pablo Jiménez", especialidad: "Cortes Clásicos", experiencia: "14 años", rating: 4.7 },
-    
-    // Especialistas en Cortes Modernos
-    { id: "fernando", nombre: "Fernando López", especialidad: "Cortes Modernos", experiencia: "6 años", rating: 4.7 },
-    { id: "diego", nombre: "Diego Ramos", especialidad: "Cortes Modernos", experiencia: "4 años", rating: 4.6 },
-    { id: "andres", nombre: "Andrés Castro", especialidad: "Cortes Modernos", experiencia: "8 años", rating: 4.8 },
-    
-    // Especialistas en Barba y Bigote
-    { id: "ricardo", nombre: "Ricardo Silva", especialidad: "Barba y Bigote", experiencia: "10 años", rating: 4.9 },
-    { id: "mauricio", nombre: "Mauricio Delgado", especialidad: "Barba y Bigote", experiencia: "13 años", rating: 4.8 },
-    { id: "gabriel", nombre: "Gabriel Peña", especialidad: "Barba y Bigote", experiencia: "11 años", rating: 4.7 },
-    
-    // Especialistas en Cortes Infantiles
-    { id: "antonio", nombre: "Antonio Ruiz", especialidad: "Cortes Infantiles", experiencia: "15 años", rating: 4.8 },
-    { id: "javier", nombre: "Javier Ortega", especialidad: "Cortes Infantiles", experiencia: "9 años", rating: 4.6 },
-    { id: "felipe", nombre: "Felipe Aguilar", especialidad: "Cortes Infantiles", experiencia: "12 años", rating: 4.7 },
-    
-    // Especialistas en Servicios Premium
-    { id: "daniel", nombre: "Daniel Vega", especialidad: "Servicios Premium", experiencia: "9 años", rating: 4.9 },
-    { id: "leonardo", nombre: "Leonardo Sánchez", especialidad: "Servicios Premium", experiencia: "16 años", rating: 4.9 },
-    { id: "rodrigo", nombre: "Rodrigo Mendez", especialidad: "Servicios Premium", experiencia: "11 años", rating: 4.8 }
+    { 
+      id_barbero: 4, 
+      id_barberia: 1, 
+      nombre_barbero: "Miguel Torres", 
+      especialidades: "Cortes Clásicos", 
+      anios_experiencia: 12, 
+      calificacion: 4.8, 
+      foto_url: "https://example.com/miguel.jpg", 
+      created_at: new Date().toISOString(),
+      nombre_barberia: "Premium Cuts", 
+      direccion: "Av. Principal 123"
+    },
+    { 
+      id_barbero: 5, 
+      id_barberia: 2, 
+      nombre_barbero: "Eduardo Morales", 
+      especialidades: "Cortes Clásicos", 
+      anios_experiencia: 20, 
+      calificacion: 4.9, 
+      foto_url: "https://example.com/eduardo.jpg", 
+      created_at: new Date().toISOString(),
+      nombre_barberia: "Barbería Central", 
+      direccion: "Calle Central 456"
+    },
+    { 
+      id_barbero: 6, 
+      id_barberia: 3, 
+      nombre_barbero: "Pablo Jiménez", 
+      especialidades: "Cortes Clásicos", 
+      anios_experiencia: 14, 
+      calificacion: 4.7, 
+      foto_url: "https://example.com/pablo.jpg", 
+      created_at: new Date().toISOString(),
+      nombre_barberia: "Barber & Co", 
+      direccion: "Plaza Mayor 789"
+    }
   ];
 
   horariosDisponibles: string[] = [
@@ -154,7 +240,7 @@ export class ReservarPage implements OnInit {
     private route: ActivatedRoute,
     private userService: UserService
   ) {
-    addIcons({checkmarkCircle,timeOutline,arrowForward,star,arrowBack,personOutline,personAddOutline,checkmarkCircleOutline,starOutline,calendarOutline,cutOutline});
+    addIcons({checkmarkCircle,timeOutline,arrowForward,searchOutline,closeCircleOutline,star,arrowBack,personOutline,personAddOutline,checkmarkCircleOutline,starOutline,calendarOutline,cutOutline});
   }
 
   ngOnInit() {
@@ -163,9 +249,9 @@ export class ReservarPage implements OnInit {
     
     // Si hay usuario logueado, pre-llenar los campos
     if (this.currentUser) {
-      this.formData.nombre = this.currentUser.nombre;
+      this.formData.nombre = this.currentUser.full_name || this.currentUser.nombre || '';
       this.formData.email = this.currentUser.email;
-      this.formData.telefono = this.currentUser.telefono || '';
+      this.formData.telefono = this.currentUser.phone || this.currentUser.telefono || '';
     }
     
     // Capturar parámetro de servicio desde la URL
@@ -192,9 +278,9 @@ export class ReservarPage implements OnInit {
         
         // Actualizar datos del usuario si ahora está logueado
         if (this.currentUser) {
-          this.formData.nombre = this.currentUser.nombre;
+          this.formData.nombre = this.currentUser.full_name || this.currentUser.nombre || '';
           this.formData.email = this.currentUser.email;
-          this.formData.telefono = this.currentUser.telefono || '';
+          this.formData.telefono = this.currentUser.phone || this.currentUser.telefono || '';
         }
         
         localStorage.removeItem('reserva_pendiente');
@@ -257,7 +343,7 @@ export class ReservarPage implements OnInit {
     const barberosDisponibles = this.getFilteredBarberos();
     const barberoActual = this.formData.barbero;
     
-    if (barberoActual && !barberosDisponibles.find(b => b.id === barberoActual)) {
+    if (barberoActual && !barberosDisponibles.find(b => b.id_barbero.toString() === barberoActual)) {
       // Si el barbero actual no está disponible para el nuevo servicio, limpiar la selección
       this.formData.barbero = '';
     }
@@ -272,21 +358,58 @@ export class ReservarPage implements OnInit {
       return this.barberos;
     }
 
-    // Mapeo de servicios a especialidades de barberos
+    // Mapeo de servicios a especialidades de barberos (por ID)
     const servicioToEspecialidades: { [key: string]: string[] } = {
-      'corte-clasico': ['Cortes Clásicos', 'Cortes Modernos'], // Miguel y Fernando
-      'fade-moderno': ['Fade y Degradados', 'Cortes Modernos'], // Carlos y Fernando
-      'corte-barba': ['Barba y Bigote', 'Cortes Clásicos', 'Servicios Premium'], // Ricardo, Miguel y Daniel
-      'arreglo-barba': ['Barba y Bigote', 'Servicios Premium'], // Ricardo y Daniel
-      'corte-infantil': ['Cortes Infantiles', 'Cortes Clásicos'], // Antonio y Miguel
-      'paquete-premium': ['Servicios Premium', 'Barba y Bigote', 'Cortes Clásicos'] // Daniel, Ricardo y Miguel
+      '1': ['Cortes Clásicos', 'Cortes Modernos'], // Corte Clásico
+      '2': ['Fade y Degradados', 'Cortes Modernos'], // Fade Moderno
+      '3': ['Barba y Bigote', 'Cortes Clásicos', 'Servicios Premium'], // Corte + Barba
+      '4': ['Barba y Bigote', 'Servicios Premium'], // Arreglo de Barba
+      '5': ['Cortes Infantiles', 'Cortes Clásicos'], // Corte Infantil
+      '6': ['Servicios Premium', 'Barba y Bigote', 'Cortes Clásicos'] // Paquete Premium
     };
 
-    const especialidadesPermitidas = servicioToEspecialidades[this.formData.servicio] || [];
+    const servicioId = this.formData.servicio || this.formData.id_servicio?.toString();
+    const especialidadesPermitidas = servicioToEspecialidades[servicioId || ''] || [];
     
     return this.barberos.filter(barbero => 
-      especialidadesPermitidas.includes(barbero.especialidad)
+      especialidadesPermitidas.includes(barbero.especialidades)
     );
+  }
+
+  // Nuevos métodos para el buscador
+  getDisplayedBarberos(): Barbero[] {
+    const filteredBarberos = this.getFilteredBarberos();
+    
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      return filteredBarberos;
+    }
+
+    const searchTermLower = this.searchTerm.toLowerCase().trim();
+    
+    return filteredBarberos.filter(barbero => {
+      // Buscar en nombre
+      const matchesName = barbero.nombre_barbero.toLowerCase().includes(searchTermLower);
+      
+      // Buscar en especialidad
+      const matchesSpecialty = barbero.especialidades.toLowerCase().includes(searchTermLower);
+      
+      // Buscar en experiencia (años de experiencia)
+      const matchesExperience = barbero.anios_experiencia.toString().includes(searchTermLower);
+      
+      // Buscar en calificación
+      const matchesRating = barbero.calificacion.toString().includes(searchTermLower);
+      
+      return matchesName || matchesSpecialty || matchesExperience || matchesRating;
+    });
+  }
+
+  onSearchTermChange() {
+    // Este método se puede usar para agregar funcionalidad adicional cuando cambie el término de búsqueda
+    // Por ejemplo, analytics o debouncing
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
   }
 
   getCurrentDate(): string {
@@ -294,12 +417,14 @@ export class ReservarPage implements OnInit {
     return today.toISOString().split('T')[0];
   }
 
-  getSelectedServicio(): Servicio | undefined {
-    return this.servicios.find(s => s.id === this.formData.servicio);
+  getSelectedServicio(): ServicioConPrecio | undefined {
+    const servicioId = this.formData.servicio || this.formData.id_servicio?.toString();
+    return this.servicios.find(s => s.id_servicio.toString() === servicioId);
   }
 
-  getSelectedBarbero(): Barbero | undefined {
-    return this.barberos.find(b => b.id === this.formData.barbero);
+  getSelectedBarbero(): BarberoConBarberia | undefined {
+    const barberoId = this.formData.barbero || this.formData.id_barbero?.toString();
+    return this.barberos.find(b => b.id_barbero.toString() === barberoId);
   }
 
   formatPrice(price: number): string {

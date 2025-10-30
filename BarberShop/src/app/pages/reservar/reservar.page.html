@@ -48,24 +48,24 @@
         @if (step === 1) {
           <div class="step-content">
             <div class="services-grid">
-              @for (servicio of servicios; track servicio.id) {
+              @for (servicio of servicios; track servicio.id_servicio) {
                 <div class="service-item"
-                     [ngClass]="{'selected': formData.servicio === servicio.id}"
-                     (click)="selectServicio(servicio.id)">
+                     [ngClass]="{'selected': formData.servicio === servicio.id_servicio.toString()}"
+                     (click)="selectServicio(servicio.id_servicio.toString())">
               
               <div class="service-content">
                 <div class="service-info">
-                  <h3 class="service-name">{{ servicio.nombre }}</h3>
-                  <p class="service-description">{{ servicio.descripcion }}</p>
+                  <h3 class="service-name">{{ servicio.nombre_servicio }}</h3>
+                  <p class="service-description">{{ servicio.description }}</p>
                   <div class="service-meta">
                     <span class="duration">
                       <ion-icon name="time-outline"></ion-icon>
-                      {{ servicio.duracion }}
+                      {{ servicio.duracion_min }} min
                     </span>
                   </div>
                 </div>
                 <div class="service-price">
-                  ${{ formatPrice(servicio.precio) }}
+                  ${{ formatPrice(servicio.precio_BarbServ) }}
                 </div>
               </div>
                 </div>
@@ -90,7 +90,7 @@
               <div class="section">
                 <div class="selected-service-card">
               <div class="service-header">
-                <h3 class="service-name">{{ getSelectedServicio()?.nombre }}</h3>
+                <h3 class="service-name">{{ getSelectedServicio()?.nombre_servicio }}</h3>
                 <ion-button 
                   fill="clear" 
                   size="small"
@@ -100,10 +100,10 @@
                 </ion-button>
               </div>
               <div class="service-details">
-                <span class="service-price">${{ formatPrice(getSelectedServicio()?.precio || 0) }}</span>
+                <span class="service-price">${{ formatPrice(getSelectedServicio()?.precio_BarbServ || 0) }}</span>
                 <span class="service-duration">
                   <ion-icon name="time-outline"></ion-icon>
-                  {{ getSelectedServicio()?.duracion }}
+                  {{ getSelectedServicio()?.duracion_min }} min
                 </span>
               </div>
             </div>
@@ -113,23 +113,57 @@
           <div class="section">
             <h3 class="section-title">
               Selecciona tu Barbero 
-              <span class="barberos-count">({{ getFilteredBarberos().length }} disponibles)</span>
+              <span class="barberos-count">({{ getDisplayedBarberos().length }} disponibles)</span>
             </h3>
-            <p class="section-subtitle">Barberos especializados en {{ getSelectedServicio()?.nombre }}</p>
+            <p class="section-subtitle">Barberos especializados en {{ getSelectedServicio()?.nombre_servicio }}</p>
+            
+            <!-- Buscador de Barberos -->
+            <div class="search-section">
+              <ion-item class="search-item">
+                <ion-label position="stacked">Buscar Barbero</ion-label>
+                <ion-input 
+                  [(ngModel)]="searchTerm"
+                  placeholder="Buscar por nombre, especialidad o experiencia..."
+                  (ionInput)="onSearchTermChange()"
+                  clearInput="true">
+                  <ion-icon name="search-outline" slot="start"></ion-icon>
+                </ion-input>
+              </ion-item>
+              
+              @if (searchTerm) {
+                <div class="search-info">
+                  <p class="search-results">
+                    Mostrando {{ getDisplayedBarberos().length }} de {{ getFilteredBarberos().length }} barberos
+                    @if (searchTerm) {
+                      para "{{ searchTerm }}"
+                    }
+                  </p>
+                  <ion-button 
+                    fill="clear" 
+                    size="small" 
+                    (click)="clearSearch()"
+                    class="clear-search-btn">
+                    <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                    Limpiar búsqueda
+                  </ion-button>
+                </div>
+              }
+            </div>
+            
             <div class="barbers-grid">
-              @for (barbero of getFilteredBarberos(); track barbero.id) {
+              @for (barbero of getDisplayedBarberos(); track barbero.id_barbero) {
                 <div class="barber-item"
-                     [ngClass]="{'selected': formData.barbero === barbero.id}"
-                     (click)="selectBarbero(barbero.id)">
+                     [ngClass]="{'selected': formData.barbero === barbero.id_barbero.toString()}"
+                     (click)="selectBarbero(barbero.id_barbero.toString())">
                 
                 <div class="barber-info">
-                  <h4 class="barber-name">{{ barbero.nombre }}</h4>
-                  <p class="barber-specialty">Especialidad: {{ barbero.especialidad }}</p>
-                  <p class="barber-experience">{{ barbero.experiencia }} de experiencia</p>
+                  <h4 class="barber-name">{{ barbero.nombre_barbero }}</h4>
+                  <p class="barber-specialty">Especialidad: {{ barbero.especialidades }}</p>
+                  <p class="barber-experience">{{ barbero.anios_experiencia }} años de experiencia</p>
                 </div>
                   <div class="barber-rating">
                     <ion-icon name="star" class="star-icon"></ion-icon>
-                    <span>{{ barbero.rating }}</span>
+                    <span>{{ barbero.calificacion }}</span>
                   </div>
                 </div>
               }
@@ -199,25 +233,25 @@
                 <ion-col size="12" sizeMd="6">
                   <div class="summary-item">
                     <strong>Servicio:</strong>
-                    <p>{{ getSelectedServicio()?.nombre }}</p>
+                    <p>{{ getSelectedServicio()?.nombre_servicio }}</p>
                   </div>
                 </ion-col>
                 <ion-col size="12" sizeMd="6">
                   <div class="summary-item">
                     <strong>Precio:</strong>
-                    <p class="price-text">${{ formatPrice(getSelectedServicio()?.precio || 0) }}</p>
+                    <p class="price-text">${{ formatPrice(getSelectedServicio()?.precio_BarbServ || 0) }}</p>
                   </div>
                 </ion-col>
                 <ion-col size="12" sizeMd="6">
                   <div class="summary-item">
                     <strong>Barbero:</strong>
-                    <p>{{ getSelectedBarbero()?.nombre }}</p>
+                    <p>{{ getSelectedBarbero()?.nombre_barbero }}</p>
                   </div>
                 </ion-col>
                 <ion-col size="12" sizeMd="6">
                   <div class="summary-item">
                     <strong>Duración:</strong>
-                    <p>{{ getSelectedServicio()?.duracion }}</p>
+                    <p>{{ getSelectedServicio()?.duracion_min }} min</p>
                   </div>
                 </ion-col>
                 <ion-col size="12" sizeMd="6">

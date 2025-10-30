@@ -504,10 +504,45 @@
           --border-radius: 8px;
           --padding-start: 1.5rem;
           --padding-end: 1.5rem;
+          --transition: all 0.3s ease;
           
+          // Botón de cancelar (outline)
+          &[fill="outline"] {
+            --border-color: rgba(255, 255, 255, 0.3);
+            --color: #ffffff;
+            
+            &:hover {
+              --border-color: #d4af37;
+              --color: #d4af37;
+            }
+            
+            &:active,
+            &:focus,
+            &.activated {
+              --border-color: #d4af37 !important;
+              --color: #d4af37 !important;
+              --background: rgba(212, 175, 55, 0.1) !important;
+            }
+          }
+          
+          // Botón principal (Crear/Actualizar Servicio)
           &:last-child {
             --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
             --color: #000000;
+            --box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+            
+            &:hover {
+              --background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+              --box-shadow: 0 4px 12px rgba(212, 175, 55, 0.5);
+            }
+            
+            &:active,
+            &:focus,
+            &.activated {
+              --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%) !important;
+              --color: #000000 !important;
+              --box-shadow: 0 1px 4px rgba(212, 175, 55, 0.7) !important;
+            }
           }
         }
       }
@@ -519,9 +554,25 @@
     --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
     --color: #000000;
     --border-radius: 16px;
+    --box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+    --transition: all 0.3s ease;
     
     &:hover {
       --background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+      --box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6);
+    }
+    
+    &:active,
+    &:focus,
+    &.activated {
+      --background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%) !important;
+      --color: #000000 !important;
+      --box-shadow: 0 2px 8px rgba(212, 175, 55, 0.8) !important;
+    }
+    
+    // Asegurar que el ícono mantenga el color negro
+    ion-icon {
+      color: #000000 !important;
     }
   }
 }

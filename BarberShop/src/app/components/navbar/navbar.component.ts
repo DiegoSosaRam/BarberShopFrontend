@@ -79,7 +79,9 @@ export class NavbarComponent implements OnInit {
   }
 
   get userDisplayName(): string {
-    return this.currentUser ? this.currentUser.nombre.split(' ')[0] : '';
+    if (!this.currentUser) return '';
+    const name = this.currentUser.full_name || this.currentUser.nombre || '';
+    return name ? name.split(' ')[0] : '';
   }
 
   navigateToHome() {

@@ -1,14 +1,26 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Profile } from '../models/interfaces';
 
+// Interface temporal para compatibilidad con el código existente
 export interface Usuario {
-  id: string;
+  // Propiedades nuevas (siguiendo el esquema de la BD)
+  id_profile?: number;
+  role?: string;
+  full_name?: string;
+  phone?: string;
+  avatar_url?: string;
+  is_active?: boolean;
+  created_at?: string;
   email: string;
   password: string;
-  nombre: string;
+  
+  // Propiedades de compatibilidad (mantenidas temporalmente)
+  id?: string;
+  nombre?: string;
   telefono?: string;
-  tipo: 'cliente' | 'barbero';
-  fechaRegistro: string;
+  tipo?: 'cliente' | 'barbero';
+  fechaRegistro?: string;
 }
 
 @Injectable({
@@ -155,7 +167,7 @@ export class UserService {
       barberos: users.filter(u => u.tipo === 'barbero').length,
       registrosHoy: users.filter(u => {
         const today = new Date().toDateString();
-        const userDate = new Date(u.fechaRegistro).toDateString();
+        const userDate = u.fechaRegistro ? new Date(u.fechaRegistro).toDateString() : '';
         return today === userDate;
       }).length
     };
@@ -172,6 +184,6 @@ export class UserService {
   // Getter para verificar si el usuario actual es cliente y tiene citas
   get clienteActualTieneCitas(): boolean {
     const currentUser = this.getCurrentUser();
-    return currentUser?.tipo === 'cliente' && this.clienteTieneCitas(currentUser.id);
+    return currentUser?.tipo === 'cliente' && currentUser?.id ? this.clienteTieneCitas(currentUser.id) : false;
   }
 }
