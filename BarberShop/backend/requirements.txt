@@ -22,6 +22,24 @@ djangorestframework-simplejwt==5.3.1
 
 # # desde /backend:
 
+# crear .env con:
+    # # Postgres
+    # PGHOST=127.0.0.1
+    # PGPORT=5432
+    # PGDATABASE=barbershop
+    # PGUSER=postgres
+    # PGPASSWORD=admin
+
+    # # Django
+    # DJANGO_SECRET_KEY=2(z(tlwldkh))z-k+ty6dp!8ijx&a8g=den+i70y6su%1m_b$_
+    # DJANGO_DEBUG=True
+    # DJANGO_ALLOWED_HOSTS=*
+
+    # # PgAdmin (opcional)
+    # PGADMIN_EMAIL=admin@local.test
+    # PGADMIN_PASSWORD=admin123
+
+
 # # 1) Base de datos
 # docker compose up -d db
 
