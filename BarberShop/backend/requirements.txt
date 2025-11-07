@@ -253,3 +253,36 @@ djangorestframework-simplejwt==5.3.1
 #   ON "barberias"("slug");
 
 # COMMIT;
+
+
+
+# BEGIN;
+
+# -- 1) Quita la PK compuesta actual
+# ALTER TABLE barberia_servicios DROP CONSTRAINT barberia_servicios_pkey;
+
+# -- 2) Agrega columna id autoincremental como nueva PK
+# ALTER TABLE barberia_servicios
+#   ADD COLUMN id BIGSERIAL PRIMARY KEY;
+
+# -- 3) Mantén la unicidad lógica entre (id_barberia, id_servicio)
+# ALTER TABLE barberia_servicios
+#   ADD CONSTRAINT barberia_servicios_barberia_servicio_uniq
+#   UNIQUE (id_barberia, id_servicio);
+
+# COMMIT;
+
+
+
+# BEGIN;
+
+# ALTER TABLE barbero_servicios DROP CONSTRAINT barbero_servicios_pkey;
+
+# ALTER TABLE barbero_servicios
+#   ADD COLUMN id BIGSERIAL PRIMARY KEY;
+
+# ALTER TABLE barbero_servicios
+#   ADD CONSTRAINT barbero_servicios_barbero_servicio_uniq
+#   UNIQUE (id_barbero, id_servicio);
+
+# COMMIT;
