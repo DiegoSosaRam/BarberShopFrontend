@@ -11,7 +11,7 @@ djangorestframework-simplejwt==5.3.1
 #   .\.venv\Scripts\Activate.ps1
 #   Test-Path .\manage.py
 #   Test-Path .\api\settings.py
-
+#
 # Luego crea la BD en pgAdmin (o con SQL):
 
 # CREATE DATABASE barbershop OWNER postgres;
