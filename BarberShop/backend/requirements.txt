@@ -19,6 +19,8 @@ djangorestframework-simplejwt==5.3.1
 # \c barbershop
 # CREATE EXTENSION IF NOT EXISTS btree_gist;
 
+# por si acaso crear un admin:
+#   (.venv) python manage.py createsuperuser
 
 # # desde /backend:
 
