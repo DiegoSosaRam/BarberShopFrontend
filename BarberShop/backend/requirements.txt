@@ -253,3 +253,5 @@ djangorestframework-simplejwt==5.3.1
 #   ON "barberias"("slug");
 
 # COMMIT;
+
+# hola
