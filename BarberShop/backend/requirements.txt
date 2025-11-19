@@ -9,6 +9,9 @@ djangorestframework-simplejwt==5.3.1
 #   Set-ExecutionPolicy -Scope CurrentUser RemoteSigned -Force
 #   py -m venv .venv
 #   .\.venv\Scripts\Activate.ps1
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+#   pip install python-dotenv
 #   Test-Path .\manage.py
 #   Test-Path .\api\settings.py
 #
@@ -48,7 +51,7 @@ djangorestframework-simplejwt==5.3.1
 # # 2) Backend
 # source .venv/bin/activate        # o .venv\Scripts\activate en Windows
 # python manage.py migrate
-# python manage.py runserver 0.0.0.0:8000
+# python manage.py runserver
 
 
 # tablas directas en pgAdmin:
