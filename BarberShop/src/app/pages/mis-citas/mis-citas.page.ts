@@ -25,6 +25,7 @@ import {
   arrowBackOutline
 } from 'ionicons/icons';
 import { UserService, Usuario } from '../../services/user.service';
+import { CitaService, Cita } from '../../services/cita.service';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 
 // Interface para las citas del cliente (basada en la tabla citas + joins)
@@ -83,9 +84,11 @@ export class MisCitasPage implements OnInit {
   misCitas: CitaCliente[] = [];
   showToast = false;
   toastMessage = '';
+  loading = false;
 
   constructor(
     private userService: UserService,
+    private citaService: CitaService,
     private router: Router
   ) {
     addIcons({
@@ -102,9 +105,12 @@ export class MisCitasPage implements OnInit {
   ngOnInit() {
     this.userService.currentUser$.subscribe(user => {
       this.currentUser = user;
-      if (user) {
-        this.loadMisCitas();
+      if (!user) {
+        // Si no hay usuario logueado, redirigir a login
+        this.router.navigate(['/login']);
+        return;
       }
+      this.loadMisCitas();
     });
   }
 
@@ -136,111 +142,46 @@ export class MisCitasPage implements OnInit {
   }
 
   loadMisCitas() {
-    // Simular citas del cliente (aquí conectarías con tu API)
-    this.misCitas = [
-      {
-        id_cita: 1,
-        id_cliente: 1,
-        id_barbero: 1,
-        id_servicio: 3,
-        id_barberia: 1,
-        inicio: '2024-10-20T14:30:00',
-        fin: '2024-10-20T15:15:00',
-        estado: 'aceptada',
-        notas: 'Corte degradado, barba con diseño',
-        created_at: '2024-10-15T10:00:00',
-        nombre_barbero: 'Carlos Martínez',
-        nombre_servicio: 'Corte Premium + Barba',
-        nombre_barberia: 'Premium Cuts',
-        precio_BarbServ: 25000,
-        duracion_min: '45',
-        // Campos de compatibilidad
-        id: '1',
-        barbero: 'Carlos Martínez',
-        servicio: 'Corte Premium + Barba',
-        fecha: '2024-10-20',
-        hora: '14:30',
-        precio: 25000,
-        duracion: '45 min',
-        fechaCreacion: '2024-10-15'
+    if (!this.currentUser?.id_profile) {
+      console.log('No hay usuario logueado');
+      return;
+    }
+
+    this.loading = true;
+    this.citaService.getPorCliente(this.currentUser.id_profile).subscribe({
+      next: (citas) => {
+        console.log('Citas obtenidas del backend:', citas);
+        // Mapear las citas del backend al formato esperado
+        this.misCitas = citas.map(cita => this.mapCitaToCliente(cita));
+        this.loading = false;
       },
-      {
-        id_cita: 2,
-        id_cliente: 1,
-        id_barbero: 4,
-        id_servicio: 1,
-        id_barberia: 1,
-        inicio: '2024-10-18T16:00:00',
-        fin: '2024-10-18T16:30:00',
-        estado: 'pendiente',
-        created_at: '2024-10-16T09:00:00',
-        nombre_barbero: 'Miguel Rodriguez',
-        nombre_servicio: 'Corte Clásico',
-        nombre_barberia: 'Premium Cuts',
-        precio_BarbServ: 15000,
-        duracion_min: '30',
-        // Campos de compatibilidad
-        id: '2',
-        barbero: 'Miguel Rodriguez',
-        servicio: 'Corte Clásico',
-        fecha: '2024-10-18',
-        hora: '16:00',
-        precio: 15000,
-        duracion: '30 min',
-        fechaCreacion: '2024-10-15'
-      },
-      {
-        id_cita: 3,
-        id_cliente: 1,
-        id_barbero: 1,
-        id_servicio: 4,
-        id_barberia: 1,
-        inicio: '2024-10-12T11:00:00',
-        fin: '2024-10-12T11:25:00',
-        estado: 'completada',
-        notas: 'Afeitado con navaja tradicional',
-        created_at: '2024-10-10T14:00:00',
-        nombre_barbero: 'Carlos Martínez',
-        nombre_servicio: 'Afeitado Tradicional',
-        nombre_barberia: 'Premium Cuts',
-        precio_BarbServ: 12000,
-        duracion_min: '25',
-        // Campos de compatibilidad
-        id: '3',
-        barbero: 'Carlos Martínez',
-        servicio: 'Afeitado Tradicional',
-        fecha: '2024-10-12',
-        hora: '11:00',
-        precio: 12000,
-        duracion: '25 min',
-        fechaCreacion: '2024-10-10'
-      },
-      {
-        id_cita: 4,
-        id_cliente: 1,
-        id_barbero: 5,
-        id_servicio: 1,
-        id_barberia: 2,
-        inicio: '2024-10-10T09:30:00',
-        fin: '2024-10-10T10:10:00',
-        estado: 'cancelada',
-        created_at: '2024-10-08T12:00:00',
-        nombre_barbero: 'Luis García',
-        nombre_servicio: 'Corte + Lavado',
-        nombre_barberia: 'Barbería Central',
-        precio_BarbServ: 18000,
-        duracion_min: '40',
-        // Campos de compatibilidad
-        id: '4',
-        barbero: 'Luis García',
-        servicio: 'Corte + Lavado',
-        fecha: '2024-10-10',
-        hora: '09:30',
-        precio: 18000,
-        duracion: '40 min',
-        fechaCreacion: '2024-10-08'
+      error: (error) => {
+        console.error('Error al cargar citas:', error);
+        this.misCitas = [];
+        this.loading = false;
+        this.showToastMessage('Error al cargar tus citas');
       }
-    ];
+    });
+  }
+
+  private mapCitaToCliente(cita: Cita): CitaCliente {
+    return {
+      id_cita: cita.id_cita || 0,
+      id_cliente: cita.id_cliente,
+      id_barbero: cita.id_barbero,
+      id_servicio: cita.id_servicio,
+      id_barberia: cita.id_barberia,
+      inicio: cita.inicio,
+      fin: cita.fin,
+      estado: (cita.estado || 'pendiente') as 'pendiente' | 'aceptada' | 'completada' | 'cancelada',
+      notas: cita.notas,
+      created_at: cita.created_at || '',
+      nombre_barbero: cita.barbero_nombre || 'Sin asignar',
+      nombre_servicio: cita.servicio_nombre || 'Sin nombre',
+      nombre_barberia: cita.barberia_nombre || 'Sin barbería',
+      precio_BarbServ: 0, // Esto debería venir del backend
+      duracion_min: '30', // Esto debería venir del backend
+    };
   }
 
   getEstadoColor(estado: string): string {
@@ -284,10 +225,25 @@ export class MisCitasPage implements OnInit {
   }
 
   cancelarCita(cita: CitaCliente) {
-    if (cita.estado === 'pendiente' || cita.estado === 'aceptada') {
-      cita.estado = 'cancelada';
-      this.showToastMessage('Cita cancelada exitosamente');
+    if (cita.estado !== 'pendiente' && cita.estado !== 'aceptada') {
+      this.showToastMessage('Solo puedes cancelar citas pendientes o aceptadas');
+      return;
     }
+
+    if (!confirm('¿Estás seguro de que deseas cancelar esta cita?')) {
+      return;
+    }
+
+    this.citaService.cancelar(cita.id_cita).subscribe({
+      next: () => {
+        cita.estado = 'cancelada';
+        this.showToastMessage('Cita cancelada exitosamente');
+      },
+      error: (error) => {
+        console.error('Error al cancelar cita:', error);
+        this.showToastMessage('Error al cancelar la cita');
+      }
+    });
   }
 
   agendarNuevaCita() {

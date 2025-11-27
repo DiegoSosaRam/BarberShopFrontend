@@ -105,6 +105,45 @@ class CitaViewSet(viewsets.ModelViewSet):
     queryset = Cita.objects.all()
     serializer_class = CitaSerializer
 
+    @action(detail=False, methods=['get'])
+    def por_cliente(self, request):
+        """Obtener todas las citas de un cliente específico"""
+        id_cliente = request.query_params.get('id_cliente')
+        if not id_cliente:
+            return Response(
+                {'error': 'Se requiere el parámetro id_cliente'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        citas = Cita.objects.filter(id_cliente=id_cliente).select_related(
+            'id_barbero', 'id_servicio', 'id_barberia'
+        ).order_by('-inicio')
+        
+        # Enriquecer las citas con información de barbero, servicio y barbería
+        citas_data = []
+        for cita in citas:
+            cita_dict = CitaSerializer(cita).data
+            cita_dict['barbero_nombre'] = cita.id_barbero.nombre_barbero if cita.id_barbero else 'Sin asignar'
+            cita_dict['servicio_nombre'] = cita.id_servicio.nombre_servicio if cita.id_servicio else 'Sin nombre'
+            cita_dict['barberia_nombre'] = cita.id_barberia.nombre_barberia if cita.id_barberia else 'Sin barbería'
+            citas_data.append(cita_dict)
+        
+        return Response(citas_data)
+
+    @action(detail=True, methods=['post'])
+    def cancelar(self, request, pk=None):
+        """Cancelar una cita"""
+        cita = self.get_object()
+        if cita.estado not in ['pendiente', 'aprobada']:
+            return Response(
+                {'error': 'Solo se pueden cancelar citas pendientes o aprobadas'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        cita.estado = 'cancelada'
+        cita.save()
+        return Response(CitaSerializer(cita).data)
+
 
 # ========= HORARIOS =========
 

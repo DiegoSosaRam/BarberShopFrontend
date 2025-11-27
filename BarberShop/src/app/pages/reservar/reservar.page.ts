@@ -37,6 +37,7 @@ import {
   star, searchOutline, closeCircleOutline } from 'ionicons/icons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { UserService, Usuario } from '../../services/user.service';
+import { CitaService, CitaCreate } from '../../services/cita.service';
 import { Servicio, Barbero, ServicioConPrecio, BarberoConBarberia } from '../../models/interfaces';
 
 interface FormDataCita {
@@ -238,21 +239,24 @@ export class ReservarPage implements OnInit {
   constructor(
     private router: Router, 
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private citaService: CitaService
   ) {
     addIcons({checkmarkCircle,timeOutline,arrowForward,searchOutline,closeCircleOutline,star,arrowBack,personOutline,personAddOutline,checkmarkCircleOutline,starOutline,calendarOutline,cutOutline});
   }
 
   ngOnInit() {
-    // Verificar si hay usuario logueado
-    this.currentUser = this.userService.getCurrentUser();
-    
-    // Si hay usuario logueado, pre-llenar los campos
-    if (this.currentUser) {
-      this.formData.nombre = this.currentUser.full_name || this.currentUser.nombre || '';
-      this.formData.email = this.currentUser.email;
-      this.formData.telefono = this.currentUser.phone || this.currentUser.telefono || '';
-    }
+    // Suscribirse a cambios en el usuario actual
+    this.userService.currentUser$.subscribe(user => {
+      this.currentUser = user;
+      
+      // Si hay usuario logueado, pre-llenar los campos
+      if (this.currentUser) {
+        this.formData.nombre = this.currentUser.full_name || this.currentUser.nombre || '';
+        this.formData.email = this.currentUser.email;
+        this.formData.telefono = this.currentUser.phone || this.currentUser.telefono || '';
+      }
+    });
     
     // Capturar parámetro de servicio desde la URL
     this.route.queryParams.subscribe(params => {
@@ -429,18 +433,88 @@ export class ReservarPage implements OnInit {
   async handleSubmit() {
     if (!this.canSubmit()) return;
     
+    // Verificar que el usuario esté logueado
+    if (!this.currentUser || !this.currentUser.id_profile) {
+      this.toastMessage = 'Debes iniciar sesión para reservar una cita';
+      this.showToast = true;
+      return;
+    }
+    
     this.loading = true;
     
-    // Simular llamada API
-    setTimeout(() => {
-      this.loading = false;
-      this.toastMessage = `¡Cita reservada exitosamente! Tu cita está confirmada para el ${this.formData.fecha} a las ${this.formData.hora}`;
-      this.showToast = true;
+    try {
+      // Calcular fecha y hora de inicio
+      const fechaInicio = new Date(`${this.formData.fecha}T${this.formData.hora}:00`);
       
-      setTimeout(() => {
-        this.router.navigate(['/']);
-      }, 2000);
-    }, 1500);
+      // Calcular hora de fin (asumiendo 30 minutos por defecto)
+      const fechaFin = new Date(fechaInicio.getTime() + 30 * 60000);
+      
+      const citaData: CitaCreate = {
+        id_cliente: this.currentUser.id_profile,
+        id_barbero: Number(this.formData.barbero || this.formData.id_barbero),
+        id_servicio: Number(this.formData.servicio || this.formData.id_servicio),
+        id_barberia: 1, // TODO: Obtener de la barbería seleccionada
+        inicio: fechaInicio.toISOString(),
+        fin: fechaFin.toISOString(),
+        notas: this.formData.notas || ''
+      };
+      
+      console.log('Datos de cita a enviar:', citaData);
+      console.log('FormData completo:', this.formData);
+      console.log('ID Cliente:', citaData.id_cliente);
+      console.log('ID Barbero (convertido):', citaData.id_barbero, '- tipo:', typeof citaData.id_barbero);
+      console.log('ID Servicio (convertido):', citaData.id_servicio, '- tipo:', typeof citaData.id_servicio);
+      
+      // Validar que los IDs sean números válidos
+      if (!citaData.id_barbero || isNaN(citaData.id_barbero)) {
+        this.loading = false;
+        this.toastMessage = 'Error: Debes seleccionar un barbero válido';
+        this.showToast = true;
+        return;
+      }
+      
+      if (!citaData.id_servicio || isNaN(citaData.id_servicio)) {
+        this.loading = false;
+        this.toastMessage = 'Error: Debes seleccionar un servicio válido';
+        this.showToast = true;
+        return;
+      }
+      
+      // Llamar al backend para crear la cita
+      this.citaService.create(citaData).subscribe({
+        next: (cita) => {
+          this.loading = false;
+          console.log('Cita creada exitosamente:', cita);
+          this.toastMessage = `¡Cita reservada exitosamente! Tu cita está confirmada para el ${this.formData.fecha} a las ${this.formData.hora}`;
+          this.showToast = true;
+          
+          setTimeout(() => {
+            this.router.navigate(['/mis-citas']);
+          }, 2000);
+        },
+        error: (error) => {
+          this.loading = false;
+          console.error('Error al crear cita:', error);
+          console.error('Detalle del error:', error.error);
+          
+          let errorMessage = 'Error al crear la cita. Por favor intenta de nuevo.';
+          if (error.error && typeof error.error === 'object') {
+            // Intentar mostrar errores específicos del backend
+            const errors = Object.entries(error.error).map(([key, value]) => `${key}: ${value}`).join(', ');
+            errorMessage = errors || errorMessage;
+          }
+          
+          this.toastMessage = errorMessage;
+          this.showToast = true;
+        }
+      });
+      
+    } catch (error) {
+      this.loading = false;
+      console.error('Error:', error);
+      this.toastMessage = 'Error al procesar la reserva';
+      this.showToast = true;
+    }
   }
 
   getStepTitle(): string {

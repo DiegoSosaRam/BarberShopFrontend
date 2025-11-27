@@ -68,14 +68,23 @@ export class LoginPage {
       next: (response: any) => {
         const user = Array.isArray(response) ? response[0] : response.user;
         this.loading = false;
-        this.toastMessage = `¡Bienvenido ${user.full_name}!`;
+        
+        if (!user) {
+          this.toastMessage = 'Error: No se recibió información del usuario';
+          this.showToast = true;
+          return;
+        }
+        
+        this.toastMessage = `¡Bienvenido ${user.full_name || user.nombre || 'Usuario'}!`;
         this.showToast = true;
         
         setTimeout(() => {
           // Redirigir según el rol del usuario
-          if (user.role === 'BARBERO') {
+          const userRole = user.role_code || user.role;
+          
+          if (userRole === 'BARBERO') {
             this.router.navigate(['/custom-services']);
-          } else if (user.role === 'ADMIN') {
+          } else if (userRole === 'ADMIN') {
             this.router.navigate(['/admin']);
           } else {
             this.router.navigate(['/services']);
@@ -84,7 +93,18 @@ export class LoginPage {
       },
       error: (error) => {
         this.loading = false;
-        this.toastMessage = error.message || 'Credenciales incorrectas';
+        console.error('Error completo:', error);
+        
+        // Intentar extraer mensaje de error del backend
+        let errorMessage = 'Credenciales incorrectas';
+        
+        if (error.error && typeof error.error === 'object') {
+          errorMessage = error.error.error || error.error.message || errorMessage;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
+        this.toastMessage = errorMessage;
         this.showToast = true;
       }
     });

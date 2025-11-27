@@ -122,6 +122,12 @@ class CitaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cita
         fields = "__all__"
+    
+    def create(self, validated_data):
+        # Si no se proporciona estado, usar 'pendiente' por defecto (lowercase según constraint)
+        if 'estado' not in validated_data or validated_data['estado'] is None:
+            validated_data['estado'] = 'pendiente'
+        return super().create(validated_data)
 
 
 # ========= HORARIOS =========
