@@ -4,6 +4,11 @@
 
 export const environment = {
   production: false,  
+  
+  // Backend Django API
+  apiUrl: 'http://127.0.0.1:8000/api',
+  
+  // Supabase (si lo sigues usando)
   supabaseUrl: 'https://uhyhbxdvjdmyvtzjmbxv.supabase.co',
   supabaseKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVoeWhieGR2amRteXZ0emptYnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NTI0NDEsImV4cCI6MjA3NTUyODQ0MX0.8aATQWD9Cbf11Nv2K4VNZmd2SKPSs7ULIBgs2gCWbqE',
 };

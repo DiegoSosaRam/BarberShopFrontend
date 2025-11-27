@@ -18,7 +18,7 @@ import {
 import { addIcons } from 'ionicons';
 import { personOutline, lockClosedOutline, eyeOutline, eyeOffOutline, mailOutline, phonePortraitOutline } from 'ionicons/icons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -45,10 +45,11 @@ export class RegisterPage {
   showConfirmPassword = false;
   showToast = false;
   toastMessage = '';
+  loading = false;
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private authService: AuthService
   ) {
     addIcons({ personOutline, lockClosedOutline, eyeOutline, eyeOffOutline, mailOutline, phonePortraitOutline });
   }
@@ -83,61 +84,35 @@ export class RegisterPage {
       return;
     }
 
-    // Verificar que el email no esté ya registrado
-    if (this.userService.emailExists(this.registerData.email)) {
-      this.toastMessage = 'Este email ya está registrado';
-      this.showToast = true;
-      return;
-    }
+    this.loading = true;
 
-    try {
-      // Registrar nuevo usuario
-      const nuevoUsuario = this.userService.registerUser({
-        email: this.registerData.email,
-        password: this.registerData.password,
-        nombre: this.registerData.nombre,
-        telefono: this.registerData.telefono,
-        tipo: 'cliente'
-      });
-
-      this.toastMessage = `¡Registro exitoso! Bienvenido ${nuevoUsuario.nombre}`;
-      this.showToast = true;
-      
-      // Establecer usuario en sesión
-      this.userService.setCurrentUser(nuevoUsuario);
-      
-      setTimeout(() => {
-        // Verificar si hay una reserva pendiente
-        const reservaPendiente = localStorage.getItem('reserva_pendiente');
+    // Registrar nuevo usuario en el backend
+    this.authService.register({
+      full_name: this.registerData.nombre,
+      email: this.registerData.email,
+      phone: this.registerData.telefono,
+      password: this.registerData.password,
+      role_code_input: 'CLIENTE'
+    }).subscribe({
+      next: (user) => {
+        this.loading = false;
+        this.toastMessage = `¡Registro exitoso! Bienvenido ${user.full_name}`;
+        this.showToast = true;
         
-        if (reservaPendiente) {
-          // Limpiar reserva pendiente y volver a reservar
-          localStorage.removeItem('reserva_pendiente');
-          this.router.navigate(['/reservar'], { 
-            queryParams: { return_from_register: 'true' } 
-          });
-        } else {
-          // Los clientes van a services
+        setTimeout(() => {
+          // Redirigir a la página de servicios
           this.router.navigate(['/services']);
-        }
-      }, 1500);
-      
-    } catch (error) {
-      this.toastMessage = 'Error al registrar usuario. Intenta nuevamente.';
-      this.showToast = true;
-    }
+        }, 1500);
+      },
+      error: (error) => {
+        this.loading = false;
+        this.toastMessage = error.message || 'Error al registrar usuario';
+        this.showToast = true;
+      }
+    });
   }
 
   goToLogin() {
     this.router.navigate(['/login']);
-  }
-
-  // Métodos útiles para testing
-  getAllUsers() {
-    return this.userService.getAllUsers();
-  }
-
-  getStats() {
-    return this.userService.getUserStats();
   }
 }

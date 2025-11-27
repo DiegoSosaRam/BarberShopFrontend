@@ -15,8 +15,12 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    # Mostrar el código de rol en vez de solo el id si quieres
+    # Mostrar el código de rol en vez de solo el id
     role_code = serializers.CharField(source="role.role_code", read_only=True)
+    # Campo password: solo escritura, nunca se retorna en GET
+    password = serializers.CharField(write_only=True, required=False, allow_blank=False, min_length=6)
+    # Campo para recibir role_code al crear/actualizar
+    role_code_input = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Profile
@@ -24,12 +28,60 @@ class ProfileSerializer(serializers.ModelSerializer):
             "id_profile",
             "role",
             "role_code",
+            "role_code_input",
             "full_name",
+            "email",  # ✨ NUEVO
+            "password",  # ✨ NUEVO (write_only)
             "phone",
             "avatar_url",
             "is_active",
             "created_at",
         ]
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'email': {'required': True},
+            'role': {'required': False}  # No requerido porque usaremos role_code_input
+        }
+    
+    def create(self, validated_data):
+        """Crear perfil con contraseña hasheada"""
+        password = validated_data.pop('password', None)
+        role_code_input = validated_data.pop('role_code_input', None)
+        
+        # Obtener rol por código
+        if role_code_input:
+            from barbershop.models import Role
+            try:
+                role = Role.objects.get(role_code=role_code_input)
+                validated_data['role'] = role
+            except Role.DoesNotExist:
+                raise serializers.ValidationError(f"Role with code '{role_code_input}' does not exist")
+        
+        # Si no hay role en validated_data, establecer CLIENTE por defecto
+        if 'role' not in validated_data:
+            from barbershop.models import Role
+            validated_data['role'] = Role.objects.get(role_code='CLIENTE')
+        
+        profile = Profile(**validated_data)
+        
+        if password:
+            profile.set_password(password)
+        
+        profile.save()
+        return profile
+    
+    def update(self, instance, validated_data):
+        """Actualizar perfil, opcionalmente cambiar contraseña"""
+        password = validated_data.pop('password', None)
+        
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        
+        if password:
+            instance.set_password(password)
+        
+        instance.save()
+        return instance
 
 
 # ========= NÚCLEO =========

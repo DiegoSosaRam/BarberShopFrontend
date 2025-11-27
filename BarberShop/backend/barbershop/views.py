@@ -1,4 +1,6 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from .models import (
     Role, Profile,
     Barberia, Servicio, Barbero,
@@ -28,6 +30,48 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    
+    @action(detail=False, methods=['post'])
+    def login(self, request):
+        """
+        Endpoint de autenticación: POST /api/usuarios/login/
+        Body: { "email": "...", "password": "..." }
+        """
+        email = request.data.get('email')
+        password = request.data.get('password')
+        
+        if not email or not password:
+            return Response(
+                {'error': 'Email y contraseña son requeridos'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            profile = Profile.objects.get(email=email)
+            
+            if not profile.is_active:
+                return Response(
+                    {'error': 'Usuario inactivo'},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            
+            if not profile.check_password(password):
+                return Response(
+                    {'error': 'Credenciales incorrectas'},
+                    status=status.HTTP_401_UNAUTHORIZED
+                )
+            
+            serializer = self.get_serializer(profile)
+            return Response({
+                'user': serializer.data,
+                'message': 'Login exitoso'
+            })
+            
+        except Profile.DoesNotExist:
+            return Response(
+                {'error': 'Usuario no encontrado'},
+                status=status.HTTP_404_NOT_FOUND
+            )
 
 
 # ========= NÚCLEO =========

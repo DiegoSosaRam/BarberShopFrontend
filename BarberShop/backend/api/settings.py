@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "rest_framework",
     "barbershop",
 ]
@@ -29,11 +30,13 @@ DATABASES = {
         "NAME": env("PGDATABASE"),
         "USER": env("PGUSER"),
         "PASSWORD": env("PGPASSWORD"),
+
     }
 }
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -69,6 +72,15 @@ ROOT_URLCONF = "api.urls"
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")      # para collectstatic en prod
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]    # opcional en dev (si creas /backend/static)
+
+# ===== CORS Configuration =====
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8100",
+    "http://localhost:4200",
+    "http://127.0.0.1:8100",
+    "http://127.0.0.1:4200",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 # (Opcional) Evitar warning de claves autoincrementales en apps nuevas
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Profile } from '../models/interfaces';
+import { AuthService, AuthUser } from './auth.service';
+import { Observable, map } from 'rxjs';
 
-// Interface temporal para compatibilidad con el código existente
+// Interface de compatibilidad para código existente
 export interface Usuario {
-  // Propiedades nuevas (siguiendo el esquema de la BD)
   id_profile?: number;
   role?: string;
   full_name?: string;
@@ -13,9 +12,8 @@ export interface Usuario {
   is_active?: boolean;
   created_at?: string;
   email: string;
-  password: string;
   
-  // Propiedades de compatibilidad (mantenidas temporalmente)
+  // Propiedades de compatibilidad (deprecated)
   id?: string;
   nombre?: string;
   telefono?: string;
@@ -27,163 +25,104 @@ export interface Usuario {
   providedIn: 'root'
 })
 export class UserService {
-
-  private readonly USERS_KEY = 'barbershop_users';
-  private readonly CURRENT_USER_KEY = 'barbershop_current_user';
   
-  // BehaviorSubject para notificar cambios en el usuario actual
-  private currentUserSubject = new BehaviorSubject<Usuario | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  constructor(private authService: AuthService) {}
 
-  constructor() {
-    this.initializeDefaultUsers();
-    // Cargar usuario actual si existe
-    const currentUser = this.getCurrentUser();
-    this.currentUserSubject.next(currentUser);
-  }
-
-  // Inicializar usuarios por defecto si no existen
-  private initializeDefaultUsers() {
-    const existingUsers = this.getAllUsers();
-    
-    if (existingUsers.length === 0) {
-      const defaultUsers: Usuario[] = [
-        {
-          id: 'cliente-001',
-          email: 'cliente@barbershop.com',
-          password: '123456',
-          nombre: 'Juan Pérez',
-          telefono: '555-0001',
-          tipo: 'cliente',
-          fechaRegistro: new Date().toISOString()
-        },
-        {
-          id: 'barbero-001',
-          email: 'barbero@barbershop.com',
-          password: '123456',
-          nombre: 'Carlos Mendoza',
-          telefono: '555-0002',
-          tipo: 'barbero',
-          fechaRegistro: new Date().toISOString()
-        }
-      ];
-      
-      this.saveUsers(defaultUsers);
-    }
-  }
-
-  // Obtener todos los usuarios
-  getAllUsers(): Usuario[] {
-    const users = localStorage.getItem(this.USERS_KEY);
-    return users ? JSON.parse(users) : [];
-  }
-
-  // Guardar usuarios en localStorage
-  private saveUsers(users: Usuario[]): void {
-    localStorage.setItem(this.USERS_KEY, JSON.stringify(users));
-  }
-
-  // Buscar usuario por email y password
-  authenticateUser(email: string, password: string): Usuario | null {
-    const users = this.getAllUsers();
-    return users.find(user => user.email === email && user.password === password) || null;
-  }
-
-  // Verificar si un email ya existe
-  emailExists(email: string): boolean {
-    const users = this.getAllUsers();
-    return users.some(user => user.email === email);
-  }
-
-  // Registrar nuevo usuario
-  registerUser(userData: Omit<Usuario, 'id' | 'fechaRegistro'>): Usuario {
-    const users = this.getAllUsers();
-    
-    // Generar ID único
-    const id = `${userData.tipo}-${Date.now().toString(36)}`;
-    
-    const newUser: Usuario = {
-      ...userData,
-      id,
-      fechaRegistro: new Date().toISOString()
-    };
-    
-    users.push(newUser);
-    this.saveUsers(users);
-    
-    return newUser;
-  }
-
-  // Obtener usuario actual de la sesión
+  /**
+   * Obtener usuario actual (delegado a AuthService)
+   */
   getCurrentUser(): Usuario | null {
-    const currentUser = localStorage.getItem(this.CURRENT_USER_KEY);
-    return currentUser ? JSON.parse(currentUser) : null;
+    const authUser = this.authService.getCurrentUser();
+    if (!authUser) return null;
+    
+    return this.convertAuthUserToUsuario(authUser);
   }
 
-  // Guardar usuario actual en sesión
-  setCurrentUser(user: Usuario): void {
-    localStorage.setItem(this.CURRENT_USER_KEY, JSON.stringify(user));
-    this.currentUserSubject.next(user); // Notificar cambio
+  /**
+   * Observable del usuario actual
+   */
+  get currentUser$() {
+    return this.authService.currentUser$.pipe(
+      map(authUser => authUser ? this.convertAuthUserToUsuario(authUser) : null)
+    );
   }
 
-  // Cerrar sesión
+  /**
+   * Cerrar sesión
+   */
   logout(): void {
-    localStorage.removeItem(this.CURRENT_USER_KEY);
-    this.currentUserSubject.next(null); // Notificar cambio
+    this.authService.logout();
   }
 
-  // Obtener usuarios por tipo
-  getUsersByType(tipo: 'cliente' | 'barbero'): Usuario[] {
-    const users = this.getAllUsers();
-    return users.filter(user => user.tipo === tipo);
+  /**
+   * Verificar si hay usuario logueado
+   */
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
   }
 
-  // Eliminar usuario (para testing)
-  deleteUser(id: string): boolean {
-    const users = this.getAllUsers();
-    const filteredUsers = users.filter(user => user.id !== id);
-    
-    if (filteredUsers.length !== users.length) {
-      this.saveUsers(filteredUsers);
-      return true;
-    }
-    
+  /**
+   * Convertir AuthUser a Usuario (para compatibilidad)
+   */
+  private convertAuthUserToUsuario(authUser: AuthUser): Usuario {
+    return {
+      id_profile: authUser.id_profile,
+      role: authUser.role,
+      full_name: authUser.full_name,
+      phone: authUser.phone,
+      avatar_url: authUser.avatar_url,
+      is_active: authUser.is_active,
+      created_at: authUser.created_at,
+      email: authUser.email,
+      
+      // Compatibilidad con código antiguo
+      id: authUser.id_profile.toString(),
+      nombre: authUser.full_name,
+      telefono: authUser.phone,
+      tipo: this.mapRoleToTipo(authUser.role),
+      fechaRegistro: authUser.created_at
+    };
+  }
+
+  /**
+   * Mapear role a tipo (para compatibilidad)
+   */
+  private mapRoleToTipo(role: string): 'cliente' | 'barbero' {
+    if (role === 'BARBERO') return 'barbero';
+    return 'cliente';
+  }
+
+  /**
+   * Verificar si el usuario actual es cliente y tiene citas
+   * @deprecated - Usar CitaService.getPorCliente() directamente
+   */
+  get clienteActualTieneCitas(): boolean {
+    // Ya no se puede verificar sin llamar al backend
+    // Este método queda deprecated
     return false;
   }
 
-  // Limpiar todos los usuarios (para testing)
-  clearAllUsers(): void {
-    localStorage.removeItem(this.USERS_KEY);
-    localStorage.removeItem(this.CURRENT_USER_KEY);
-    this.initializeDefaultUsers();
+  // Admin methods - TODO: Convert to backend API calls
+  getAllUsers(): Usuario[] {
+    console.warn('getAllUsers: This method should call backend API');
+    return [];
   }
 
-  // Obtener estadísticas
   getUserStats() {
-    const users = this.getAllUsers();
+    console.warn('getUserStats: This method should call backend API');
     return {
-      total: users.length,
-      clientes: users.filter(u => u.tipo === 'cliente').length,
-      barberos: users.filter(u => u.tipo === 'barbero').length,
-      registrosHoy: users.filter(u => {
-        const today = new Date().toDateString();
-        const userDate = u.fechaRegistro ? new Date(u.fechaRegistro).toDateString() : '';
-        return today === userDate;
-      }).length
+      total: 0,
+      clientes: 0,
+      barberos: 0,
+      admins: 0
     };
   }
 
-  // Método para verificar si un cliente tiene citas (simulación)
-  clienteTieneCitas(clienteId: string): boolean {
-    // Simular que algunos clientes tienen citas
-    // En una implementación real, esto consultaría tu API
-    const clientesConCitas = ['cliente-001', 'cliente-002', 'cliente-003'];
-    return clientesConCitas.includes(clienteId);
+  deleteUser(user: Usuario): void {
+    console.warn('deleteUser: This method should call backend API', user);
   }
 
-  // Getter para verificar si el usuario actual es cliente y tiene citas
-  get clienteActualTieneCitas(): boolean {
-    const currentUser = this.getCurrentUser();
-    return currentUser?.tipo === 'cliente' && currentUser?.id ? this.clienteTieneCitas(currentUser.id) : false;
+  clearAllUsers(): void {
+    console.warn('clearAllUsers: This method should call backend API');
   }
 }

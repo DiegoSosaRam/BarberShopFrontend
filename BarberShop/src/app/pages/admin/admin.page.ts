@@ -83,8 +83,11 @@ export class AdminPage implements OnInit {
 
   deleteUser() {
     if (this.userToDelete) {
-      this.userService.deleteUser(this.userToDelete);
-      this.loadData();
+      const user = this.usuarios.find(u => u.id === this.userToDelete || u.id_profile?.toString() === this.userToDelete);
+      if (user) {
+        this.userService.deleteUser(user);
+        this.loadData();
+      }
       this.userToDelete = '';
     }
     this.showDeleteAlert = false;

@@ -269,39 +269,25 @@ export class ReservarPage implements OnInit {
   }
 
   restoreReservationState() {
-    const reservaPendiente = localStorage.getItem('reserva_pendiente');
-    if (reservaPendiente) {
-      try {
-        const savedData = JSON.parse(reservaPendiente);
-        this.formData = { ...this.formData, ...savedData.formData };
-        this.step = savedData.step || 3; // Ir al paso 3 por defecto
-        
-        // Actualizar datos del usuario si ahora está logueado
-        if (this.currentUser) {
-          this.formData.nombre = this.currentUser.full_name || this.currentUser.nombre || '';
-          this.formData.email = this.currentUser.email;
-          this.formData.telefono = this.currentUser.phone || this.currentUser.telefono || '';
-        }
-        
-        localStorage.removeItem('reserva_pendiente');
-      } catch (error) {
-        console.error('Error al restaurar estado de reserva:', error);
-      }
+    // Ya no se necesita restaurar estado desde localStorage
+    // El usuario ya está autenticado en memoria
+    if (this.currentUser) {
+      this.formData.nombre = this.currentUser.full_name || this.currentUser.nombre || '';
+      this.formData.email = this.currentUser.email;
+      this.formData.telefono = this.currentUser.phone || this.currentUser.telefono || '';
     }
   }
 
   // Métodos de autenticación para el paso 3
   goToLogin() {
-    // Guardar el estado actual de la reserva
-    this.saveReservationState();
-    // Navegar a login
+    // Simplemente navegar a login
+    // Ya no guardamos estado en localStorage
     this.router.navigate(['/login']);
   }
 
   goToRegister() {
-    // Guardar el estado actual de la reserva
-    this.saveReservationState();
-    // Navegar a registro
+    // Simplemente navegar a registro
+    // Ya no guardamos estado en localStorage
     this.router.navigate(['/register']);
   }
 
@@ -311,11 +297,8 @@ export class ReservarPage implements OnInit {
   }
 
   saveReservationState() {
-    const reservaData = {
-      formData: this.formData,
-      step: this.step
-    };
-    localStorage.setItem('reserva_pendiente', JSON.stringify(reservaData));
+    // Ya no guardamos en localStorage
+    // La sesión del usuario se mantiene en memoria
   }
 
   handleNextStep() {

@@ -18,7 +18,7 @@ import {
 import { addIcons } from 'ionicons';
 import { personOutline, lockClosedOutline, eyeOutline, eyeOffOutline } from 'ionicons/icons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -41,10 +41,11 @@ export class LoginPage {
   showPassword = false;
   showToast = false;
   toastMessage = '';
+  loading = false;
 
   constructor(
     private router: Router,
-    private userService: UserService
+    private authService: AuthService
   ) {
     addIcons({ personOutline, lockClosedOutline, eyeOutline, eyeOffOutline });
   }
@@ -60,39 +61,33 @@ export class LoginPage {
       return;
     }
 
-    // Autenticar usuario usando el servicio
-    const usuario = this.userService.authenticateUser(this.loginData.email, this.loginData.password);
+    this.loading = true;
 
-    if (usuario) {
-      this.toastMessage = `¡Bienvenido ${usuario.nombre}!`;
-      this.showToast = true;
-      
-      // Guardar usuario en sesión
-      this.userService.setCurrentUser(usuario);
-      
-      setTimeout(() => {
-        // Verificar si hay una reserva pendiente
-        const reservaPendiente = localStorage.getItem('reserva_pendiente');
+    // Autenticar usuario usando el backend
+    this.authService.login(this.loginData.email, this.loginData.password).subscribe({
+      next: (response: any) => {
+        const user = Array.isArray(response) ? response[0] : response.user;
+        this.loading = false;
+        this.toastMessage = `¡Bienvenido ${user.full_name}!`;
+        this.showToast = true;
         
-        if (reservaPendiente) {
-          // Limpiar reserva pendiente y volver a reservar
-          localStorage.removeItem('reserva_pendiente');
-          this.router.navigate(['/reservar'], { 
-            queryParams: { return_from_login: 'true' } 
-          });
-        } else {
-          // Redirigir según el tipo de usuario
-          if (usuario.tipo === 'barbero') {
+        setTimeout(() => {
+          // Redirigir según el rol del usuario
+          if (user.role === 'BARBERO') {
             this.router.navigate(['/custom-services']);
+          } else if (user.role === 'ADMIN') {
+            this.router.navigate(['/admin']);
           } else {
             this.router.navigate(['/services']);
           }
-        }
-      }, 1500);
-    } else {
-      this.toastMessage = 'Credenciales incorrectas';
-      this.showToast = true;
-    }
+        }, 1500);
+      },
+      error: (error) => {
+        this.loading = false;
+        this.toastMessage = error.message || 'Credenciales incorrectas';
+        this.showToast = true;
+      }
+    });
   }
 
   goToRegister() {
@@ -101,10 +96,5 @@ export class LoginPage {
 
   goToAdmin() {
     this.router.navigateByUrl('/admin');
-  }
-
-  // Método para obtener estadísticas (útil para testing)
-  getStats() {
-    return this.userService.getUserStats();
   }
 }

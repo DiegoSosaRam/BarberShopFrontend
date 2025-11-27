@@ -1,5 +1,6 @@
 # barbershop/models.py
 from django.db import models
+from django.contrib.auth.hashers import make_password, check_password
 
 # ==========================================================
 # MODELO 'Role' AÑADIDO
@@ -97,12 +98,12 @@ class BarberoServicio(models.Model):
         unique_together = (("id_barbero", "id_servicio"),)
 
 # ==========================================================
-# MODELO 'Profile' CORREGIDO
+# MODELO 'Profile' CON EMAIL Y PASSWORD
 # ==========================================================
 class Profile(models.Model):
     id_profile = models.BigAutoField(primary_key=True)
     
-    # Corregido: ForeignKey a Role usando la columna 'role_id'
+    # ForeignKey a Role usando la columna 'role_id'
     role = models.ForeignKey(
         Role,
         on_delete=models.PROTECT,
@@ -111,6 +112,8 @@ class Profile(models.Model):
     )
     
     full_name = models.TextField(null=True, blank=True)
+    email = models.EmailField(unique=True, max_length=255)  # ✨ NUEVO
+    password = models.CharField(max_length=128)  # ✨ NUEVO (hasheado)
     phone = models.TextField(null=True, blank=True)
     avatar_url = models.TextField(default="URL")
     is_active = models.BooleanField(default=True)
@@ -118,6 +121,17 @@ class Profile(models.Model):
 
     class Meta:
         db_table = "profiles"
+    
+    def set_password(self, raw_password):
+        """Hashear contraseña antes de guardar"""
+        self.password = make_password(raw_password)
+    
+    def check_password(self, raw_password):
+        """Verificar contraseña"""
+        return check_password(raw_password, self.password)
+    
+    def __str__(self):
+        return f"{self.full_name} ({self.email})"
 # ==========================================================
 
 class Cita(models.Model):
