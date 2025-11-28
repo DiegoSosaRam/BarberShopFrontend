@@ -1,0 +1,51 @@
+-- ========================================================
+-- REFERENCIA: Archivos SQL individuales
+-- ========================================================
+-- 
+-- NOTA IMPORTANTE: Todos estos archivos han sido 
+-- CONSOLIDADOS en backend/sql/setup.sql
+--
+-- NO ejecutes estos archivos individualmente.
+-- Solo ejecuta: backend/sql/setup.sql
+--
+-- ========================================================
+-- CONTENIDO:
+-- ========================================================
+--
+-- 1. add_auth_fields.sql
+--    - ALTER TABLE para agregar email y password
+--    - Ya incluido en setup.sql
+--
+-- 2. add_servicio_personalizado.sql
+--    - ALTER TABLE citas para servicio_personalizado
+--    - Ya incluido en setup.sql
+--
+-- 3. insert_6_barberias.sql
+--    - INSERT 6 barberías
+--    - Ya incluido en setup.sql
+--
+-- 4. insert_23_barberos.sql
+--    - INSERT 23 barberos distribuidos
+--    - Ya incluido en setup.sql
+--
+-- 5. insert_6_servicios.sql
+--    - INSERT 6 servicios
+--    - Ya incluido en setup.sql
+--
+-- 6. insert_precios_servicios.sql
+--    - INSERT barberia_servicios con precios
+--    - Ya incluido en setup.sql
+--
+-- ========================================================
+-- INSTRUCCIONES:
+-- ========================================================
+--
+-- 1. Ejecutar migraciones Django:
+--    python manage.py migrate
+--
+-- 2. Ejecutar setup.sql:
+--    psql -U barbershop_user -d barbershop -h localhost < backend/sql/setup.sql
+--
+-- 3. ¡Listo! Tu base de datos está completamente configurada.
+--
+-- ========================================================
