@@ -33,6 +33,38 @@ export interface CitaCreate {
   inicio: string;
   fin: string;
   notas?: string;
+  servicio_personalizado?: string;
+}
+
+export interface Barberia {
+  id_barberias: number;
+  nombre_barberia: string;
+  direccion: string;
+  telefono: string;
+  timezone?: string;
+  slug?: string;
+  portada_url?: string;
+  barberia_active?: boolean;
+  created_at?: string;
+}
+
+export interface Barbero {
+  id_barbero: number;
+  id_barberia: number;
+  nombre_barbero: string;
+  calificacion: number;
+  especialidades?: string;
+  anios_experiencia?: number;
+  foto_url?: string;
+  created_at?: string;
+}
+
+export interface Servicio {
+  id_servicio: number;
+  nombre_servicio: string;
+  description?: string;
+  precio_BarbServ?: number;
+  duracion_min?: string;
 }
 
 @Injectable({
@@ -40,8 +72,30 @@ export interface CitaCreate {
 })
 export class CitaService {
   private apiUrl = `${environment.apiUrl}/citas`;
+  private barberiasUrl = `${environment.apiUrl}/barberias`;
+  private barberosUrl = `${environment.apiUrl}/barberos`;
+  private serviciosUrl = `${environment.apiUrl}/servicios`;
 
   constructor(private http: HttpClient) { }
+
+  // ========== ENDPOINTS PARA BARBERIAS ==========
+  getBarberias(): Observable<Barberia[]> {
+    return this.http.get<Barberia[]>(`${this.barberiasUrl}/`);
+  }
+
+  // ========== ENDPOINTS PARA BARBEROS ==========
+  getBarberosPorBarberia(idBarberia: number): Observable<Barbero[]> {
+    const params = new HttpParams().set('id_barberia', idBarberia.toString());
+    return this.http.get<Barbero[]>(`${this.barberosUrl}/`, { params });
+  }
+
+  // ========== ENDPOINTS PARA SERVICIOS ==========
+  getServiciosPorBarberia(idBarberia: number): Observable<Servicio[]> {
+    const params = new HttpParams().set('id_barberia', idBarberia.toString());
+    return this.http.get<Servicio[]>(`${this.serviciosUrl}/por_barberia/`, { params });
+  }
+
+  // ========== ENDPOINTS PARA CITAS ==========
 
   // Obtener todas las citas
   getAll(): Observable<Cita[]> {

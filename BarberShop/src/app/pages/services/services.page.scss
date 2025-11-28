@@ -4,6 +4,289 @@
   --ion-text-color: #ffffff;
   
   background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #0f0f0f 100%);
+
+  // Tabs de navegación
+  .content-tabs {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid rgba(212, 175, 55, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    .tab-button {
+      flex: 1;
+      padding: 16px 20px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+
+      &:hover {
+        color: #ffffff;
+        background: rgba(212, 175, 55, 0.05);
+      }
+
+      &.active {
+        color: #d4af37;
+        border-bottom-color: #d4af37;
+      }
+    }
+  }
+
+  .tab-content {
+    padding-bottom: 40px;
+  }
+
+  .barberos-tab {
+    padding: 0;
+  }
+
+  .barberos-header {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
+    padding: 40px 20px;
+    text-align: center;
+
+    h1 {
+      font-size: 2.5rem;
+      color: #d4af37;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+
+      ion-icon {
+        font-size: 2.8rem;
+      }
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+  }
+
+  .barberos-container {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 10px;
+      padding: 10px;
+    }
+
+    .barberias-sidebar {
+      flex: 0 0 280px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 20px;
+      height: fit-content;
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      @media (max-width: 768px) {
+        flex: 1;
+        max-height: 300px;
+      }
+
+      h3 {
+        color: #d4af37;
+        font-size: 1.3rem;
+        margin-top: 0;
+        margin-bottom: 15px;
+      }
+
+      .barberia-item {
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(255, 255, 255, 0.7);
+        transition: all 0.3s ease;
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+
+        ion-icon {
+          font-size: 1.2rem;
+          color: #d4af37;
+        }
+
+        &:hover {
+          background: rgba(212, 175, 55, 0.1);
+          color: #ffffff;
+        }
+
+        &.selected {
+          background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(255, 215, 0, 0.2) 100%);
+          color: #ffffff;
+          border-color: #d4af37;
+        }
+      }
+    }
+
+    .barberos-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      .search-section {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        ion-searchbar {
+          --background: rgba(255, 255, 255, 0.1);
+          --border-radius: 12px;
+          --color: #ffffff;
+          --placeholder-color: rgba(255, 255, 255, 0.5);
+          --icon-color: #d4af37;
+          padding: 0;
+          margin: 0;
+        }
+      }
+
+      .barberos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+
+        @media (max-width: 768px) {
+          grid-template-columns: 1fr;
+        }
+
+        .barbero-card {
+          --background: rgba(255, 255, 255, 0.05);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.3s ease;
+          margin: 0;
+
+          &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.3);
+            border-color: rgba(212, 175, 55, 0.5);
+          }
+
+          .barbero-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+
+            .barbero-foto {
+              width: 70px;
+              height: 70px;
+              border-radius: 50%;
+              object-fit: cover;
+              border: 3px solid #d4af37;
+            }
+
+            .barbero-info {
+              flex: 1;
+
+              h3 {
+                font-size: 1.1rem;
+                font-weight: 700;
+                color: #ffffff;
+                margin: 0 0 6px 0;
+              }
+
+              .barberia {
+                color: rgba(255, 255, 255, 0.6);
+                font-size: 0.85rem;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+
+                ion-icon {
+                  color: #d4af37;
+                  font-size: 0.9rem;
+                }
+              }
+            }
+          }
+
+          ion-card-content {
+            padding: 12px 16px 16px 16px;
+
+            .barbero-stats {
+              display: flex;
+              gap: 8px;
+              flex-wrap: wrap;
+              margin-bottom: 12px;
+
+              ion-chip {
+                margin: 0;
+                font-size: 0.85rem;
+              }
+            }
+
+            .especialidades {
+              color: rgba(255, 255, 255, 0.8);
+              font-size: 0.85rem;
+              line-height: 1.5;
+              margin-bottom: 12px;
+
+              strong {
+                color: #d4af37;
+              }
+            }
+
+            ion-button {
+              --background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+              --color: #000000;
+              font-weight: 700;
+              text-transform: none;
+            }
+          }
+        }
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 60px 20px;
+
+        ion-icon {
+          font-size: 4rem;
+          color: rgba(212, 175, 55, 0.5);
+          margin-bottom: 20px;
+        }
+
+        h3 {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 1.5rem;
+          margin-bottom: 10px;
+        }
+
+        p {
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 1rem;
+        }
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px 20px;
+        color: #d4af37;
+      }
+    }
+  }
   
   // Hero Section
   .hero-section {

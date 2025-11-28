@@ -144,6 +144,7 @@ class Cita(models.Model):
     fin = models.DateTimeField()
     estado = models.TextField(null=True, blank=True)
     notas = models.TextField(null=True, blank=True)
+    servicio_personalizado = models.TextField(null=True, blank=True)  # Descripción del servicio personalizado
     creada_por = models.ForeignKey(Profile, on_delete=models.PROTECT, db_column="creada_por", related_name="citas_creadas", null=True, blank=True)
     aprobada_por = models.ForeignKey(Barbero, on_delete=models.PROTECT, db_column="aprobada_por", related_name="citas_aprobadas", null=True, blank=True)
     rechazada_por = models.ForeignKey(Barbero, on_delete=models.PROTECT, db_column="rechazada_por", related_name="citas_rechazadas", null=True, blank=True)

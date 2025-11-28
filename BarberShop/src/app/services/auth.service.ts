@@ -40,34 +40,71 @@ export class AuthService {
   private apiUrl = environment.apiUrl;
   
   // BehaviorSubject para el usuario actual
-  private currentUserSubject = new BehaviorSubject<AuthUser | null>(this.getUserFromMemory());
+  private currentUserSubject = new BehaviorSubject<AuthUser | null>(this.getUserFromStorage());
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  // Solo guardamos el ID del usuario en memoria (no en localStorage)
-  private currentUserId: number | null = null;
+  // Key para localStorage
+  private readonly USER_STORAGE_KEY = 'barbershop_user';
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Obtener usuario de memoria (al refrescar página se pierde la sesión)
+   * Obtener usuario desde localStorage
    */
-  private getUserFromMemory(): AuthUser | null {
-    // Ya NO usamos localStorage, la sesión solo existe en memoria
+  private getUserFromStorage(): AuthUser | null {
+    try {
+      const userJson = localStorage.getItem(this.USER_STORAGE_KEY);
+      if (userJson) {
+        const user = JSON.parse(userJson) as any;
+        // Mapear role_code a role si no existe
+        if (user && !user.role && user.role_code) {
+          user.role = user.role_code;
+        }
+        return user as AuthUser;
+      }
+    } catch (error) {
+      console.error('Error al recuperar usuario de localStorage:', error);
+      localStorage.removeItem(this.USER_STORAGE_KEY);
+    }
     return null;
+  }
+
+  /**
+   * Guardar usuario en localStorage
+   */
+  private saveUserToStorage(user: AuthUser | null): void {
+    try {
+      if (user) {
+        localStorage.setItem(this.USER_STORAGE_KEY, JSON.stringify(user));
+      } else {
+        localStorage.removeItem(this.USER_STORAGE_KEY);
+      }
+    } catch (error) {
+      console.error('Error al guardar usuario en localStorage:', error);
+    }
   }
 
   /**
    * Login - Autenticar usuario por email y password
    */
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/usuarios/login/`, {
+    return this.http.post<any>(`${this.apiUrl}/usuarios/login/`, {
       email,
       password
     }).pipe(
+      map(response => {
+        // Mapear role_code a role si no existe
+        const user = response.user;
+        if (user && !user.role && (user as any).role_code) {
+          user.role = (user as any).role_code;
+        }
+        return response as AuthResponse;
+      }),
       tap(response => {
-        // Guardar usuario en memoria
-        this.currentUserId = response.user.id_profile;
+        console.log('Usuario autenticado:', response.user);
+        // Guardar usuario en localStorage y memoria
         this.currentUserSubject.next(response.user);
+        this.saveUserToStorage(response.user);
       }),
       catchError(error => {
         console.error('Error en login:', error);
@@ -102,8 +139,8 @@ export class AuthService {
     return this.http.post<AuthUser>(`${this.apiUrl}/usuarios/`, profileData).pipe(
       tap(user => {
         // Después de registrar, hacer login automático
-        this.currentUserId = user.id_profile;
         this.currentUserSubject.next(user);
+        this.saveUserToStorage(user);
       }),
       catchError(error => {
         console.error('Error en registro:', error);
@@ -128,8 +165,8 @@ export class AuthService {
    * Logout - Cerrar sesión
    */
   logout(): void {
-    this.currentUserId = null;
     this.currentUserSubject.next(null);
+    this.saveUserToStorage(null);
   }
 
   /**
@@ -150,13 +187,15 @@ export class AuthService {
    * Obtener perfil actualizado del backend
    */
   refreshUserProfile(): Observable<AuthUser> {
-    if (!this.currentUserId) {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
       return throwError(() => new Error('No hay usuario logueado'));
     }
 
-    return this.http.get<AuthUser>(`${this.apiUrl}/usuarios/${this.currentUserId}/`).pipe(
+    return this.http.get<AuthUser>(`${this.apiUrl}/usuarios/${currentUser.id_profile}/`).pipe(
       tap(user => {
         this.currentUserSubject.next(user);
+        this.saveUserToStorage(user);
       })
     );
   }
@@ -165,13 +204,15 @@ export class AuthService {
    * Actualizar perfil del usuario
    */
   updateProfile(profileData: Partial<AuthUser>): Observable<AuthUser> {
-    if (!this.currentUserId) {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
       return throwError(() => new Error('No hay usuario logueado'));
     }
 
-    return this.http.patch<AuthUser>(`${this.apiUrl}/usuarios/${this.currentUserId}/`, profileData).pipe(
+    return this.http.patch<AuthUser>(`${this.apiUrl}/usuarios/${currentUser.id_profile}/`, profileData).pipe(
       tap(user => {
         this.currentUserSubject.next(user);
+        this.saveUserToStorage(user);
       })
     );
   }

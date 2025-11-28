@@ -1,124 +1,498 @@
 <app-navbar></app-navbar>
 
-<ion-content [fullscreen]="true" class="admin-content">
+<ion-content>
   <div class="admin-container">
-    <!-- Header -->
-    <ion-card class="header-card">
-      <ion-card-header>
-        <ion-card-title class="admin-title">
-          <ion-icon name="stats-chart-outline"></ion-icon>
-          Panel de Administración
-        </ion-card-title>
-      </ion-card-header>
-    </ion-card>
+    <div class="admin-header">
+      <h1>
+        <ion-icon name="stats-chart-outline"></ion-icon>
+        Panel de Administración
+      </h1>
+      <p>Gestiona barberías, barberos y citas</p>
+    </div>
 
-    <!-- Estadísticas -->
-    <ion-card class="stats-card">
-      <ion-card-header>
-        <ion-card-title>Estadísticas de Usuarios</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-grid>
-          <ion-row>
-            <ion-col size="6">
-              <div class="stat-item">
-                <div class="stat-number">{{stats.total}}</div>
-                <div class="stat-label">Total Usuarios</div>
-              </div>
-            </ion-col>
-            <ion-col size="6">
-              <div class="stat-item">
-                <div class="stat-number">{{stats.clientes}}</div>
-                <div class="stat-label">Clientes</div>
-              </div>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="6">
-              <div class="stat-item">
-                <div class="stat-number">{{stats.barberos}}</div>
-                <div class="stat-label">Barberos</div>
-              </div>
-            </ion-col>
-            <ion-col size="6">
-              <div class="stat-item">
-                <div class="stat-number">{{stats.registrosHoy}}</div>
-                <div class="stat-label">Registros Hoy</div>
-              </div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
+    <!-- Segmented Control -->
+    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)">
+      <ion-segment-button value="barberias">
+        <ion-icon name="business-outline"></ion-icon>
+        <ion-label>Barberías</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="barberos">
+        <ion-icon name="people-outline"></ion-icon>
+        <ion-label>Barberos</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="citas">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-label>Citas</ion-label>
+      </ion-segment-button>
+    </ion-segment>
 
-    <!-- Lista de Usuarios -->
-    <ion-card class="users-card">
-      <ion-card-header>
-        <ion-card-title>
-          Usuarios Registrados
-          <ion-button fill="clear" (click)="loadData()">
-            <ion-icon name="refresh-outline"></ion-icon>
-          </ion-button>
-        </ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          @for (usuario of usuarios; track usuario.id) {
-            <ion-item class="user-item">
-              <ion-icon name="person-outline" slot="start"></ion-icon>
-              <ion-label>
-                <h2>{{usuario.full_name || usuario.nombre}}</h2>
-                <p>{{usuario.email}}</p>
-                <p>{{usuario.phone || usuario.telefono}}</p>
-                <p class="date-info">Registrado: {{formatDate(usuario.fechaRegistro || usuario.created_at || '')}}</p>
-              </ion-label>
-              <ion-badge [color]="getUserBadgeColor(usuario.tipo || usuario.role || '')" slot="end">
-                {{usuario.tipo || usuario.role}}
+    <!-- ========== SECCIÓN BARBERÍAS ========== -->
+    <div *ngIf="selectedSegment === 'barberias'" class="section">
+      <div class="section-header">
+        <h2>Gestión de Barberías</h2>
+        <ion-button (click)="openBarberiaModal()">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Nueva Barbería
+        </ion-button>
+      </div>
+
+      <div *ngIf="loading" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <div class="cards-grid" *ngIf="!loading">
+        <ion-card *ngFor="let barberia of barberias" class="data-card">
+          <ion-card-header>
+            <div class="card-header-flex">
+              <ion-card-title>{{ barberia.nombre_barberia }}</ion-card-title>
+              <ion-badge [color]="barberia.barberia_active ? 'success' : 'danger'">
+                {{ barberia.barberia_active ? 'Activa' : 'Inactiva' }}
               </ion-badge>
-              @if (usuario.email !== 'cliente@barbershop.com' && usuario.email !== 'barbero@barbershop.com') {
-                <ion-button 
-                  fill="clear" 
-                  color="danger" 
-                  slot="end"
-                  (click)="confirmDelete(usuario.id || usuario.id_profile?.toString() || '')">
-                  <ion-icon name="trash-outline"></ion-icon>
-                </ion-button>
-              }
-            </ion-item>
-          }
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none">
+              <ion-item>
+                <ion-icon slot="start" name="location-outline"></ion-icon>
+                <ion-label class="ion-text-wrap">{{ barberia.direccion }}</ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-icon slot="start" name="call-outline"></ion-icon>
+                <ion-label>{{ barberia.telefono }}</ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="button-group">
+              <ion-button size="small" fill="outline" (click)="openBarberiaModal(barberia)">
+                <ion-icon slot="start" name="create-outline"></ion-icon>
+                Editar
+              </ion-button>
+              <ion-button size="small" color="danger" fill="outline" (click)="deleteBarberia(barberia.id_barberias)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Eliminar
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
 
-    <!-- Acciones de Administración -->
-    <ion-card class="actions-card">
-      <ion-card-header>
-        <ion-card-title>Acciones de Administración</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-button 
-          expand="block" 
-          color="danger" 
-          (click)="clearAllUsers()"
-          class="action-button">
-          Limpiar Todos los Datos
+      <div *ngIf="!loading && barberias.length === 0" class="empty-state">
+        <ion-icon name="business-outline"></ion-icon>
+        <p>No hay barberías registradas</p>
+      </div>
+    </div>
+
+    <!-- ========== SECCIÓN BARBEROS ========== -->
+    <div *ngIf="selectedSegment === 'barberos'" class="section">
+      <div class="section-header">
+        <h2>Gestión de Barberos</h2>
+        <ion-button (click)="openBarberoModal()">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Nuevo Barbero
         </ion-button>
-        <ion-button 
-          expand="block" 
-          fill="outline" 
-          (click)="goBack()"
-          class="action-button">
-          Volver al Inicio
+      </div>
+
+      <div *ngIf="loading" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <div class="cards-grid" *ngIf="!loading">
+        <ion-card *ngFor="let barbero of barberos" class="data-card">
+          <ion-card-header>
+            <div class="barbero-header">
+              <img [src]="barbero.foto_url || 'assets/default-barber.png'" alt="{{ barbero.nombre_barbero }}" class="barbero-foto">
+              <div>
+                <ion-card-title>{{ barbero.nombre_barbero }}</ion-card-title>
+                <p class="barberia-tag">{{ getNombreBarberia(barbero.id_barberia) }}</p>
+              </div>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none">
+              <ion-item *ngIf="barbero.especialidades">
+                <ion-label class="ion-text-wrap">
+                  <strong>Especialidades:</strong> {{ barbero.especialidades }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <strong>Experiencia:</strong> {{ barbero.anios_experiencia }} años
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <strong>Calificación:</strong> {{ barbero.calificacion }} ⭐
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <div class="button-group">
+              <ion-button size="small" fill="outline" (click)="openBarberoModal(barbero)">
+                <ion-icon slot="start" name="create-outline"></ion-icon>
+                Editar
+              </ion-button>
+              <ion-button size="small" color="danger" fill="outline" (click)="deleteBarbero(barbero.id_barbero)">
+                <ion-icon slot="start" name="trash-outline"></ion-icon>
+                Eliminar
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div *ngIf="!loading && barberos.length === 0" class="empty-state">
+        <ion-icon name="people-outline"></ion-icon>
+        <p>No hay barberos registrados</p>
+      </div>
+    </div>
+
+    <!-- ========== SECCIÓN CITAS ========== -->
+    <div *ngIf="selectedSegment === 'citas'" class="section">
+      <div class="section-header">
+        <h2>Citas Pendientes</h2>
+        <ion-button (click)="loadCitasPendientes()">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>
+          Actualizar
         </ion-button>
-      </ion-card-content>
-    </ion-card>
+      </div>
+
+      <div *ngIf="loading" class="loading-container">
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+
+      <div class="citas-list" *ngIf="!loading">
+        <ion-card *ngFor="let cita of citasPendientes" class="cita-card" (click)="openCitaModal(cita)">
+          <ion-card-header>
+            <div class="cita-header">
+              <ion-card-title>{{ cita.nombre_barberia }}</ion-card-title>
+              <ion-badge color="warning">{{ cita.estado }}</ion-badge>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-list lines="none">
+              <ion-item>
+                <ion-label>
+                  <strong>Cliente:</strong> {{ cita.nombre_usuario }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <strong>Barbero:</strong> {{ cita.nombre_barbero }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <strong>Servicio:</strong> {{ cita.nombre_servicio }}
+                </ion-label>
+              </ion-item>
+              <ion-item *ngIf="cita.servicio_personalizado">
+                <ion-label class="ion-text-wrap">
+                  <strong>Descripción:</strong> {{ cita.servicio_personalizado }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <strong>Fecha:</strong> {{ cita.fecha_cita | date: 'dd/MM/yyyy' }}
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-label>
+                  <strong>Hora:</strong> {{ cita.hora_cita }}
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </ion-card-content>
+        </ion-card>
+      </div>
+
+      <div *ngIf="!loading && citasPendientes.length === 0" class="empty-state">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <p>No hay citas pendientes</p>
+      </div>
+    </div>
   </div>
 
-  <!-- Alert de confirmación -->
-  <ion-alert
-    [isOpen]="showDeleteAlert"
-    header="Confirmar Eliminación"
-    message="¿Estás seguro de que quieres eliminar este usuario?"
-    [buttons]="alertButtons">
-  </ion-alert>
+  <!-- ========== MODAL BARBERÍA ========== -->
+  <ion-modal [isOpen]="showBarberiaModal" (didDismiss)="closeBarberiaModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ isEditing ? 'Editar' : 'Nueva' }} Barbería</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeBarberiaModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="modal-content">
+        <div class="form-container">
+          <ion-list>
+            <ion-item>
+              <ion-input
+                label="Nombre *"
+                labelPlacement="floating"
+                [(ngModel)]="barberiaForm.nombre_barberia"
+                placeholder="Ej: Premium Cuts"
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Dirección *"
+                labelPlacement="floating"
+                [(ngModel)]="barberiaForm.direccion"
+                placeholder="Calle y número"
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Teléfono *"
+                labelPlacement="floating"
+                type="tel"
+                [(ngModel)]="barberiaForm.telefono"
+                placeholder="(664) 123-4567"
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Slug (URL amigable)"
+                labelPlacement="floating"
+                [(ngModel)]="barberiaForm.slug"
+                placeholder="Se genera automáticamente"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="URL Portada"
+                labelPlacement="floating"
+                [(ngModel)]="barberiaForm.portada_url"
+                placeholder="https://..."
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                label="Estado"
+                [(ngModel)]="barberiaForm.barberia_active"
+                interface="popover"
+              >
+                <ion-select-option [value]="true">Activa</ion-select-option>
+                <ion-select-option [value]="false">Inactiva</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+
+          <div class="modal-buttons">
+            <ion-button expand="block" (click)="saveBarberia()" [disabled]="loading">
+              <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+              <span *ngIf="!loading">
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                {{ isEditing ? 'Actualizar' : 'Crear' }}
+              </span>
+            </ion-button>
+            <ion-button expand="block" fill="outline" (click)="closeBarberiaModal()" [disabled]="loading">
+              Cancelar
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- ========== MODAL BARBERO ========== -->
+  <ion-modal [isOpen]="showBarberoModal" (didDismiss)="closeBarberoModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>{{ isEditing ? 'Editar' : 'Nuevo' }} Barbero</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeBarberoModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="modal-content">
+        <div class="form-container">
+          <ion-list>
+            <ion-item>
+              <ion-input
+                label="Nombre *"
+                labelPlacement="floating"
+                [(ngModel)]="barberoForm.nombre_barbero"
+                placeholder="Nombre completo"
+                required
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-select
+                label="Barbería *"
+                [(ngModel)]="barberoForm.id_barberia"
+                interface="popover"
+                placeholder="Selecciona una barbería"
+              >
+                <ion-select-option *ngFor="let barberia of barberias" [value]="barberia.id_barberias">
+                  {{ barberia.nombre_barberia }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Especialidades"
+                labelPlacement="floating"
+                [(ngModel)]="barberoForm.especialidades"
+                placeholder="Ej: Fade, Diseño, Barba"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Años de experiencia"
+                labelPlacement="floating"
+                type="number"
+                [(ngModel)]="barberoForm.anios_experiencia"
+                placeholder="0"
+                min="0"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="Calificación"
+                labelPlacement="floating"
+                type="number"
+                [(ngModel)]="barberoForm.calificacion"
+                placeholder="5.0"
+                min="0"
+                max="5"
+                step="0.1"
+              ></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input
+                label="URL Foto"
+                labelPlacement="floating"
+                [(ngModel)]="barberoForm.foto_url"
+                placeholder="https://..."
+              ></ion-input>
+            </ion-item>
+          </ion-list>
+
+          <div class="modal-buttons">
+            <ion-button expand="block" (click)="saveBarbero()" [disabled]="loading">
+              <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+              <span *ngIf="!loading">
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                {{ isEditing ? 'Actualizar' : 'Crear' }}
+              </span>
+            </ion-button>
+            <ion-button expand="block" fill="outline" (click)="closeBarberoModal()" [disabled]="loading">
+              Cancelar
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- ========== MODAL CITA ========== -->
+  <ion-modal [isOpen]="showCitaModal" (didDismiss)="closeCitaModal()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Gestionar Cita</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeCitaModal()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="modal-content" *ngIf="citaSeleccionada">
+        <div class="form-container">
+          <ion-card class="cita-detail">
+            <ion-card-header>
+              <ion-card-title>{{ citaSeleccionada.nombre_barberia }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-list lines="none">
+                <ion-item>
+                  <ion-label><strong>Cliente:</strong> {{ citaSeleccionada.nombre_usuario }}</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label><strong>Email:</strong> {{ citaSeleccionada.email_usuario }}</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label><strong>Barbero:</strong> {{ citaSeleccionada.nombre_barbero }}</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label><strong>Servicio:</strong> {{ citaSeleccionada.nombre_servicio }}</ion-label>
+                </ion-item>
+                <ion-item *ngIf="citaSeleccionada.servicio_personalizado">
+                  <ion-label class="ion-text-wrap">
+                    <strong>Descripción:</strong><br>
+                    {{ citaSeleccionada.servicio_personalizado }}
+                  </ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label><strong>Fecha:</strong> {{ citaSeleccionada.fecha_cita | date: 'dd/MM/yyyy' }}</ion-label>
+                </ion-item>
+                <ion-item>
+                  <ion-label><strong>Hora:</strong> {{ citaSeleccionada.hora_cita }}</ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-item>
+            <ion-textarea
+              label="Motivo de rechazo (opcional)"
+              labelPlacement="floating"
+              [(ngModel)]="motivoRechazo"
+              placeholder="Ingrese el motivo si va a rechazar la cita"
+              rows="4"
+            ></ion-textarea>
+          </ion-item>
+
+          <div class="modal-buttons">
+            <ion-button expand="block" color="success" (click)="aprobarCita()" [disabled]="loading">
+              <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+              <span *ngIf="!loading">
+                <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                Aprobar Cita
+              </span>
+            </ion-button>
+            <ion-button expand="block" color="danger" (click)="rechazarCita()" [disabled]="loading">
+              <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+              <span *ngIf="!loading">
+                <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+                Rechazar Cita
+              </span>
+            </ion-button>
+            <ion-button expand="block" fill="outline" (click)="closeCitaModal()" [disabled]="loading">
+              Cerrar
+            </ion-button>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Toast -->
+  <ion-toast
+    [isOpen]="showToast"
+    [message]="toastMessage"
+    [duration]="3000"
+    [color]="toastColor"
+    (didDismiss)="showToast = false"
+  ></ion-toast>
+
 </ion-content>

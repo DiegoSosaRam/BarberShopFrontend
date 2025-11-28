@@ -2,6 +2,25 @@
 
 <ion-content [fullscreen]="true" class="services-page">
   
+  <!-- Tabs para cambiar entre Servicios y Barberos -->
+  <div class="content-tabs">
+    <button 
+      [class.active]="activeTab === 'servicios'"
+      (click)="activeTab = 'servicios'"
+      class="tab-button">
+      Servicios
+    </button>
+    <button 
+      [class.active]="activeTab === 'barberos'"
+      (click)="activeTab = 'barberos'"
+      class="tab-button">
+      Encontrar Barbero
+    </button>
+  </div>
+
+  <!-- TAB 1: SERVICIOS -->
+  <div *ngIf="activeTab === 'servicios'" class="tab-content">
+  
   <!-- Hero Section -->
   <div class="hero-section">
     <div class="hero-content">
@@ -131,18 +150,106 @@
           (click)="navigateToReservar()">
           Reservar Cita
         </ion-button>
-        
-        @if (!isLoggedIn) {
-          <ion-button 
-            size="large"
-            fill="outline"
-            class="cta-button-secondary"
-            (click)="navigateToLogin()">
-            Iniciar Sesión
-          </ion-button>
-        }
       </div>
     </div>
   </div>
+
+  </div><!-- FIN TAB SERVICIOS -->
+
+  <!-- TAB 2: BARBEROS -->
+  <div *ngIf="activeTab === 'barberos'" class="tab-content barberos-tab">
+    
+    <div class="barberos-header">
+      <h1><ion-icon name="search-outline"></ion-icon> Encuentra tu Barbero Ideal</h1>
+      <p>Selecciona una barbería y encuentra al barbero perfecto para ti</p>
+    </div>
+
+    <div class="barberos-container">
+      <!-- Sidebar: Barberías -->
+      <aside class="barberias-sidebar">
+        <h3>Barberías</h3>
+        <div class="barberia-item" 
+          [class.selected]="barberiaSeleccionada === null"
+          (click)="seleccionarBarberia(null)">
+          <ion-icon name="people-outline"></ion-icon>
+          <span>Todos los Barberos</span>
+        </div>
+
+        <div *ngFor="let barberia of barberias" 
+          class="barberia-item"
+          [class.selected]="barberiaSeleccionada === barberia.id_barberias"
+          (click)="seleccionarBarberia(barberia.id_barberias)">
+          <ion-icon name="location-outline"></ion-icon>
+          <span>{{ barberia.nombre_barberia }}</span>
+        </div>
+      </aside>
+
+      <!-- Main: Buscador y Grid de Barberos -->
+      <main class="barberos-main">
+        <!-- Buscador -->
+        <div class="search-section">
+          <ion-searchbar
+            placeholder="Buscar por nombre, especialidad..."
+            (ionInput)="buscarBarberos($event)"
+            animated="true">
+          </ion-searchbar>
+        </div>
+
+        <!-- Grid de Barberos -->
+        <div class="barberos-grid" *ngIf="barberosFiltrados.length > 0">
+          <ion-card *ngFor="let barbero of barberosFiltrados" class="barbero-card">
+            <div class="barbero-header">
+              <img [src]="barbero.foto_url || 'https://ionicframework.com/docs/img/demos/avatar.svg'" 
+                [alt]="barbero.nombre_barbero"
+                class="barbero-foto">
+              <div class="barbero-info">
+                <h3>{{ barbero.nombre_barbero }}</h3>
+                <p class="barberia">
+                  <ion-icon name="location-outline"></ion-icon>
+                  {{ barbero.nombre_barberia }}
+                </p>
+              </div>
+            </div>
+
+            <ion-card-content>
+              <div class="barbero-stats">
+                <ion-chip *ngIf="barbero.calificacion" color="primary">
+                  <ion-icon name="star-outline"></ion-icon>
+                  <ion-label>{{ barbero.calificacion }}</ion-label>
+                </ion-chip>
+                <ion-chip *ngIf="barbero.anios_experiencia" color="secondary">
+                  <ion-icon name="time-outline"></ion-icon>
+                  <ion-label>{{ barbero.anios_experiencia }} años</ion-label>
+                </ion-chip>
+              </div>
+
+              <p class="especialidades" *ngIf="barbero.especialidades">
+                <strong>Especialidades:</strong><br>
+                {{ barbero.especialidades }}
+              </p>
+
+              <ion-button expand="block" (click)="reservarConBarbero(barbero)">
+                <ion-icon name="person-outline" slot="start"></ion-icon>
+                Reservar
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <!-- Sin resultados -->
+        <div class="no-results" *ngIf="barberosFiltrados.length === 0 && !loading">
+          <ion-icon name="search-outline"></ion-icon>
+          <h3>No se encontraron barberos</h3>
+          <p>Intenta con otra búsqueda o barbería</p>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" *ngIf="loading">
+          <p>Cargando barberos...</p>
+        </div>
+      </main>
+    </div>
+
+  </div><!-- FIN TAB BARBEROS -->
 
 </ion-content>

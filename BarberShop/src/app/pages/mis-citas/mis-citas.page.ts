@@ -37,7 +37,7 @@ export interface CitaCliente {
   id_barberia: number;
   inicio: string;
   fin: string;
-  estado: 'pendiente' | 'aceptada' | 'completada' | 'cancelada';
+  estado: 'pendiente' | 'aceptada' | 'confirmada' | 'completada' | 'cancelada' | 'rechazada';
   notas?: string;
   created_at: string;
   // Campos de joins para display
@@ -126,7 +126,7 @@ export class MisCitasPage implements OnInit {
   }
 
   get citasAceptadas(): CitaCliente[] {
-    return this.misCitas.filter(c => c.estado === 'aceptada');
+    return this.misCitas.filter(c => c.estado === 'aceptada' || c.estado === 'confirmada');
   }
 
   get citasCompletadas(): CitaCliente[] {
@@ -134,7 +134,7 @@ export class MisCitasPage implements OnInit {
   }
 
   get citasCanceladas(): CitaCliente[] {
-    return this.misCitas.filter(c => c.estado === 'cancelada');
+    return this.misCitas.filter(c => c.estado === 'cancelada' || c.estado === 'rechazada');
   }
 
   get citasProximas(): CitaCliente[] {
@@ -173,14 +173,14 @@ export class MisCitasPage implements OnInit {
       id_barberia: cita.id_barberia,
       inicio: cita.inicio,
       fin: cita.fin,
-      estado: (cita.estado || 'pendiente') as 'pendiente' | 'aceptada' | 'completada' | 'cancelada',
+      estado: (cita.estado || 'pendiente') as 'pendiente' | 'aceptada' | 'confirmada' | 'completada' | 'cancelada' | 'rechazada',
       notas: cita.notas,
       created_at: cita.created_at || '',
       nombre_barbero: cita.barbero_nombre || 'Sin asignar',
       nombre_servicio: cita.servicio_nombre || 'Sin nombre',
       nombre_barberia: cita.barberia_nombre || 'Sin barbería',
-      precio_BarbServ: 0, // Esto debería venir del backend
-      duracion_min: '30', // Esto debería venir del backend
+      precio_BarbServ: (cita as any).precio_BarbServ || 0,
+      duracion_min: (cita as any).duracion_min || '30',
     };
   }
 
@@ -189,10 +189,12 @@ export class MisCitasPage implements OnInit {
       case 'pendiente':
         return 'warning';
       case 'aceptada':
+      case 'confirmada':
         return 'primary';
       case 'completada':
         return 'success';
       case 'cancelada':
+      case 'rechazada':
         return 'danger';
       default:
         return 'medium';
