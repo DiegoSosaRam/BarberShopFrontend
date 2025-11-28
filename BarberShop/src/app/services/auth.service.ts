@@ -20,6 +20,8 @@ export interface RegisterRequest {
 export interface AuthUser {
   id_profile: number;
   role: string;
+  role_code?: string;
+  id_barberia?: number;
   full_name: string;
   email: string;
   phone?: string;

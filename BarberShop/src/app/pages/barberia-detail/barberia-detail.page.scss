@@ -1,0 +1,364 @@
+// Variables de color
+$primary-color: #d4af37;
+$dark-bg: #1a1a1a;
+$card-bg: #1a1a1a;
+$text-primary: #d4af37;
+$text-secondary: #ddd;
+$text-muted: #999;
+$border-color: #2a2a2a;
+
+ion-content {
+  --background: #{$dark-bg};
+}
+
+.barberia-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-bottom: 40px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 1rem;
+
+  p {
+    color: $text-muted;
+    font-size: 0.95rem;
+  }
+}
+
+// Header de la barbería
+.barberia-header {
+  text-align: center;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+      margin: 0;
+      color: $text-primary;
+    }
+
+    .header-subtitle {
+      color: $text-muted;
+      margin: 5px 0 0 0;
+      font-size: 0.9rem;
+    }
+  }
+
+  .back-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: $text-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.2s ease;
+
+    ion-icon {
+      font-size: 1.8rem;
+    }
+
+    &:hover {
+      opacity: 0.8;
+      transform: translateX(-4px);
+    }
+  }
+}
+
+// Información general card
+.info-card {
+  background: $card-bg;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 30px;
+  border: 1px solid $border-color;
+
+  ion-card-header {
+    padding: 16px;
+    border-bottom: 1px solid $border-color;
+  }
+
+  ion-card-title {
+    color: $text-primary;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+
+    ion-icon {
+      font-size: 1.4rem;
+    }
+  }
+
+  ion-card-content {
+    padding: 16px;
+
+    ion-list {
+      background: transparent;
+      padding: 0;
+    }
+
+    ion-item {
+      --background: transparent;
+      --padding-start: 0;
+      --inner-padding-end: 0;
+      margin-bottom: 8px;
+
+      ion-icon {
+        color: $text-primary;
+        margin-right: 10px;
+        font-size: 1.2rem;
+      }
+
+      ion-label {
+        color: $text-secondary;
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+// Segment control
+.control-segment {
+  margin-bottom: 30px;
+  background: $dark-bg;
+  border-radius: 12px;
+  padding: 5px;
+  border: 1px solid $border-color;
+
+  ion-segment-button {
+    --background: transparent;
+    --background-checked: $text-primary;
+    --color: $text-muted;
+    --color-checked: #000;
+    --indicator-color: transparent;
+    text-transform: none;
+    font-weight: 500;
+    border-radius: 8px;
+    margin: 0 2px;
+
+    ion-label {
+      margin-top: 5px;
+      font-size: 0.9rem;
+    }
+
+    ion-icon {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+// Secciones
+.section {
+  margin-bottom: 40px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  h2 {
+    color: $text-primary;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  ion-button {
+    --background: $text-primary;
+    --color: #000;
+    font-weight: 600;
+
+    &:hover {
+      --background: #ffd700;
+    }
+  }
+}
+
+// Grid de cards
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.data-card {
+  background: $card-bg;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid $border-color;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+  }
+
+  ion-card-header {
+    padding: 16px;
+    border-bottom: 1px solid $border-color;
+  }
+
+  ion-card-title {
+    color: $text-primary;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .subtitle {
+    color: $text-muted;
+    font-size: 0.85rem;
+    margin: 5px 0 0 0;
+  }
+
+  ion-card-content {
+    padding: 16px;
+
+    ion-list {
+      background: transparent;
+      padding: 0;
+      margin-bottom: 15px;
+    }
+
+    ion-item {
+      --background: transparent;
+      --padding-start: 0;
+      --inner-padding-end: 0;
+      margin-bottom: 8px;
+
+      ion-icon {
+        color: $text-primary;
+        margin-right: 10px;
+        font-size: 1.1rem;
+      }
+
+      ion-label {
+        color: $text-secondary;
+        font-size: 0.95rem;
+
+        strong {
+          color: $text-primary;
+        }
+      }
+    }
+  }
+
+  .card-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+
+    ion-badge {
+      white-space: nowrap;
+      font-size: 0.75rem;
+    }
+  }
+
+  .precio {
+    color: $text-primary;
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+}
+
+// Empty state
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1rem;
+  text-align: center;
+  color: $text-muted;
+  background: rgba(212, 175, 55, 0.05);
+  border-radius: 12px;
+  border: 1px dashed $border-color;
+
+  ion-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: $text-primary;
+    opacity: 0.5;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+}
+
+// Modal buttons
+.modal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 2rem;
+
+  ion-button {
+    font-weight: 600;
+  }
+}
+
+// Toast personalizado
+ion-toast {
+  --background: $card-bg;
+  --color: $text-secondary;
+  border: 1px solid $border-color;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .barberia-header {
+    flex-direction: column;
+    align-items: center;
+
+    .header-content {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .back-button {
+      position: absolute;
+      left: 20px;
+      top: 120px;
+    }
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .control-segment {
+    font-size: 0.85rem;
+  }
+}

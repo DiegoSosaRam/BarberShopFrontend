@@ -3,7 +3,7 @@
 <ion-content [fullscreen]="true" class="services-page">
   
   <!-- Tabs para cambiar entre Servicios y Barberos -->
-  <div class="content-tabs">
+  <div class="content-tabs" *ngIf="isLoggedIn">
     <button 
       [class.active]="activeTab === 'servicios'"
       (click)="activeTab = 'servicios'"
@@ -53,88 +53,6 @@
     </ion-grid>
   </div>
 
-  <!-- Services Section -->
-  <div class="services-section">
-    <div class="section-header">
-      <h2 class="section-title">Catálogo de Servicios</h2>
-      <p class="section-description">
-        Cada servicio está diseñado para ofrecerte la mejor experiencia
-      </p>
-    </div>
-
-    <ion-grid>
-      <ion-row>
-        @for (servicio of servicios; track servicio) {
-        <ion-col size="12" sizeMd="6" sizeLg="4" >
-          <ion-card class="service-card" [ngClass]="{'popular-service': servicio.popular}">
-            
-            <!-- Popular Badge -->
-            @if (servicio.popular) {
-              <ion-badge 
-                class="popular-badge" 
-                color="success">
-                Popular
-              </ion-badge>
-            }
-
-            <ion-card-header>
-              <!-- Category Badge -->
-              <ion-badge 
-                [color]="getCategoryColor(servicio.categoria)"
-                class="category-badge">
-                {{ servicio.categoria }}
-              </ion-badge>
-
-              <!-- Service Title -->
-              <ion-card-title class="service-title">
-                <ion-icon name="cut-outline" class="title-icon"></ion-icon>
-                {{ servicio.nombre_servicio }}
-              </ion-card-title>
-
-              <!-- Duration and Price -->
-              <div class="service-meta">
-                <div class="duration">
-                  <ion-icon name="time-outline" class="meta-icon"></ion-icon>
-                  {{ servicio.duracion_min }} min
-                </div>
-                <div class="price">
-                  ${{ formatPrice(servicio.precio_BarbServ) }}
-                </div>
-              </div>
-            </ion-card-header>
-
-            <ion-card-content>
-              <!-- Description -->
-              <p class="service-description">{{ servicio.description }}</p>
-
-              <!-- Features -->
-              <div class="features-section">
-                <h4 class="features-title">Incluye:</h4>
-                <ul class="features-list">
-                  @for (caracteristica of servicio.caracteristicas; track caracteristica) {
-                    <li class="feature-item">
-                      <div class="bullet"></div>
-                      {{ caracteristica }}
-                    </li>
-                  }
-                </ul>
-              </div>
-
-              <!-- Reserve Button -->
-              <ion-button 
-                expand="block" 
-                class="reserve-button"
-                (click)="navigateToReservar(servicio.id_servicio.toString())">
-                Reservar Ahora
-              </ion-button>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      }
-      </ion-row>
-    </ion-grid>
-  </div>
-
   <!-- Call to Action Section -->
   <div class="cta-section">
     <div class="cta-content">
@@ -154,10 +72,41 @@
     </div>
   </div>
 
+  <!-- Barberías Section -->
+  <div class="barberias-section" *ngIf="isLoggedIn">
+    <div class="section-header">
+      <h2 class="section-title">Nuestras <span class="gradient-text">Barberías</span></h2>
+      <p class="section-description">
+        Accede a cada barbería para ver citas, barberos y precios
+      </p>
+    </div>
+
+    <div class="barberias-list">
+      <div *ngFor="let barberia of barberias" 
+        class="barberia-item-detail"
+        (click)="irADetalleBarberia(barberia.id_barberias)">
+        <div class="barberia-item-header">
+          <h3>{{ barberia.nombre_barberia }}</h3>
+          <ion-icon name="arrow-forward"></ion-icon>
+        </div>
+        <div class="barberia-item-info">
+          <div class="info-row">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ barberia.direccion }}</span>
+          </div>
+          <div class="info-row">
+            <ion-icon name="call-outline"></ion-icon>
+            <span>{{ barberia.telefono }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div><!-- FIN TAB SERVICIOS -->
 
   <!-- TAB 2: BARBEROS -->
-  <div *ngIf="activeTab === 'barberos'" class="tab-content barberos-tab">
+  <div *ngIf="activeTab === 'barberos' && isLoggedIn" class="tab-content barberos-tab">
     
     <div class="barberos-header">
       <h1><ion-icon name="search-outline"></ion-icon> Encuentra tu Barbero Ideal</h1>

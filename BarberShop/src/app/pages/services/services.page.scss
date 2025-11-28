@@ -687,3 +687,105 @@ ion-badge {
     --color: var(--ion-color-medium);
   }
 }
+
+// Barberías Section
+.barberias-section {
+  padding: 40px 20px;
+  
+  .section-header {
+    text-align: center;
+    margin-bottom: 40px;
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin: 0 0 12px 0;
+      color: #ffffff;
+
+      .gradient-text {
+        background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+    }
+
+    .section-description {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin: 0;
+    }
+  }
+
+  .barberias-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .barberia-item-detail {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(212, 175, 55, 0.5);
+      transform: translateX(8px);
+    }
+
+    .barberia-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+
+      h3 {
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #d4af37;
+      }
+
+      ion-icon {
+        color: rgba(212, 175, 55, 0.6);
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+      }
+    }
+
+    &:hover .barberia-item-header ion-icon {
+      color: #d4af37;
+      transform: translateX(4px);
+    }
+
+    .barberia-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .info-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.95rem;
+
+        ion-icon {
+          color: rgba(212, 175, 55, 0.7);
+          font-size: 1.2rem;
+          flex-shrink: 0;
+        }
+
+        span {
+          word-break: break-word;
+        }
+      }
+    }
+  }
+}

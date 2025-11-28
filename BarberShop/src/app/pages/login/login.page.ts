@@ -82,7 +82,11 @@ export class LoginPage {
           // Redirigir según el rol del usuario
           const userRole = user.role_code || user.role;
           
-          if (userRole === 'BARBERO') {
+          if (userRole === 'barberia') {
+            // Redireccionar a la página de detalle de la barbería del usuario
+            const barberiaId = user.id_barberia || 1;
+            this.router.navigate(['/barberia', barberiaId]);
+          } else if (userRole === 'BARBERO') {
             this.router.navigate(['/custom-services']);
           } else if (userRole === 'ADMIN') {
             this.router.navigate(['/admin']);

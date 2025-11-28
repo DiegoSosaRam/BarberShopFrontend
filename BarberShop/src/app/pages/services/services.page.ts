@@ -6,43 +6,31 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { 
   IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonCard, 
-  IonCardContent, 
-  IonCardHeader, 
-  IonCardTitle, 
-  IonButton, 
-  IonBadge,
+  IonButton,
   IonIcon,
   IonGrid,
   IonRow,
   IonCol,
   IonSearchbar,
-  IonList,
-  IonItem,
   IonLabel,
   IonChip,
-  IonSegment,
-  IonSegmentButton
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle
 } from '@ionic/angular/standalone';
 import { 
-  timeOutline, 
-  starOutline, 
-  cutOutline, 
   ribbonOutline, 
   peopleOutline, 
   sparklesOutline,
   searchOutline,
   locationOutline,
-  personOutline
-} from 'ionicons/icons';
+  personOutline,
+  starOutline, timeOutline, callOutline, arrowForward } from 'ionicons/icons';
 import { addIcons } from 'ionicons';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { UserService } from '../../services/user.service';
 import { BarberiaService, Barberia } from '../../services/barberia.service';
-import { ServicioConPrecio } from '../../models/interfaces';
 
 interface Barbero {
   id_barbero: number;
@@ -53,13 +41,6 @@ interface Barbero {
   especialidades?: string;
   anios_experiencia?: number;
   nombre_barberia?: string;
-}
-
-// Interface temporal para compatibilidad visual
-interface ServicioDisplay extends ServicioConPrecio {
-  caracteristicas: string[];
-  popular: boolean;
-  categoria: string;
 }
 
 interface Ventaja {
@@ -74,90 +55,14 @@ interface Ventaja {
   styleUrls: ['./services.page.scss'],
   standalone: true,
   imports: [
-    IonContent, IonCard, IonCardContent, 
-    IonCardHeader, IonCardTitle, IonButton, IonBadge, IonIcon, IonGrid, 
+    IonContent, IonButton, IonIcon, IonGrid, 
     IonRow, IonCol, CommonModule, FormsModule, NavbarComponent,
-    IonSearchbar,  IonLabel, IonChip
+    IonSearchbar, IonLabel, IonChip, IonCard, IonCardContent
   ]
 })
 export class ServicesPage implements OnInit {
 
-  // Propiedades de servicios (existentes)
-  servicios: ServicioDisplay[] = [
-    {
-      id_servicio: 1,
-      nombre_servicio: "Corte Clásico",
-      description: "Corte tradicional con tijeras y máquina, perfecto para un look elegante y profesional.",
-      servicio_active: true,
-      created_at: new Date().toISOString(),
-      precio_BarbServ: 15000,
-      duracion_min: "30",
-      caracteristicas: ["Lavado incluido", "Peinado final", "Acabado preciso"],
-      popular: false,
-      categoria: "Clásico"
-    },
-    {
-      id_servicio: 2,
-      nombre_servicio: "Fade Moderno",
-      description: "Degradado moderno con técnicas actuales, ideal para un estilo contemporáneo y fresco.",
-      servicio_active: true,
-      created_at: new Date().toISOString(),
-      precio_BarbServ: 18000,
-      duracion_min: "45",
-      caracteristicas: ["Degradado perfecto", "Diseño personalizado", "Técnicas modernas"],
-      popular: true,
-      categoria: "Moderno"
-    },
-    {
-      id_servicio: 3,
-      nombre_servicio: "Corte + Barba",
-      description: "Servicio completo que combina corte de cabello y arreglo profesional de barba.",
-      servicio_active: true,
-      created_at: new Date().toISOString(),
-      precio_BarbServ: 25000,
-      duracion_min: "60",
-      caracteristicas: ["Corte completo", "Perfilado de barba", "Aceites naturales", "Toalla caliente"],
-      popular: true,
-      categoria: "Completo"
-    },
-    {
-      id_servicio: 4,
-      nombre_servicio: "Arreglo de Barba",
-      description: "Perfilado y mantenimiento especializado de barba con productos premium.",
-      servicio_active: true,
-      created_at: new Date().toISOString(),
-      precio_BarbServ: 12000,
-      duracion_min: "20",
-      caracteristicas: ["Perfilado preciso", "Aceites aromáticos", "Cera de barba"],
-      popular: false,
-      categoria: "Barba"
-    },
-    {
-      id_servicio: 5,
-      nombre_servicio: "Corte Infantil",
-      description: "Corte especializado para niños en ambiente cómodo y divertido.",
-      servicio_active: true,
-      created_at: new Date().toISOString(),
-      precio_BarbServ: 10000,
-      duracion_min: "25",
-      caracteristicas: ["Ambiente amigable", "Paciencia especial", "Descuentos familiares"],
-      popular: false,
-      categoria: "Infantil"
-    },
-    {
-      id_servicio: 6,
-      nombre_servicio: "Paquete Premium",
-      description: "Experiencia completa de barbería con todos nuestros servicios premium.",
-      servicio_active: true,
-      created_at: new Date().toISOString(),
-      precio_BarbServ: 35000,
-      duracion_min: "90",
-      caracteristicas: ["Corte personalizado", "Arreglo de barba", "Shampoo premium", "Masaje relajante", "Productos exclusivos"],
-      popular: true,
-      categoria: "Premium"
-    }
-  ];
-
+  // Propiedades de ventajas
   ventajas: Ventaja[] = [
     {
       icono: "ribbon-outline",
@@ -196,34 +101,12 @@ export class ServicesPage implements OnInit {
     private barberiaService: BarberiaService,
     private http: HttpClient
   ) {
-    addIcons({ 
-      timeOutline, 
-      starOutline, 
-      cutOutline, 
-      ribbonOutline, 
-      peopleOutline, 
-      sparklesOutline,
-      searchOutline,
-      locationOutline,
-      personOutline
-    });
+    addIcons({locationOutline,callOutline,arrowForward,searchOutline,peopleOutline,starOutline,timeOutline,personOutline,ribbonOutline,sparklesOutline});
   }
 
   ngOnInit() {
     this.loadBarberias();
     this.loadAllBarberos();
-  }
-
-  getCategoryColor(categoria: string): string {
-    const colors: { [key: string]: string } = {
-      "Clásico": "primary",
-      "Moderno": "secondary", 
-      "Completo": "tertiary",
-      "Barba": "medium",
-      "Infantil": "warning",
-      "Premium": "success"
-    };
-    return colors[categoria] || "medium";
   }
 
   navigateToReservar(servicioId?: string) {
@@ -236,10 +119,6 @@ export class ServicesPage implements OnInit {
 
   navigateToLogin() {
     this.router.navigate(['/login']);
-  }
-
-  formatPrice(price: number): string {
-    return price.toLocaleString();
   }
 
   get isLoggedIn(): boolean {
@@ -339,5 +218,9 @@ export class ServicesPage implements OnInit {
         barberia_id: barbero.id_barberia
       }
     });
+  }
+
+  irADetalleBarberia(barberiaId: number) {
+    this.router.navigate(['/barberia', barberiaId]);
   }
 }

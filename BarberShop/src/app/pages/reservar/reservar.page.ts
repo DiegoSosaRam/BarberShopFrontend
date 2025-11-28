@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { 
   IonContent, 
   IonCard, 
@@ -73,10 +73,15 @@ export class ReservarPage implements OnInit {
   notas: string = '';
   descripcionPersonalizada: string = '';
 
+  // IDs pendientes para auto-seleccionar desde URL
+  barberoIdPendiente: number | null = null;
+  servicioIdPendiente: number | null = null;
+
   constructor(
     private authService: AuthService,
     private citaService: CitaService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     addIcons({checkmarkCircle,locationOutline,callOutline,arrowForward,arrowBack,timeOutline,informationCircleOutline,calendarOutline,cutOutline,personOutline,starOutline,star});
   }
@@ -92,6 +97,67 @@ export class ReservarPage implements OnInit {
 
     // Cargar las 6 barberías
     this.cargarBarberias();
+
+    // Verificar si vienen parámetros de barbero y barbería desde servicios
+    this.activatedRoute.queryParams.subscribe(params => {
+      const barberoId = params['barbero_id'];
+      const barberiaId = params['barberia_id'];
+      const servicioId = params['servicio'];
+
+      if (barberiaId) {
+        // Auto-seleccionar la barbería
+        this.seleccionarBarberiaDesdeParams(parseInt(barberiaId));
+      }
+
+      if (barberoId) {
+        // Guardar el ID del barbero para seleccionarlo después
+        this.barberoIdPendiente = parseInt(barberoId);
+      }
+
+      if (servicioId) {
+        // Guardar el ID del servicio para seleccionarlo después
+        this.servicioIdPendiente = parseInt(servicioId);
+      }
+    });
+  }
+
+  seleccionarBarberiaDesdeParams(barberiaId: number) {
+    // Esperar a que se carguen las barberías
+    const interval = setInterval(() => {
+      if (this.barberias.length > 0) {
+        clearInterval(interval);
+        const barberia = this.barberias.find(b => b.id_barberias === barberiaId);
+        if (barberia) {
+          this.seleccionarBarberia(barberia);
+
+          // Si hay barbero pendiente, seleccionarlo después de cargar los barberos
+          if (this.barberoIdPendiente) {
+            const barberInterval = setInterval(() => {
+              if (this.barberos.length > 0) {
+                clearInterval(barberInterval);
+                const barbero = this.barberos.find(b => b.id_barbero === this.barberoIdPendiente);
+                if (barbero) {
+                  this.seleccionarBarbero(barbero);
+
+                  // Si hay servicio pendiente, seleccionarlo después de cargar los servicios
+                  if (this.servicioIdPendiente) {
+                    const servicioInterval = setInterval(() => {
+                      if (this.servicios.length > 0) {
+                        clearInterval(servicioInterval);
+                        const servicio = this.servicios.find(s => s.id_servicio === this.servicioIdPendiente);
+                        if (servicio) {
+                          this.seleccionarServicio(servicio);
+                        }
+                      }
+                    }, 100);
+                  }
+                }
+              }
+            }, 100);
+          }
+        }
+      }
+    }, 100);
   }
 
   cargarBarberias() {

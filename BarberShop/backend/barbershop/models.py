@@ -111,6 +111,16 @@ class Profile(models.Model):
         null=False
     )
     
+    # ForeignKey a Barberia (para usuarios con rol 'barberia')
+    id_barberia = models.ForeignKey(
+        'Barberia',
+        on_delete=models.SET_NULL,
+        db_column="id_barberia",
+        null=True,
+        blank=True,
+        related_name="perfiles"
+    )
+    
     full_name = models.TextField(null=True, blank=True)
     email = models.EmailField(unique=True, max_length=255)  # ✨ NUEVO
     password = models.CharField(max_length=128)  # ✨ NUEVO (hasheado)

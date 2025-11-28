@@ -29,6 +29,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "role",
             "role_code",
             "role_code_input",
+            "id_barberia",
             "full_name",
             "email",  # ✨ NUEVO
             "password",  # ✨ NUEVO (write_only)

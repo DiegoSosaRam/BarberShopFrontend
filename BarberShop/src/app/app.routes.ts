@@ -47,5 +47,9 @@ export const routes: Routes = [
     path: 'qualify-barber',
     loadComponent: () => import('./pages/qualify-barber/qualify-barber.page').then( m => m.QualifyBarberPage)
   },
+  {
+    path: 'barberia/:id',
+    loadComponent: () => import('./pages/barberia-detail/barberia-detail.page').then( m => m.BarberiDetailPage)
+  },
 
 ];
